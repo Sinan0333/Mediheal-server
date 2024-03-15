@@ -1,9 +1,7 @@
 import bcrypt from 'bcrypt'
 
 import userRepositories from "../repositories/userRepositories";
-import { UserData,ResErr } from '../interfaces/IUser';
-
-
+import { UserData,UserRes } from '../interfaces/IUser';
 
 
 class UserServices{
@@ -18,27 +16,27 @@ class UserServices{
         return userData? true : false
     }
 
-    async createUser(name:string,phone:string,email:string,password:string):Promise<UserData | ResErr>{
+    async createUser(name:string,phone:string,email:string,password:string):Promise<UserRes>{
         const hashedPass:string = await bcrypt.hash(password,10)
         const checkEmail:boolean = await this.checkExistingEmail(email)
         if(checkEmail){
-            return {error:"Email is already exist"}
+            return {status:false,message:'Email is already exist'}
         }
         const userData = await this.userRepo.createUser(name,phone,email,hashedPass)
-        return userData
+        return {userData,status:true,message:'Success'}
     }
 
-    async authUser(email:string,password:string):Promise<UserData | ResErr>{
+    async authUser(email:string,password:string):Promise<UserRes>{
         const userData = await this.userRepo.findUserByEmail(email)
         if(userData){
             const isPasswordValid = await bcrypt.compare(password,userData.password)
             if(isPasswordValid){
-                return userData
+                return {userData,status:true,message:'Success'}
             }else{
-                return {error:"incorrect password"}
+                return {status:false,message:'incorrect password'}
             }
         }else{
-            return {error:"Email is not found"}
+            return {status:false,message:'Email not found'}
         }
     }
 

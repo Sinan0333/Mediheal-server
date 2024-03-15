@@ -1,6 +1,6 @@
 import {Request,Response} from "express"
 import UserServices from "../services/userServices";
-import { UserData, ResErr } from "../interfaces/IUser";
+import { UserData, UserRes } from "../interfaces/IUser";
 
 
 
@@ -21,7 +21,7 @@ class UserController{
                 return;
             }
 
-            const result:UserData | ResErr = await this.userService.createUser(name,phone,email,password)
+            const result:UserRes = await this.userService.createUser(name,phone,email,password)
             res.json(result)
 
         } catch (error) {

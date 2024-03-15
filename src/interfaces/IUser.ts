@@ -11,8 +11,13 @@ interface ResErr{
     error:string
 }
 
+interface UserRes{
+    userData?:UserData
+    status:true | false
+    message:string
+}
 
 export{
     UserData,
-    ResErr
+    UserRes
 }
