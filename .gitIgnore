@@ -1,0 +1,22 @@
+# Node.js
+node_modules/
+
+
+# TypeScript
+*.tsbuildinfo
+
+
+# Compiled JavaScript
+/dist/
+
+
+# Dependency lock file
+package-lock.json
+
+
+# Environment configuration
+.env
+
+
+# Build output
+build/
