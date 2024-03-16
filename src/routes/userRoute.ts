@@ -17,6 +17,7 @@ const userController = new UserController(userServices)
 
 
 userRoute.post('/signup',userController.signup.bind(userController))
+userRoute.post('/login',userController.login.bind(userController))
 
 
 

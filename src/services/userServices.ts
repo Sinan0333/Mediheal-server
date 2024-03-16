@@ -1,7 +1,9 @@
 import bcrypt from 'bcrypt'
 
 import userRepositories from "../repositories/userRepositories";
-import { UserData,UserRes } from '../interfaces/IUser';
+import { UserRes } from '../interfaces/IUser';
+import { generateToken } from '../utils/jwt';
+
 
 
 class UserServices{
@@ -16,14 +18,28 @@ class UserServices{
         return userData? true : false
     }
 
-    async createUser(name:string,phone:string,email:string,password:string):Promise<UserRes>{
+    async createUser(name:string,phone:string | number,email:string,password:string):Promise<UserRes>{
+        
+        
+        if (!name || !phone || !email || !password) {
+            console.log(name,phone,email,password);
+            return {status:false,message:'Missing required fields'}
+         
+        }
         const hashedPass:string = await bcrypt.hash(password,10)
         const checkEmail:boolean = await this.checkExistingEmail(email)
+
         if(checkEmail){
             return {status:false,message:'Email is already exist'}
         }
-        const userData = await this.userRepo.createUser(name,phone,email,hashedPass)
-        return {userData,status:true,message:'Success'}
+        if(typeof(phone) ==="string"){
+            phone = parseInt(phone)
+            const userData = await this.userRepo.createUser(name,phone,email,hashedPass)
+            return {userData,status:true,message:'Success'}
+        }else{
+            return {status:false,message:'Internal server error'}
+        }
+        
     }
 
     async authUser(email:string,password:string):Promise<UserRes>{
@@ -31,7 +47,8 @@ class UserServices{
         if(userData){
             const isPasswordValid = await bcrypt.compare(password,userData.password)
             if(isPasswordValid){
-                return {userData,status:true,message:'Success'}
+                const token:string = generateToken(userData._id)
+                return {userData,token,status:true,message:'Success'}
             }else{
                 return {status:false,message:'incorrect password'}
             }

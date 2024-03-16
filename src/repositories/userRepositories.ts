@@ -8,7 +8,7 @@ class UserRepository{
         return userData
     }
 
-    async createUser(name:string,phone:string,email:string,password:string):Promise<UserData>{
+    async createUser(name:string,phone:number,email:string,password:string):Promise<UserData>{
         const userModel = new User({name,phone,email,password})
         return await userModel.save()
     }

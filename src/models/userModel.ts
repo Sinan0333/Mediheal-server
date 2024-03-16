@@ -7,7 +7,7 @@ const UserSchema = new Schema <UserData>({
         required:true
     },
     phone:{
-        type:String,
+        type:Number,
         required:true
     },
     email:{
