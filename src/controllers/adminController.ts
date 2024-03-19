@@ -16,10 +16,8 @@ class AdminController{
     async login(req:Request,res:Response):Promise<void>{
         try {
             const {email,password}:UserData = req.body
-            const result:UserRes = await this.adminServices.authAdmin(email,password)
-            if(result.token){
-                setCookies(res,result.token)
-            }
+            const result:UserRes | null= await this.adminServices.authAdmin(email,password)
+            if(result?.token) setCookies(res,result.token)
             res.json(result)
             
         } catch (error) {

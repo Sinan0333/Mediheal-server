@@ -16,8 +16,7 @@ class UserController{
         try {
     
             const {name,phone,email,password}:UserData = req.body
-            const result:UserRes = await this.userService.createUser(name,phone,email,password)
-          
+            const result:UserRes |null = await this.userService.createUser(name,phone,email,password)
             res.json(result)
 
         } catch (error) {
@@ -29,10 +28,8 @@ class UserController{
     async login(req:Request,res:Response):Promise<void>{
         try {
             const {email,password}:UserData = req.body
-            const result:UserRes = await this.userService.authUser(email,password)
-            if(result.token){
-                setCookies(res,result.token)
-            }
+            const result:UserRes | null = await this.userService.authUser(email,password)
+            if(result?.token) setCookies(res,result.token)
             res.json(result)
             
         } catch (error) {

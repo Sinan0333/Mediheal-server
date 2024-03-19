@@ -6,8 +6,18 @@ export interface DepartmentDoc extends Document{
    description:string
    logo:string
    image:string
+   is_blocked:boolean
 }
 
+export interface IDepartmentData {
+   _id?:string
+   name:string
+   title:string
+   description:string
+   logo:string
+   image:string
+   is_blocked?:Boolean
+}
 
 
 

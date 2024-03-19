@@ -4,8 +4,13 @@ import Admin from "../models/adminModel"
 class AdminRepository{
 
     async findAdminByEmail(email:string):Promise<UserData | null>{
-        const userData = Admin.findOne({email:email}).exec()
-        return userData
+        try {
+            const userData =await Admin.findOne({email}).exec()
+            return userData
+        } catch (error) {
+            console.error("Error in findAdminByEmail:", error);
+            return null;
+        }
     }
 }
 

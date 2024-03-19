@@ -18,20 +18,15 @@ class UserServices{
         return userData? true : false
     }
 
-    async createUser(name:string,phone:string | number,email:string,password:string):Promise<UserRes>{
-        
-        
-        if (!name || !phone || !email || !password) {
-            console.log(name,phone,email,password);
-            return {status:false,message:'Missing required fields'}
+    async createUser(name:string,phone:string | number,email:string,password:string):Promise<UserRes |null>{
+       try {
          
-        }
+        if (!name || !phone || !email || !password) return {status:false,message:'Missing required fields'}
+
         const hashedPass:string = await bcrypt.hash(password,10)
         const checkEmail:boolean = await this.checkExistingEmail(email)
-
-        if(checkEmail){
-            return {status:false,message:'Email is already exist'}
-        }
+        if(checkEmail) return {status:false,message:'Email is already exist'}
+            
         if(typeof(phone) ==="string"){
             phone = parseInt(phone)
             const userData = await this.userRepo.createUser(name,phone,email,hashedPass)
@@ -39,10 +34,16 @@ class UserServices{
         }else{
             return {status:false,message:'Internal server error'}
         }
+
+       } catch (error) {
+        console.log("Error in creatUser:",error)
+        return null
+       }
         
     }
 
-    async authUser(email:string,password:string):Promise<UserRes>{
+    async authUser(email:string,password:string):Promise<UserRes | null>{
+       try {
         const userData = await this.userRepo.findUserByEmail(email)
         if(userData){
             const isPasswordValid = await bcrypt.compare(password,userData.password)
@@ -55,6 +56,10 @@ class UserServices{
         }else{
             return {status:false,message:'Email not found'}
         }
+       } catch (error) {
+        console.log("Error in authUser:",error);
+        return null
+       }
     }
 
 }
