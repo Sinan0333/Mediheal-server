@@ -31,7 +31,7 @@ app.use(
 app.use('/',userRoute)
 app.use('/admin',adminRoute)
 app.use('/doctor',doctorRoute)
-app.use((err:Error, _req:express.Request, res:express.Response):void => {
+app.use((err: Error, _req: express.Request, res: express.Response, _next: express.NextFunction) => {
   console.error(err.stack);
   res.status(500).send('Something went wrong!');
 });

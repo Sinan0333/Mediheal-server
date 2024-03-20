@@ -1,4 +1,4 @@
-import {Document} from 'mongoose'
+import {Document, ObjectId} from 'mongoose'
 
 export interface DepartmentDoc extends Document{
    name:string
@@ -10,7 +10,7 @@ export interface DepartmentDoc extends Document{
 }
 
 export interface IDepartmentData {
-   _id?:string
+   _id?:ObjectId
    name:string
    title:string
    description:string
@@ -19,5 +19,7 @@ export interface IDepartmentData {
    is_blocked?:Boolean
 }
 
+// export DepartmentListData {
 
+// }
 

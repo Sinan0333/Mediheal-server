@@ -1,4 +1,4 @@
-import { DepartmentDoc } from "../interfaces/IDepartment"
+import { DepartmentDoc, IDepartmentData } from "../interfaces/IDepartment"
 import Department from "../models/departmentModel"
 
 class DepartmentRepository{
@@ -11,6 +11,11 @@ class DepartmentRepository{
     async findDepartmentByName(name:string):Promise<DepartmentDoc | null>{
         const departmentData = await Department.findOne({name:name})
         return departmentData
+    }
+
+    async findDepartment():Promise<IDepartmentData[]>{
+      const departmentData:IDepartmentData[] = await Department.find()
+      return departmentData
     }
 }
 

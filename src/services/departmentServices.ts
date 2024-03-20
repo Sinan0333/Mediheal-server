@@ -40,6 +40,19 @@ class DepartmentServices{
         }
     }
 
+    async listDepartment(is_blocked:Boolean):Promise<Res | null>{
+        try {
+
+            const departmentData:IDepartmentData[] = await this.departmentRepo.findDepartment()
+            const filteredData:IDepartmentData[] = departmentData.filter(obj=> obj.is_blocked===is_blocked)
+            return {data:filteredData,status:true,message:'Complete list of departments'}
+            
+        } catch (error) {
+            console.log("Error in listDepartment:",error);
+            return null
+        }
+    }
+
 }
 
 export  default DepartmentServices

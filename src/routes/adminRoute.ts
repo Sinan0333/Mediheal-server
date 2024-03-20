@@ -22,6 +22,7 @@ const departmentController = new DepartmentController(departmentServices)
 
 
 adminRoute.post('/login',adminController.login.bind(adminController))
+adminRoute.get('/department',departmentController.listDepartment.bind(departmentController))
 adminRoute.post('/department/add',departmentController.addDepartment.bind(departmentController))
 
 
