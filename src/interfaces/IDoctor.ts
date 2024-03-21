@@ -1,6 +1,6 @@
 import {Document, ObjectId} from 'mongoose'
 
-interface DoctorDoc extends Document{
+export interface DoctorDoc extends Document{
    firstName:string
    lastName:string
    dob:Date
@@ -20,6 +20,3 @@ interface DoctorDoc extends Document{
 
 
 
-export{
-DoctorDoc
-}
