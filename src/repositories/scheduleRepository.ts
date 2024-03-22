@@ -1,13 +1,19 @@
-import { IScheduleData } from "../interfaces/Ischedule"
-import Schedule from "../models/scheduleModel"
+import { ScheduleDoc } from "../interfaces/Ischedule";
+import Schedule from "../models/scheduleModel";
 
-class ScheduleRepository{
+class ScheduleRepository {
 
-    async createSchedule(data:IScheduleData):Promise<IScheduleData>{
-        const scheduleModel = new Schedule(data)
-        return await scheduleModel.save()
+    async createSchedule(data: ScheduleDoc): Promise<ScheduleDoc | null> {
+        try {
+            const scheduleModel = new Schedule(data);
+            const savedSchedule = await scheduleModel.save();
+            return savedSchedule;
+        } catch (error) {
+            console.error("Error creating schedule:", error);
+            return null;
+        }
     }
 
 }
 
-export default ScheduleRepository
+export default ScheduleRepository;

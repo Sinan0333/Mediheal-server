@@ -1,7 +1,18 @@
 import express,{Router} from 'express'
 
+import DoctorRepository from '../repositories/doctorRepositories' 
+import DoctorServices from '../services/doctorServices'
+import DoctorController from '../controllers/doctorController'
+
+
+const doctorRepositories = new DoctorRepository()
+const doctorServices = new DoctorServices(doctorRepositories)
+const doctorController = new DoctorController(doctorServices)
+
 
 const doctorRoute:Router = express.Router()
 
+
+doctorRoute.post('/add',doctorController.addDoctor.bind(doctorController))
 
 export default doctorRoute

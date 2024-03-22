@@ -1,7 +1,7 @@
 import {Schema,model} from 'mongoose'
-import { UserData } from '../interfaces/IUser'
+import { UserDoc } from '../interfaces/IUser'
 
-const AdminSchema = new Schema <UserData>({
+const AdminSchema = new Schema <UserDoc>({
     name:{
         type:String,
         required:true
@@ -20,5 +20,5 @@ const AdminSchema = new Schema <UserData>({
     },
 })
 
-export default  model<UserData>('Admin',AdminSchema)
+export default  model<UserDoc>('Admin',AdminSchema)
 

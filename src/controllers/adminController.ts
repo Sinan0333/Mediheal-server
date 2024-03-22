@@ -1,6 +1,6 @@
 import {Request,Response} from "express"
 import AdminServices from "../services/adminServices";
-import { UserData, UserRes } from "../interfaces/IUser";
+import { UserDoc, UserRes } from "../interfaces/IUser";
 import { setCookies } from "../utils/cookies";
 
 
@@ -15,7 +15,7 @@ class AdminController{
 
     async login(req:Request,res:Response):Promise<void>{
         try {
-            const {email,password}:UserData = req.body
+            const {email,password}:UserDoc = req.body
             const result:UserRes | null= await this.adminServices.authAdmin(email,password)
             if(result?.token) setCookies(res,result.token)
             res.json(result)

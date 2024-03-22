@@ -1,6 +1,6 @@
 import {Document} from 'mongoose'
 
-interface UserData extends Document{
+export interface UserDoc extends Document{
     name:string
     phone:string | number
     email:string
@@ -8,14 +8,10 @@ interface UserData extends Document{
 }
 
 
-interface UserRes{
-    userData?:UserData
+export interface UserRes{
+    userData?:UserDoc
     token?:string
     status:true | false
     message:string
 }
 
-export{
-    UserData,
-    UserRes
-}

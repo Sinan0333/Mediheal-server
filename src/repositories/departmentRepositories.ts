@@ -1,22 +1,38 @@
-import { DepartmentDoc, IDepartmentData } from "../interfaces/IDepartment"
-import Department from "../models/departmentModel"
+import { DepartmentDoc } from "../interfaces/IDepartment";
+import Department from "../models/departmentModel";
 
-class DepartmentRepository{
+class DepartmentRepository {
 
-    async createDepartment(name:string,title:string,description:string,logo:string,image:string):Promise<DepartmentDoc>{
-        const departmentModel = new Department({name,title,description,logo,image})
-        return await departmentModel.save()
+    async createDepartment(name: string, title: string, description: string, logo: string, image: string): Promise<DepartmentDoc | null> {
+        try {
+            const departmentModel = new Department({ name, title, description, logo, image });
+            const savedDepartment = await departmentModel.save();
+            return savedDepartment;
+        } catch (error) {
+            console.error("Error creating department:", error);
+            return null;
+        }
     }
 
-    async findDepartmentByName(name:string):Promise<DepartmentDoc | null>{
-        const departmentData = await Department.findOne({name:name})
-        return departmentData
+    async findDepartmentByName(name: string): Promise<DepartmentDoc | null> {
+        try {
+            const departmentData = await Department.findOne({ name });
+            return departmentData;
+        } catch (error) {
+            console.error("Error finding department by name:", error);
+            return null;
+        }
     }
 
-    async findDepartment():Promise<IDepartmentData[]>{
-      const departmentData:IDepartmentData[] = await Department.find()
-      return departmentData
+    async findDepartments(): Promise<DepartmentDoc[] | null> {
+        try {
+            const departmentData: DepartmentDoc[] = await Department.find();
+            return departmentData;
+        } catch (error) {
+            console.error("Error finding departments:", error);
+            return null;
+        }
     }
 }
 
-export default DepartmentRepository
+export default DepartmentRepository;

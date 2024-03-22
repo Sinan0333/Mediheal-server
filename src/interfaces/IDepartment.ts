@@ -19,7 +19,5 @@ export interface IDepartmentData {
    is_blocked?:Boolean
 }
 
-// export DepartmentListData {
 
-// }
 

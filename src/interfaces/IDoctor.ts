@@ -1,22 +1,38 @@
-import {Document, ObjectId} from 'mongoose'
+import {Document, Types} from 'mongoose'
 
 export interface DoctorDoc extends Document{
-   firstName:string
-   lastName:string
-   dob:Date
-   image:string
-   phone:Number
-   email:string
-   address:string
-   gender:string
-   experience:number
-   department:ObjectId
+   _id?:string
+   firstName:string 
+   secondName:string 
+   dob:Date 
+   age:number 
+   gender:string 
+   address:string 
+   experience:number 
+   phone:number 
+   email:string 
    password:string
+   department:Types.ObjectId
    workingDays:string[]
-   schedule:ObjectId
-   workingTime:object[]
+   image:string 
 }
 
+export interface IDoctorData {
+   _id?:string
+   firstName:string 
+   secondName:string 
+   dob:Date 
+   age:number 
+   gender:string 
+   address:string 
+   experience:number 
+   phone:number 
+   email:string 
+   password:string
+   department:Types.ObjectId
+   workingDays:string[]
+   image:string
+}
 
 
 

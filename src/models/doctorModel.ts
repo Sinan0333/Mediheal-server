@@ -1,9 +1,33 @@
 import {Schema,model} from 'mongoose'
-import { UserData } from '../interfaces/IUser'
+import { DoctorDoc } from '../interfaces/IDoctor'
 
-const DoctorSchema = new Schema <UserData>({
-    name:{
+const DoctorSchema = new Schema <DoctorDoc>({
+    firstName:{
         type:String,
+        required:true
+    },
+    secondName:{
+        type:String,
+        required:true
+    },
+    dob:{
+        type:Date,
+        required:true
+    },
+    age:{
+        type:Number,
+        required:true
+    },
+    gender:{
+        type:String,
+        required:true
+    },
+    address:{
+        type:String,
+        required:true
+    },
+    experience:{
+        type:Number,
         required:true
     },
     phone:{
@@ -18,7 +42,21 @@ const DoctorSchema = new Schema <UserData>({
         type:String,
         required:true
     },
+    department:{
+        type: Schema.Types.ObjectId, 
+        ref: 'Department', 
+        required: true
+    },
+    workingDays:{
+        type:[String],
+        required:true
+    },
+    image:{
+        type:String,
+        required:true
+    }
+    
 })
 
-export default  model<UserData>('Doctor',DoctorSchema)
+export default  model<DoctorDoc>('Doctor',DoctorSchema)
 

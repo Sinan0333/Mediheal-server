@@ -1,5 +1,5 @@
 import {Schema,model} from 'mongoose'
-import { IScheduleData } from '../interfaces/Ischedule'
+import { ScheduleDoc } from '../interfaces/Ischedule'
 
 const ScheduleItemSchema = new Schema({
     startTime: { type: String, required: true },
@@ -8,7 +8,7 @@ const ScheduleItemSchema = new Schema({
     booked:{type:Boolean, required:true}
 })
 
-const ScheduleSchema = new Schema <IScheduleData>({
+const ScheduleSchema = new Schema <ScheduleDoc>({
     monday:[ScheduleItemSchema],
     tuesday:[ScheduleItemSchema],
     wednesday:[ScheduleItemSchema],
@@ -18,5 +18,5 @@ const ScheduleSchema = new Schema <IScheduleData>({
     sunday:[ScheduleItemSchema]
 })
 
-export default  model<IScheduleData>('Schedule',ScheduleSchema)
+export default  model<ScheduleDoc>('Schedule',ScheduleSchema)
 

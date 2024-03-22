@@ -1,6 +1,6 @@
 import {Request,Response} from "express"
 import UserServices from "../services/userServices";
-import { UserData, UserRes } from "../interfaces/IUser";
+import { UserDoc, UserRes } from "../interfaces/IUser";
 import { setCookies } from "../utils/cookies";
 
 
@@ -15,7 +15,7 @@ class UserController{
     async signup(req:Request,res:Response):Promise<void>{
         try {
     
-            const {name,phone,email,password}:UserData = req.body
+            const {name,phone,email,password}:UserDoc = req.body
             const result:UserRes |null = await this.userService.createUser(name,phone,email,password)
             res.json(result)
 
@@ -27,7 +27,7 @@ class UserController{
 
     async login(req:Request,res:Response):Promise<void>{
         try {
-            const {email,password}:UserData = req.body
+            const {email,password}:UserDoc = req.body
             const result:UserRes | null = await this.userService.authUser(email,password)
             if(result?.token) setCookies(res,result.token)
             res.json(result)
