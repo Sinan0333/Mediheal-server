@@ -16,8 +16,8 @@ class DoctorController{
     async addDoctor(req:Request,res:Response):Promise<void>{
         try {
             
-            const {firstName,secondName,dob,age,gender,address,experience,phone,email,password,department,workingDays,image}:DoctorDoc = req.body
-            const result: Res | null = await this.doctorServices.addDoctor({firstName,secondName,dob,age,gender,address,experience,phone,email,password,department,workingDays,image})  
+            const {firstName,secondName,dob,age,gender,address,experience,phone,email,password,department,workingDays,fees,image}:DoctorDoc = req.body
+            const result: Res | null = await this.doctorServices.addDoctor({firstName,secondName,dob,age,gender,address,experience,phone,email,password,department,workingDays,fees,image})  
             res.json(result)
             
         } catch (error) {

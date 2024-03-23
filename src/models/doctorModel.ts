@@ -51,6 +51,10 @@ const DoctorSchema = new Schema <DoctorDoc>({
         type:[String],
         required:true
     },
+    fees:{
+        type:Number,
+        required:true
+    },
     image:{
         type:String,
         required:true

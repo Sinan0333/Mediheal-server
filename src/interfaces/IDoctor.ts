@@ -14,6 +14,7 @@ export interface DoctorDoc extends Document{
    password:string
    department:Types.ObjectId
    workingDays:string[]
+   fees:number
    image:string 
 }
 
@@ -31,6 +32,7 @@ export interface IDoctorData {
    password:string
    department:Types.ObjectId
    workingDays:string[]
+   fees:number
    image:string
 }
 
