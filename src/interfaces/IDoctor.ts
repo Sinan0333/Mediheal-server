@@ -1,4 +1,5 @@
 import {Document, Types} from 'mongoose'
+import { DepartmentDoc } from './IDepartment'
 
 export interface DoctorDoc extends Document{
    _id?:string
@@ -30,7 +31,7 @@ export interface IDoctorData {
    phone:number 
    email:string 
    password:string
-   department:Types.ObjectId
+   department:Types.ObjectId | DepartmentDoc
    workingDays:string[]
    fees:number
    image:string

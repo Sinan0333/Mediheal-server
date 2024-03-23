@@ -24,6 +24,16 @@ class DoctorRepository {
         }
     }
 
+    async findDoctorById(_id: string): Promise<DoctorDoc | null> {
+        try {
+            const doctorData = await Doctor.findOne({ _id }).populate('department');
+            return doctorData;
+        } catch (error) {
+            console.error("Error finding doctor by email:", error);
+            return null;
+        }
+    }
+
     async findDoctors(): Promise<DoctorDoc[] | null> {
         try {
             const doctorData: DoctorDoc[] = await Doctor.find().populate('department');

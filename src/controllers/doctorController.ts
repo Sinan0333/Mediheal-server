@@ -38,6 +38,20 @@ class DoctorController{
         }
     }
 
+    async viewDoctor(req:Request,res:Response):Promise <void>{
+        try {
+            
+            const {_id} = req.params
+            const result: Res | null = await this.doctorServices.viewDoctor(_id)
+            res.json(result)
+
+        } catch (error) {
+            console.error("Error in doctorController.viewDoctor:", error);
+            res.status(500).json({ error: "Internal server error" });
+        }
+    }
+
+
 }
 
 

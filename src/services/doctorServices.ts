@@ -51,6 +51,20 @@ class DoctorServices {
             return null;
         }
     }
+
+    async viewDoctor(_id:string):Promise <Res | null>{
+        try {
+
+            const doctorsData:IDoctorData | null = await this.doctorRepo.findDoctorById(_id)
+            return {data:doctorsData,status:true, message:"Doctor Data"}
+
+        } catch (error) {
+            console.error("Error in ListDoctors", error);
+            return null;
+        }
+    }
+
+
 }
 
 export default DoctorServices;
