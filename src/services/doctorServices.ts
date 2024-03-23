@@ -1,7 +1,8 @@
 import bcrypt from 'bcrypt';
 import DoctorRepositories from "../repositories/doctorRepositories";
 import { IDoctorData } from '../interfaces/IDoctor';
-import { Res } from '../interfaces/Icommen';
+import { Res } from '../interfaces/Icommon';
+import { uploadFile } from '../utils/cloudinary';
 
 class DoctorServices {
     private doctorRepo: DoctorRepositories;
@@ -28,12 +29,25 @@ class DoctorServices {
             if (checkExist) return { status: false, message: 'User Email already exists' };
 
             const hashedPass: string = await bcrypt.hash(password, 10);
-            const newData: IDoctorData = { ...data, password: hashedPass };
+            const imagePublicId = await uploadFile(data.image, "doctor_image");
+            const newData: IDoctorData = { ...data, password: hashedPass,image:imagePublicId };
 
             const doctorData = await this.doctorRepo.createDoctor(newData);
             return { data: doctorData, status: true, message: 'Doctor registered successfully' };
         } catch (error) {
             console.error("Error in addDoctor:", error);
+            return null;
+        }
+    }
+
+    async listDoctors():Promise <Res | null>{
+        try {
+
+            const doctorsData:IDoctorData[] | null = await this.doctorRepo.findDoctors()
+            return {data:doctorsData,status:true, message:"List of doctors"}
+
+        } catch (error) {
+            console.error("Error in ListDoctors", error);
             return null;
         }
     }

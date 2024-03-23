@@ -1,7 +1,7 @@
 import {Request,Response} from "express"
 import DepartmentServices from "../services/departmentServices";
 import { IDepartmentData } from '../interfaces/IDepartment';
-import { Res } from '../interfaces/Icommen';
+import { Res } from '../interfaces/Icommon';
 
 
 

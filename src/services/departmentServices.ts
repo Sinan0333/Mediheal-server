@@ -1,6 +1,6 @@
 import DepartmentRepository from "../repositories/departmentRepositories";
 import { IDepartmentData, DepartmentDoc } from '../interfaces/IDepartment';
-import { Res } from '../interfaces/Icommen';
+import { Res } from '../interfaces/Icommon';
 import { uploadFile } from "../utils/cloudinary";
 
 class DepartmentServices {
