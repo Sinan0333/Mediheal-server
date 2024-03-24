@@ -51,6 +51,21 @@ class DoctorController{
         }
     }
 
+    async ediDoctor(req:Request,res:Response):Promise<void>{
+        try {
+            
+            const {_id} = req.params
+            
+            const {firstName,secondName,dob,age,gender,address,experience,phone,email,password,department,workingDays,fees,image}:DoctorDoc = req.body
+            const result: Res | null = await this.doctorServices.ediDoctor({firstName,secondName,dob,age,gender,address,experience,phone,email,password,department,workingDays,fees,image},_id)  
+            res.json(result)
+            
+        } catch (error) {
+            console.error("Error in DoctorController.addDoctor:", error);
+            res.status(500).json({ error: "Internal server error" });
+        }
+    }
+
 
 }
 

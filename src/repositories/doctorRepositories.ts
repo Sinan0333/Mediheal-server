@@ -43,6 +43,16 @@ class DoctorRepository {
             return null;
         }
     }
+
+    async updateDoctor(data:IDoctorData,_id:string):Promise<DoctorDoc | null>{
+        try {
+            const doctorData:DoctorDoc | null = await Doctor.findOneAndUpdate({_id},data,{new:true})
+            return doctorData
+        } catch (error) {
+            console.error("Error finding doctors:", error);
+            return null;
+        }
+    }
 }
 
 export default DoctorRepository;

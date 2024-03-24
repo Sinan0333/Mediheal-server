@@ -15,6 +15,7 @@ const doctorRoute:Router = express.Router()
 
 doctorRoute.post('/add',doctorController.addDoctor.bind(doctorController))
 doctorRoute.get('/view/:_id',doctorController.viewDoctor.bind(doctorController))
+doctorRoute.post('/edit/:_id',doctorController.ediDoctor.bind(doctorController))
 doctorRoute.get('/list',doctorController.listDoctors.bind(doctorController))
 
 export default doctorRoute

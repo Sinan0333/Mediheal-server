@@ -64,6 +64,26 @@ class DoctorServices {
         }
     }
 
+    async ediDoctor(data: IDoctorData,_id:string): Promise<Res | null> {
+        try {
+            let imagePublicId
+
+            if(data.image.split("/").includes('Mediheal')){
+                imagePublicId=data.image
+            }else{
+                imagePublicId = await uploadFile(data.image,"doctor_image");
+            }
+
+            const newData: IDoctorData = { ...data, image:imagePublicId };
+
+            const doctorData = await this.doctorRepo.updateDoctor(newData,_id);
+            return { data: doctorData, status: true, message: 'Doctor updated successfully' };
+
+        } catch (error) {
+            console.error("Error in editDoctor:", error);
+            return null;
+        }
+    }
 
 }
 
