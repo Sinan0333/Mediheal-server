@@ -13,6 +13,7 @@ const doctorController = new DoctorController(doctorServices)
 const doctorRoute:Router = express.Router()
 
 
+doctorRoute.post('/login',doctorController.login.bind(doctorController))
 doctorRoute.post('/add',doctorController.addDoctor.bind(doctorController))
 doctorRoute.get('/view/:_id',doctorController.viewDoctor.bind(doctorController))
 doctorRoute.post('/edit/:_id',doctorController.ediDoctor.bind(doctorController))

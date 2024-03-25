@@ -1,8 +1,9 @@
 import bcrypt from 'bcrypt';
 import DoctorRepositories from "../repositories/doctorRepositories";
-import { IDoctorData } from '../interfaces/IDoctor';
+import { DoctorDoc, DoctorRes, IDoctorData } from '../interfaces/IDoctor';
 import { Res } from '../interfaces/Icommon';
 import { uploadFile } from '../utils/cloudinary';
+import { generateToken } from '../utils/jwt';
 
 class DoctorServices {
     private doctorRepo: DoctorRepositories;
@@ -36,6 +37,26 @@ class DoctorServices {
             return { data: doctorData, status: true, message: 'Doctor registered successfully' };
         } catch (error) {
             console.error("Error in addDoctor:", error);
+            return null;
+        }
+    }
+
+    async authDoctor(email: string, password: string): Promise<DoctorRes | null> {
+        try {
+            const userData:DoctorDoc | null = await this.doctorRepo.findDoctorByEmail(email);
+            if (userData) {
+                const isPasswordValid = await bcrypt.compare(password, userData.password);
+                if (isPasswordValid && userData._id) {
+                    const token: string = generateToken(userData._id);
+                    return { userData, token, status: true, message: 'Authentication successful' };
+                } else {
+                    return { status: false, message: 'Incorrect password' };
+                }
+            } else {
+                return { status: false, message: 'Email not found' };
+            }
+        } catch (error) {
+            console.error("Error in authUser:", error);
             return null;
         }
     }

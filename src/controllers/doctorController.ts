@@ -1,7 +1,8 @@
 import {Request,Response} from "express"
 import DoctorServices from "../services/doctorServices";
-import { DoctorDoc } from '../interfaces/IDoctor';
+import { DoctorDoc, DoctorRes } from '../interfaces/IDoctor';
 import { Res } from '../interfaces/Icommon';
+import { setCookies } from "../utils/cookies";
 
 
 
@@ -22,6 +23,20 @@ class DoctorController{
             
         } catch (error) {
             console.error("Error in DoctorController.addDoctor:", error);
+            res.status(500).json({ error: "Internal server error" });
+        }
+    }
+
+    async login(req:Request,res:Response):Promise<void>{
+        try {
+            const {email,password}:DoctorDoc = req.body
+            const result:DoctorRes | null = await this.doctorServices.authDoctor(email,password)
+            if(result?.token) setCookies(res,result.token)
+            
+            res.json(result)
+            
+        } catch (error) {
+            console.error("Error in UserController.login:", error);
             res.status(500).json({ error: "Internal server error" });
         }
     }

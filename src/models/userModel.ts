@@ -18,6 +18,10 @@ const UserSchema = new Schema <UserDoc>({
         type:String,
         required:true
     },
+    verified:{
+        type:Boolean,
+        default:false
+    }
 })
 
 export default  model<UserDoc>('User',UserSchema)

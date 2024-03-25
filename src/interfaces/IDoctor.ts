@@ -38,4 +38,12 @@ export interface IDoctorData {
 }
 
 
+export interface DoctorRes{
+   userData?:DoctorDoc
+   token?:string
+   status:true | false
+   message:string
+}
+
+
 

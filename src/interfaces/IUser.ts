@@ -5,12 +5,14 @@ export interface UserDoc extends Document{
     phone:string | number
     email:string
     password:string
+    verified:boolean
 }
 
 
 export interface UserRes{
-    userData?:UserDoc
+    userData?:UserDoc | null
     token?:string
+    otp_id?:string
     status:true | false
     message:string
 }
