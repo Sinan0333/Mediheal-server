@@ -5,6 +5,7 @@ import { generateToken } from '../utils/jwt';
 import OtpRepositories from '../repositories/otpRepositories';
 import { sendVerifyMail } from '../utils/otpVerification';
 import { Res } from '../interfaces/Icommon';
+import { uploadFile } from '../utils/cloudinary';
 
 class UserServices {
     private userRepo: UserRepositories;
@@ -25,7 +26,7 @@ class UserServices {
         }
     }
 
-    async createUser(name: string, phone: string | number, email: string, password: string): Promise<UserRes | null> {
+    async createUser(name: string, phone: string , email: string, password: string): Promise<UserRes | null> {
         try {
             // Validate required fields
             if (!name || !phone || !email || !password) {
@@ -44,11 +45,8 @@ class UserServices {
             // Hash the password
             const hashedPass: string = await bcrypt.hash(password, 10);
 
-            // Convert phone to integer if it's a string
-            const phoneNumber: number = typeof phone === "string" ? parseInt(phone) : phone;
-
             // Create user
-            const userData = await this.userRepo.createUser(name, phoneNumber, email, hashedPass);
+            const userData = await this.userRepo.createUser(name, phone, email, hashedPass);
             return {userData,status: true, message: 'User created successfully' };
         } catch (error) {
             console.error("Error in createUser:", error);
@@ -63,7 +61,7 @@ class UserServices {
             const otpData = await this.otpRepo.findOtpByEmail(userData?.email);
 
             if(otpData?.otp == otp){
-                const userData = await this.userRepo.findUserByIdAndUpdate(_id)
+                const userData = await this.userRepo.findUserByIdAndUpdate(_id,{verified:true})
                 return { userData, status: true, message: 'Verification successful' };
             }else{
                 return {status:false ,message:"Otp verification filed"}
@@ -89,9 +87,6 @@ class UserServices {
     }
 
 
-
-
-
     async authUser(email: string, password: string): Promise<UserRes | null> {
         try {
             const userData = await this.userRepo.findUserByEmail(email);
@@ -111,6 +106,86 @@ class UserServices {
             return null;
         }
     }
+
+    async listUsers(): Promise<Res | null> {
+        try {
+            const userData:UserDoc[] | null= await this.userRepo.findUsers()
+            return {data:userData,status:true, message:'Users find successful'}
+
+        } catch (error) {
+            console.error("Error in listUsers:", error);
+            return null;
+        }
+    }
+
+    async getUserData(_id:string): Promise<Res | null> {
+        try {
+
+            const userData:UserDoc | null= await this.userRepo.findUserById(_id)
+            return {data:userData,status:true, message:'User find successful'}
+
+        } catch (error) {
+            console.error("Error in getUserData:", error);
+            return null;
+        }
+    }
+
+    async updateProfile(_id:string,name: string, phone: string , email: string, password: string ,newPassword:string,image:string): Promise<UserRes | null> {
+        try {
+
+            const oldUserData:UserDoc | null = await this.userRepo.findUserById(_id)
+            let newImage:string = ""
+            
+            if(password && oldUserData){
+
+                const isMatch = await bcrypt.compare(password,oldUserData.password);
+                
+                if(isMatch){
+
+                    if(image){
+                        if(image !== oldUserData.image){
+                            newImage = await uploadFile(image, "user_profile");
+                        }else{
+                            newImage = oldUserData.image
+                        }
+                    }else{
+                        newImage = oldUserData.image
+                    }
+
+                    const hashedPass: string = await bcrypt.hash(newPassword, 10);
+                    const userData = await this.userRepo.findUserByIdAndUpdate(_id,{name,phone,email,password:hashedPass,image:newImage})
+                    return { userData, status: true, message: 'Profile Updated successfully' };
+
+                }else{
+                    return {status:false,message:"Incorrect password"}
+                }
+            }
+
+
+            if(oldUserData){
+
+                if(image){
+                    if(image !== oldUserData.image){
+                        newImage = await uploadFile(image, "user_profile");
+                    }else{
+                        newImage = oldUserData.image
+                    }
+                }else{
+                    newImage = oldUserData.image
+                }
+
+                const userData = await this.userRepo.findUserByIdAndUpdate(_id,{name,phone,email,image:newImage})
+                return { userData, status: true, message: 'Profile Updated successfully' };
+            }
+
+            return {status:false ,message:"Something wrong"}
+
+        } catch (error) {
+            console.error("Error in createUser:", error);
+            return null;
+        }
+    }
+
 }
 
 export default UserServices;

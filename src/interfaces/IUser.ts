@@ -2,10 +2,11 @@ import {Document} from 'mongoose'
 
 export interface UserDoc extends Document{
     name:string
-    phone:string | number
+    phone:string
     email:string
     password:string
     verified:boolean
+    image:string
 }
 
 

@@ -66,6 +66,44 @@ class UserController{
             res.status(500).json({ error: "Internal server error" });
         }
     }
+
+    async listUsers(_req:Request,res:Response):Promise<void>{
+        try {
+
+            const result:UserRes | null = await this.userService.listUsers()
+            res.json(result)
+            
+        } catch (error) {
+            console.error("Error in UserController.login:", error);
+            res.status(500).json({ error: "Internal server error" });
+        }
+    }
+
+    async getUserData(req:Request,res:Response):Promise<void>{
+        try {
+
+            const {_id} = req.body
+            const result:UserRes | null = await this.userService.getUserData(_id)
+            res.json(result)
+            
+        } catch (error) {
+            console.error("Error in UserController.login:", error);
+            res.status(500).json({ error: "Internal server error" });
+        }
+    }
+
+    async updateProfile(req:Request,res:Response):Promise<void>{
+        try {
+    
+            const {_id,name,phone,email,password,newPassword,image} = req.body
+            const result:UserRes |null = await this.userService.updateProfile(_id,name,phone,email,password,newPassword,image)
+            res.json(result)
+
+        } catch (error) {
+             console.error("Error in UserController.signup:", error);
+            res.status(500).json({ error: "Internal server error" });
+        }
+    }
 }
 
 

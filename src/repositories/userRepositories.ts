@@ -23,7 +23,7 @@ class UserRepository {
         }
     }
 
-    async createUser(name: string, phone: number, email: string, password: string): Promise<UserDoc> {
+    async createUser(name: string, phone: string, email: string, password: string): Promise<UserDoc> {
         try {
             const userModel = new User({ name, phone, email, password });
             return await userModel.save();
@@ -33,9 +33,19 @@ class UserRepository {
         }
     }
 
-    async findUserByIdAndUpdate(_id:string | undefined): Promise<UserDoc | null > {
+    async findUserByIdAndUpdate(_id:string | undefined,data:object): Promise<UserDoc | null > {
         try {
-            const userData = await User.findByIdAndUpdate({_id},{verified:true},{new:true});
+            const userData = await User.findByIdAndUpdate({_id},data,{new:true});
+            return userData
+        } catch (error) {
+            console.error("Error in findUserByIdAndUpdate:", error);
+            throw error;
+        }
+    }
+
+    async findUsers(): Promise<UserDoc[] | null > {
+        try {
+            const userData:UserDoc[] = await User.find();
             return userData
         } catch (error) {
             console.error("Error in findUserByIdAndUpdate:", error);

@@ -7,7 +7,7 @@ const UserSchema = new Schema <UserDoc>({
         required:true
     },
     phone:{
-        type:Number,
+        type:String,
         required:true
     },
     email:{
@@ -21,6 +21,10 @@ const UserSchema = new Schema <UserDoc>({
     verified:{
         type:Boolean,
         default:false
+    },
+    image:{
+        type:String,
+        default:""
     }
 })
 

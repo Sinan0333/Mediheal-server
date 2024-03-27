@@ -7,7 +7,7 @@ const AdminSchema = new Schema <UserDoc>({
         required:true
     },
     phone:{
-        type:Number,
+        type:String,
         required:true
     },
     email:{
