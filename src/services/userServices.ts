@@ -6,6 +6,7 @@ import OtpRepositories from '../repositories/otpRepositories';
 import { sendVerifyMail } from '../utils/otpVerification';
 import { Res } from '../interfaces/Icommon';
 import { uploadFile } from '../utils/cloudinary';
+import { OtpDoc } from '../interfaces/IOtp';
 
 class UserServices {
     private userRepo: UserRepositories;
@@ -18,7 +19,7 @@ class UserServices {
 
     async checkExistingEmail(email: string): Promise<boolean> {
         try {
-            const userData = await this.userRepo.findUserByEmail(email);
+            const userData:UserDoc | null = await this.userRepo.findUserByEmail(email);
             return !!userData;
         } catch (error) {
             console.error("Error in checkExistingEmail:", error);
@@ -39,14 +40,14 @@ class UserServices {
                 return { status: false, message: 'Email is already in use' };
             }
 
-            const otp = await sendVerifyMail(name,email)
+            const otp:string = await sendVerifyMail(name,email)
             await this.otpRepo.createOrUpdateOtp(email,otp)
 
             // Hash the password
             const hashedPass: string = await bcrypt.hash(password, 10);
 
             // Create user
-            const userData = await this.userRepo.createUser(name, phone, email, hashedPass);
+            const userData:UserDoc | null = await this.userRepo.createUser(name, phone, email, hashedPass);
             return {userData,status: true, message: 'User created successfully' };
         } catch (error) {
             console.error("Error in createUser:", error);
@@ -58,10 +59,10 @@ class UserServices {
         try {
 
             const userData:UserDoc | null = await this.userRepo.findUserById(_id)
-            const otpData = await this.otpRepo.findOtpByEmail(userData?.email);
+            const otpData:OtpDoc | null = await this.otpRepo.findOtpByEmail(userData?.email);
 
             if(otpData?.otp == otp){
-                const userData = await this.userRepo.findUserByIdAndUpdate(_id,{verified:true})
+                const userData:UserDoc | null = await this.userRepo.findUserByIdAndUpdate(_id,{verified:true})
                 return { userData, status: true, message: 'Verification successful' };
             }else{
                 return {status:false ,message:"Otp verification filed"}
@@ -77,7 +78,7 @@ class UserServices {
         try {
 
             const userData:UserDoc | null = await this.userRepo.findUserById(_id)
-            const otpData = await this.otpRepo.findOtpByEmail(userData?.email);
+            const otpData:OtpDoc | null = await this.otpRepo.findOtpByEmail(userData?.email);
             return otpData ? {data:otpData.otp,status:true ,message:"Otp get"} : {status:false ,message:"Can't find the otp"}
 
         } catch (error) {
@@ -89,12 +90,16 @@ class UserServices {
 
     async authUser(email: string, password: string): Promise<UserRes | null> {
         try {
-            const userData = await this.userRepo.findUserByEmail(email);
+            const userData:UserDoc | null = await this.userRepo.findUserByEmail(email);
             if (userData) {
-                const isPasswordValid = await bcrypt.compare(password, userData.password);
+                const isPasswordValid:Boolean = await bcrypt.compare(password, userData.password);
                 if (isPasswordValid) {
-                    const token: string = generateToken(userData._id);
-                    return { userData, token, status: true, message: 'Authentication successful' };
+                    if(userData.is_blocked){
+                        return{status:false,message:"Admin blocked you"}
+                    }else{
+                        const token: string = generateToken(userData._id);
+                        return { userData, token, status: true, message: 'Authentication successful' };
+                    }
                 } else {
                     return { status: false, message: 'Incorrect password' };
                 }
@@ -138,7 +143,7 @@ class UserServices {
             
             if(password && oldUserData){
 
-                const isMatch = await bcrypt.compare(password,oldUserData.password);
+                const isMatch:Boolean = await bcrypt.compare(password,oldUserData.password);
                 
                 if(isMatch){
 
@@ -153,7 +158,7 @@ class UserServices {
                     }
 
                     const hashedPass: string = await bcrypt.hash(newPassword, 10);
-                    const userData = await this.userRepo.findUserByIdAndUpdate(_id,{name,phone,email,password:hashedPass,image:newImage})
+                    const userData:UserDoc | null = await this.userRepo.findUserByIdAndUpdate(_id,{name,phone,email,password:hashedPass,image:newImage})
                     return { userData, status: true, message: 'Profile Updated successfully' };
 
                 }else{
@@ -174,7 +179,7 @@ class UserServices {
                     newImage = oldUserData.image
                 }
 
-                const userData = await this.userRepo.findUserByIdAndUpdate(_id,{name,phone,email,image:newImage})
+                const userData:UserDoc | null = await this.userRepo.findUserByIdAndUpdate(_id,{name,phone,email,image:newImage})
                 return { userData, status: true, message: 'Profile Updated successfully' };
             }
 

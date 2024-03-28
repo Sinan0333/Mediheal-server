@@ -16,7 +16,7 @@ class DepartmentRepository {
 
     async findDepartmentByName(name: string): Promise<DepartmentDoc | null> {
         try {
-            const departmentData = await Department.findOne({ name });
+            const departmentData:DepartmentDoc | null = await Department.findOne({ name });
             return departmentData;
         } catch (error) {
             console.error("Error finding department by name:", error);

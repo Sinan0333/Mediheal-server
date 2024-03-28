@@ -22,13 +22,13 @@ class DepartmentServices {
                 return { status: false, message: 'Missing required fields' };
             }
 
-            const existingDepartment = await this.checkExistingDepartment(name);
+            const existingDepartment:Boolean = await this.checkExistingDepartment(name);
             if (existingDepartment) return { status: false, message: "Department name already exists" };
 
-            const logoPublicId = await uploadFile(logo, "department_logos");
-            const imagePublicId = await uploadFile(image, "department_images");
+            const logoPublicId:string = await uploadFile(logo, "department_logos");
+            const imagePublicId:string = await uploadFile(image, "department_images");
 
-            const departmentData = await this.departmentRepo.createDepartment(name, title, description, logoPublicId, imagePublicId);
+            const departmentData:DepartmentDoc | null = await this.departmentRepo.createDepartment(name, title, description, logoPublicId, imagePublicId);
             return { data: departmentData, status: true, message: "Department added successfully" };
         } catch (error) {
             console.error("Error in addDepartment:", error);

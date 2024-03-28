@@ -7,6 +7,7 @@ export interface UserDoc extends Document{
     password:string
     verified:boolean
     image:string
+    is_blocked:boolean
 }
 
 

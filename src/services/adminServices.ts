@@ -15,7 +15,7 @@ class AdminServices {
             const userData: UserDoc | null = await this.adminRepo.findAdminByEmail(email);
 
             if (userData) {
-                const isPasswordValid = await bcrypt.compare(password, userData.password);
+                const isPasswordValid:Boolean = await bcrypt.compare(password, userData.password);
 
                 if (isPasswordValid) {
                     const token: string = generateToken(userData._id);

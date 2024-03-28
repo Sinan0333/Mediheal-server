@@ -5,7 +5,7 @@ class AdminRepository{
 
     async findAdminByEmail(email:string):Promise<UserDoc | null>{
         try {
-            const userData =await Admin.findOne({email})
+            const userData:UserDoc | null =await Admin.findOne({email})
             return userData
         } catch (error) {
             console.error("Error in findAdminByEmail:", error);

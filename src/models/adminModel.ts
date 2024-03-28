@@ -18,6 +18,14 @@ const AdminSchema = new Schema <UserDoc>({
         type:String,
         required:true
     },
+    verified:{
+        type:Boolean,
+        default:false
+    },
+    image:{
+        type:String,
+        default:""
+    }
 })
 
 export default  model<UserDoc>('Admin',AdminSchema)

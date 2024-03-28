@@ -58,6 +58,10 @@ const DoctorSchema = new Schema <DoctorDoc>({
     image:{
         type:String,
         required:true
+    },
+    is_blocked:{
+        type:Boolean,
+        default:false
     }
     
 })

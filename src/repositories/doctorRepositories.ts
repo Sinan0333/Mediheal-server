@@ -6,7 +6,7 @@ class DoctorRepository {
     async createDoctor(data: IDoctorData): Promise<DoctorDoc | null> {
         try {
             const doctorModel = new Doctor(data);
-            const savedDoctor = await doctorModel.save();
+            const savedDoctor:DoctorDoc = await doctorModel.save();
             return savedDoctor;
         } catch (error) {
             console.error("Error creating doctor:", error);
@@ -16,7 +16,7 @@ class DoctorRepository {
 
     async findDoctorByEmail(email: string): Promise<DoctorDoc | null> {
         try {
-            const doctorData = await Doctor.findOne({ email }).populate('department');
+            const doctorData:DoctorDoc | null = await Doctor.findOne({ email }).populate('department');
             return doctorData;
         } catch (error) {
             console.error("Error finding doctor by email:", error);
@@ -26,7 +26,7 @@ class DoctorRepository {
 
     async findDoctorById(_id: string): Promise<DoctorDoc | null> {
         try {
-            const doctorData = await Doctor.findOne({ _id }).populate('department');
+            const doctorData:DoctorDoc | null = await Doctor.findOne({ _id }).populate('department');
             return doctorData;
         } catch (error) {
             console.error("Error finding doctor by email:", error);

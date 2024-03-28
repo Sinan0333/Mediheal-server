@@ -14,7 +14,7 @@ class DoctorServices {
 
     async checkExistingEmail(email: string): Promise<boolean> {
         try {
-            const userData = await this.doctorRepo.findDoctorByEmail(email);
+            const userData:DoctorDoc | null = await this.doctorRepo.findDoctorByEmail(email);
             return !!userData;
         } catch (error) {
             console.error("Error in checkExistingEmail:", error);
@@ -30,10 +30,10 @@ class DoctorServices {
             if (checkExist) return { status: false, message: 'User Email already exists' };
 
             const hashedPass: string = await bcrypt.hash(password, 10);
-            const imagePublicId = await uploadFile(data.image, "doctor_image");
+            const imagePublicId:string = await uploadFile(data.image, "doctor_image");
             const newData: IDoctorData = { ...data, password: hashedPass,image:imagePublicId };
 
-            const doctorData = await this.doctorRepo.createDoctor(newData);
+            const doctorData:DoctorDoc | null = await this.doctorRepo.createDoctor(newData);
             return { data: doctorData, status: true, message: 'Doctor registered successfully' };
         } catch (error) {
             console.error("Error in addDoctor:", error);
@@ -87,7 +87,7 @@ class DoctorServices {
 
     async ediDoctor(data: IDoctorData,_id:string): Promise<Res | null> {
         try {
-            let imagePublicId
+            let imagePublicId:string
 
             if(data.image.split("/").includes('Mediheal')){
                 imagePublicId=data.image
@@ -97,7 +97,7 @@ class DoctorServices {
 
             const newData: IDoctorData = { ...data, image:imagePublicId };
 
-            const doctorData = await this.doctorRepo.updateDoctor(newData,_id);
+            const doctorData:DoctorDoc | null = await this.doctorRepo.updateDoctor(newData,_id);
             return { data: doctorData, status: true, message: 'Doctor updated successfully' };
 
         } catch (error) {

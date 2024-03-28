@@ -17,6 +17,7 @@ export interface DoctorDoc extends Document{
    workingDays:string[]
    fees:number
    image:string 
+   is_blocked:boolean
 }
 
 export interface IDoctorData {

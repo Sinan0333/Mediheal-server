@@ -5,7 +5,7 @@ class UserRepository {
 
     async findUserByEmail(email: string): Promise<UserDoc | null> {
         try {
-            const userData = await User.findOne({ email }).exec();
+            const userData:UserDoc | null = await User.findOne({ email }).exec();
             return userData;
         } catch (error) {
             console.error("Error in findUserByEmail:", error);
@@ -15,7 +15,7 @@ class UserRepository {
 
     async findUserById(_id: string): Promise<UserDoc | null> {
         try {
-            const userData = await User.findOne({ _id }).exec();
+            const userData:UserDoc | null = await User.findOne({ _id }).exec();
             return userData;
         } catch (error) {
             console.error("Error in findUserById:", error);
@@ -35,7 +35,7 @@ class UserRepository {
 
     async findUserByIdAndUpdate(_id:string | undefined,data:object): Promise<UserDoc | null > {
         try {
-            const userData = await User.findByIdAndUpdate({_id},data,{new:true});
+            const userData:UserDoc | null = await User.findByIdAndUpdate({_id},data,{new:true});
             return userData
         } catch (error) {
             console.error("Error in findUserByIdAndUpdate:", error);

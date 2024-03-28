@@ -25,6 +25,10 @@ const UserSchema = new Schema <UserDoc>({
     image:{
         type:String,
         default:""
+    },
+    is_blocked:{
+        type:Boolean,
+        default:false
     }
 })
 
