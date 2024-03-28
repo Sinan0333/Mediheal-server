@@ -104,6 +104,21 @@ class UserController{
             res.status(500).json({ error: "Internal server error" });
         }
     }
+
+    async changeBlockStatus(req:Request,res:Response):Promise<void>{
+        try {
+            
+            const {_id} = req.params
+            const {is_blocked}:UserDoc = req.body
+            
+            const result: Res | null = await this.userService.changeBlockStatus(_id,is_blocked)  
+            res.json(result)
+            
+        } catch (error) {
+            console.error("Error in UserController.changeBLockStatus:", error);
+            res.status(500).json({ error: "Internal server error" });
+        }
+    }
 }
 
 

@@ -33,6 +33,16 @@ class DepartmentRepository {
             return null;
         }
     }
+
+    async changeBlockStatus(_id:string,is_blocked:Boolean):Promise<DepartmentDoc | null>{
+        try {
+            const departmentData:DepartmentDoc | null = await Department.findOneAndUpdate({_id},{is_blocked:is_blocked},{new:true})
+            return departmentData
+        } catch (error) {
+            console.error("Error changeBlockStatus:", error);
+            return null;
+        }
+    }
 }
 
 export default DepartmentRepository;

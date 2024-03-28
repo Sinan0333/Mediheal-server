@@ -36,13 +36,29 @@ class DepartmentServices {
         }
     }
 
-    async listDepartment(isBlocked: boolean): Promise<Res | null> {
+    async listDepartment(isBlocked?: boolean): Promise<Res | null> {
         try {
             const departmentData: DepartmentDoc[] | null = await this.departmentRepo.findDepartments();
-            const filteredData: DepartmentDoc[] | undefined = departmentData?.filter(obj => obj.is_blocked === isBlocked);
-            return { data: filteredData, status: true, message: 'Complete list of departments' };
+            if(isBlocked !==undefined){
+                const filteredData: DepartmentDoc[] | undefined = departmentData?.filter(obj => obj.is_blocked === isBlocked);
+                return { data: filteredData, status: true, message: 'Complete list of departments' };
+            }
+
+            return { data: departmentData, status: true, message: 'Complete list of departments' };
         } catch (error) {
             console.error("Error in listDepartment:", error);
+            return null;
+        }
+    }
+
+    async changeBlockStatus(_id:string,is_blocked:Boolean): Promise<Res | null> {
+        try {
+
+            const doctorData:DepartmentDoc | null = await this.departmentRepo.changeBlockStatus(_id,is_blocked)
+            return {data:doctorData,status:true,message:`Department is ${is_blocked ? "blocked" : "unblocked"}`}
+            
+        } catch (error) {
+            console.error("Error in editDoctor:", error);
             return null;
         }
     }

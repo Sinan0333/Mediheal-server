@@ -3,6 +3,7 @@ import DoctorServices from "../services/doctorServices";
 import { DoctorDoc, DoctorRes } from '../interfaces/IDoctor';
 import { Res } from '../interfaces/Icommon';
 import { setCookies } from "../utils/cookies";
+import { UserDoc } from "../interfaces/IUser";
 
 
 
@@ -53,6 +54,18 @@ class DoctorController{
         }
     }
 
+    async unBlockedDoctors(_req:Request,res:Response):Promise <void>{
+        try {
+            
+            const result: Res | null = await this.doctorServices.listDoctors(false)
+            res.json(result)
+
+        } catch (error) {
+            console.error("Error in doctorController.addDoctor:", error);
+            res.status(500).json({ error: "Internal server error" });
+        }
+    }
+
     async viewDoctor(req:Request,res:Response):Promise <void>{
         try {
             
@@ -73,6 +86,21 @@ class DoctorController{
             
             const {firstName,secondName,dob,age,gender,address,experience,phone,email,password,department,workingDays,fees,image}:DoctorDoc = req.body
             const result: Res | null = await this.doctorServices.ediDoctor({firstName,secondName,dob,age,gender,address,experience,phone,email,password,department,workingDays,fees,image},_id)  
+            res.json(result)
+            
+        } catch (error) {
+            console.error("Error in DoctorController.addDoctor:", error);
+            res.status(500).json({ error: "Internal server error" });
+        }
+    }
+
+    async changeBlockStatus(req:Request,res:Response):Promise<void>{
+        try {
+            
+            const {_id} = req.params
+            const {is_blocked}:UserDoc = req.body
+            
+            const result: Res | null = await this.doctorServices.changeBlockStatus(_id,is_blocked)  
             res.json(result)
             
         } catch (error) {

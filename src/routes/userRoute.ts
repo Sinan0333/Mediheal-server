@@ -22,6 +22,7 @@ userRoute.post('/login',userController.login.bind(userController))
 userRoute.get('/list',userController.listUsers.bind(userController))
 userRoute.post('/list/view',userController.getUserData.bind(userController))
 userRoute.post('/list/edit',userController.updateProfile.bind(userController))
+userRoute.post('/list/block/:_id',userController.changeBlockStatus.bind(userController))
 
 
 

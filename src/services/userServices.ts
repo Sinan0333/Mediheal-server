@@ -191,6 +191,18 @@ class UserServices {
         }
     }
 
+    async changeBlockStatus(_id:string,is_blocked:Boolean): Promise<Res | null> {
+        try {
+
+            const doctorData:UserDoc | null = await this.userRepo.changeBlockStatus(_id,is_blocked)
+            return {data:doctorData,status:true,message:`User is ${is_blocked ? "blocked" : "unblocked"}`}
+            
+        } catch (error) {
+            console.error("Error in editDoctor:", error);
+            return null;
+        }
+    }
+
 }
 
 export default UserServices;

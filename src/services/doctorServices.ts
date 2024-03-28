@@ -61,10 +61,14 @@ class DoctorServices {
         }
     }
 
-    async listDoctors():Promise <Res | null>{
+    async listDoctors(is_blocked?:Boolean):Promise <Res | null>{
         try {
-
-            const doctorsData:IDoctorData[] | null = await this.doctorRepo.findDoctors()
+            const doctorsData:DoctorDoc[] | null = await this.doctorRepo.findDoctors()
+    
+            if(is_blocked !==undefined){
+                const filteredData: IDoctorData[] | undefined = doctorsData?.filter(obj => obj.is_blocked === is_blocked);
+                return { data: filteredData, status: true, message: 'filtered doctors' };
+            }
             return {data:doctorsData,status:true, message:"List of doctors"}
 
         } catch (error) {
@@ -102,6 +106,18 @@ class DoctorServices {
 
         } catch (error) {
             console.error("Error in editDoctor:", error);
+            return null;
+        }
+    }
+
+    async changeBlockStatus(_id:string,is_blocked:Boolean): Promise<Res | null> {
+        try {
+
+            const doctorData:DoctorDoc | null = await this.doctorRepo.changeBlockStatus(_id,is_blocked)
+            return {data:doctorData,status:true,message:`Doctor is ${is_blocked ? "blocked" : "unblocked"}`}
+
+        } catch (error) {
+            console.error("Error in changeBlockStatus:", error);
             return null;
         }
     }

@@ -13,7 +13,7 @@ export interface DoctorDoc extends Document{
    phone:number 
    email:string 
    password:string
-   department:Types.ObjectId
+   department:Types.ObjectId 
    workingDays:string[]
    fees:number
    image:string 
