@@ -36,6 +36,45 @@ class DepartmentServices {
         }
     }
 
+    async editDepartment(_id:string,data: IDepartmentData): Promise<Res | null> {
+        try {
+            const { name, title, description, logo, image } = data;
+            if (!name || !title || !description || !logo || !image) {
+                return { status: false, message: 'Missing required fields' };
+            }
+
+            let logoPublicId:string
+            if(data.image.split("/").includes('Mediheal')){
+                logoPublicId=data.image
+            }else{
+                logoPublicId = await uploadFile(data.logo,"department_logos");
+            }
+
+            let imagePublicId:string
+            if(data.image.split("/").includes('Mediheal')){
+                imagePublicId=data.image
+            }else{
+                imagePublicId = await uploadFile(data.image,"department_images");
+            }
+
+            const departmentData:DepartmentDoc | null = await this.departmentRepo.updateDepartment(_id,name, title, description, logoPublicId, imagePublicId);
+            return { data: departmentData, status: true, message: "Department updated successfully" };
+        } catch (error) {
+            console.error("Error in addDepartment:", error);
+            return null;
+        }
+    }
+
+    async getDepartmentData(_id:string): Promise<Res | null> {
+        try {
+            const departmentData:DepartmentDoc | null = await this.departmentRepo.findDepartmentById(_id)
+            return { data: departmentData, status: true, message: 'Departments Data' };
+        } catch (error) {
+            console.error("Error in listDepartment:", error);
+            return null;
+        }
+    }
+
     async listDepartment(isBlocked?: boolean): Promise<Res | null> {
         try {
             const departmentData: DepartmentDoc[] | null = await this.departmentRepo.findDepartments();

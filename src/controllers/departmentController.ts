@@ -26,6 +26,33 @@ class DepartmentController{
         }
     }
 
+    async editDepartment(req:Request,res:Response):Promise<void>{
+        try {
+            
+            const {name,title,description,logo,image}:IDepartmentData = req.body
+            const {_id} = req.params
+            const result: Res | null = await this.departmentServices.editDepartment(_id,{ name, title, description, logo, image })  
+            res.json(result)
+            
+        } catch (error) {
+            console.error("Error in Department.addDepartment:", error);
+            res.status(500).json({ error: "Internal server error" });
+        }
+    }
+
+    async getDepartment(req:Request,res:Response):Promise<void>{
+        try {
+            
+            const {_id} = req.params
+            const result: Res | null = await this.departmentServices.getDepartmentData(_id)  
+            res.json(result)
+            
+        } catch (error) {
+            console.error("Error in Department.getDepartment:", error);
+            res.status(500).json({ error: "Internal server error" });
+        }
+    }
+
     async listDepartment(_req:Request,res:Response):Promise<void>{
         try {
 
