@@ -2,18 +2,18 @@ import { ObjectId, Document } from "mongoose";
 
 export interface ScheduleDoc extends Document {
     _id?: ObjectId;
-    monday: ScheduleDay[];
-    tuesday: ScheduleDay[];
-    wednesday: ScheduleDay[];
-    thursday: ScheduleDay[];
-    friday: ScheduleDay[];
-    saturday: ScheduleDay[];
-    sunday: ScheduleDay[];
+    monday: ScheduleTime[] | [];
+    tuesday: ScheduleTime[]|[];
+    wednesday: ScheduleTime[] | [];
+    thursday: ScheduleTime[] | [];
+    friday: ScheduleTime[] | [];
+    saturday: ScheduleTime[] | [];
+    sunday: ScheduleTime[] | [];
 } 
 
-export interface ScheduleDay {
+export interface ScheduleTime {
     startTime: string;
     endTime: string;
     break: boolean;
-    booked: boolean;
+    isReserved: boolean;
 }

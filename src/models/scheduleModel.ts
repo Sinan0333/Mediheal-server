@@ -5,7 +5,7 @@ const ScheduleItemSchema = new Schema({
     startTime: { type: String, required: true },
     endTime: { type: String, required: true },
     break:{type:Boolean, required:true},
-    booked:{type:Boolean, required:true}
+    isReserved:{type:Boolean, required:true}
 })
 
 const ScheduleSchema = new Schema <ScheduleDoc>({

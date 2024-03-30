@@ -1,5 +1,12 @@
-import {Document, Types} from 'mongoose'
+import {Document, ObjectId, Types} from 'mongoose'
 import { DepartmentDoc } from './IDepartment'
+
+export interface ScheduleType {
+   startTime:number
+   endTime:number
+   interval:number
+}
+
 
 export interface DoctorDoc extends Document{
    _id?:string
@@ -14,7 +21,9 @@ export interface DoctorDoc extends Document{
    email:string 
    password:string
    department:Types.ObjectId 
-   workingDays:string[]
+   workingDays:number[]
+   slots:ObjectId
+   schedule:ScheduleType
    fees:number
    image:string 
    is_blocked:boolean
@@ -33,7 +42,9 @@ export interface IDoctorData {
    email:string 
    password:string
    department:Types.ObjectId | DepartmentDoc
-   workingDays:string[]
+   workingDays:number[]
+   slots?:ObjectId
+   schedule:ScheduleType
    fees:number
    image:string
 }

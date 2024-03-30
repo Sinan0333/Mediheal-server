@@ -48,8 +48,27 @@ const DoctorSchema = new Schema <DoctorDoc>({
         required: true
     },
     workingDays:{
-        type:[String],
+        type:[Number],
         required:true
+    },
+    slots:{
+        type:Schema.Types.ObjectId,
+        ref:'Schedule',
+        required:true
+    },
+    schedule:{
+        startTime:{
+            type:Number,
+            required:true
+        },
+        endTime:{
+            type:Number,
+            required:true
+        },
+        interval:{
+            type:Number,
+            required:true
+        } 
     },
     fees:{
         type:Number,

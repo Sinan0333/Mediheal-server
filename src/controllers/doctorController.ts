@@ -18,8 +18,8 @@ class DoctorController{
     async addDoctor(req:Request,res:Response):Promise<void>{
         try {
             
-            const {firstName,secondName,dob,age,gender,address,experience,phone,email,password,department,workingDays,fees,image}:DoctorDoc = req.body
-            const result: Res | null = await this.doctorServices.addDoctor({firstName,secondName,dob,age,gender,address,experience,phone,email,password,department,workingDays,fees,image})  
+            const {firstName,secondName,dob,age,gender,address,experience,phone,email,password,department,workingDays,fees,image,schedule}:DoctorDoc = req.body
+            const result: Res | null = await this.doctorServices.addDoctor({firstName,secondName,dob,age,gender,address,experience,phone,email,password,department,workingDays,schedule,fees,image})  
             res.json(result)
             
         } catch (error) {
@@ -84,8 +84,8 @@ class DoctorController{
             
             const {_id} = req.params
             
-            const {firstName,secondName,dob,age,gender,address,experience,phone,email,password,department,workingDays,fees,image}:DoctorDoc = req.body
-            const result: Res | null = await this.doctorServices.ediDoctor({firstName,secondName,dob,age,gender,address,experience,phone,email,password,department,workingDays,fees,image},_id)  
+            const {firstName,secondName,dob,age,gender,address,experience,phone,email,password,department,workingDays,fees,image,schedule}:DoctorDoc = req.body
+            const result: Res | null = await this.doctorServices.ediDoctor({firstName,secondName,dob,age,gender,address,experience,phone,email,password,department,workingDays,schedule,fees,image},_id)  
             res.json(result)
             
         } catch (error) {

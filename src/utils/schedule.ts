@@ -1,146 +1,167 @@
-export const slots = [
-    {
-        startTime:'09:00 am',
-        endTime:'09:30 am',
-        break:false,
-        booked:false
-    },
-    {
-        startTime:'09:30 am',
-        endTime:'10:00 am',
-        break:false,
-        booked:false
-    },
-    {
-        startTime:'10:00 am',
-        endTime:'10:30 am',
-        break:false,
-        booked:false
-    },
-    {
-        startTime:'10:30 am',
-        endTime:'11:00 am',
-        break:false,
-        booked:false
-    },
-    {
-        startTime:'11:00 am',
-        endTime:'11:30 am',
-        break:false,
-        booked:false
-    },
-    {
-        startTime:'11:30 am',
-        endTime:'12:00',
-        break:false,
-        booked:false
-    },
-    {
-        startTime:'12:00 pm',
-        endTime:'12:30 pm',
-        break:false,
-        booked:false
-    },
-    {
-        startTime:'12:30 pm',
-        endTime:'01:00 pm',
-        break:false,
-        booked:false
-    },
-    {
-        startTime:'01:00 pm',
-        endTime:'01:30 pm',
-        break:false,
-        booked:false
-    },
-    {
-        startTime:'01:30 pm',
-        endTime:'02:00 pm',
-        break:false,
-        booked:false
-    },
-    {
-        startTime:'02:00 pm',
-        endTime:'02:30 pm',
-        break:false,
-        booked:false
-    },
-    {
-        startTime:'02:30 pm',
-        endTime:'03:00 pm',
-        break:false,
-        booked:false
-    },
-    {
-        startTime:'03:00 pm',
-        endTime:'03:30 pm',
-        break:false,
-        booked:false
-    },
-    {
-        startTime:'03:30 pm',
-        endTime:'04:00 pm',
-        break:false,
-        booked:false
-    },
-    {
-        startTime:'04:00 pm',
-        endTime:'04:30 pm',
-        break:false,
-        booked:false
-    },
-    {
-        startTime:'04:30 pm',
-        endTime:'05:00 pm',
-        break:false,
-        booked:false
-    },
-    {
-        startTime:'05:00 pm',
-        endTime:'05:30 pm',
-        break:false,
-        booked:false
-    },
-    {
-        startTime:'05:30 pm',
-        endTime:'06:00 pm',
-        break:false,
-        booked:false
-    },
-    {
-        startTime:'06:00 pm',
-        endTime:'06:30 pm',
-        break:false,
-        booked:false
-    },
-    {
-        startTime:'06:30 pm',
-        endTime:'07:00 pm',
-        break:false,
-        booked:false
-    },
-    {
-        startTime:'07:00 pm',
-        endTime:'07:30 pm',
-        break:false,
-        booked:false
-    },
-    {
-        startTime:'07:30 pm',
-        endTime:'08:00 pm',
-        break:false,
-        booked:false
-    },
-    {
-        startTime:'08:00 pm',
-        endTime:'08:30 pm',
-        break:false,
-        booked:false
-    },
-    {
-        startTime:'08:30 pm',
-        endTime:'09:00 pm',
-        break:false,
-        booked:false
-    },
-]
+// import {ScheduleTime} from "../interfaces/Ischedule"
+
+
+
+// export const geneateSlots = async (workingDays: number[]): Promise<void>=> {
+//     try {
+//         let slots: ScheduleTime[] = [];
+//         const slotDurationInMinutes = 30; 
+//         let initial = 0
+//         const schedule = {
+//             monday:slots,
+//             tuesday:slots,
+//             wednesday:slots,
+//             thursday:slots,
+//             friday:slots,
+//             saturday:slots,
+//             sunday:slots
+//         }
+
+//         // Iterate over each day between start and end date
+//         let currentDate = new Date();
+//         while (initial <= 6) {
+
+//             const currentDayOfWeek = currentDate.getDay()
+
+//             // Check if the current day is a working day for the doctor
+//             if (workingDays.includes(currentDayOfWeek)) {
+//                 const startTime = new Date(currentDate);
+//                 const endTime = new Date(currentDate);
+//                 const workingHoursStart = 9; // Example: 9:00 AM
+//                 const workingHoursEnd = 17; // Example: 5:00 PM
+
+//                 // Iterate over working hours, creating slots at regular intervals
+//                 for (let hour = workingHoursStart; hour < workingHoursEnd; hour++) {
+//                     startTime.setHours(hour, 0, 0, 0); // Set start time for slot
+//                     endTime.setHours(hour, slotDurationInMinutes, 0, 0); // Set end time for slot
+//                     slots.push({
+//                         startTime,
+//                         endTime,
+//                         break:false,
+//                         isReserved: false,
+//                     });
+//                 }
+//                 switch (currentDayOfWeek) {
+//                     case 1:
+//                       schedule.monday = slots
+//                       break;
+//                     case 2:
+//                       schedule.tuesday = slots
+//                       break;
+//                     case 3:
+//                         schedule.wednesday = slots
+//                         break;
+//                     case 4:
+//                         schedule.thursday = slots
+//                         break;
+//                     case 5:
+//                         schedule.friday = slots
+//                         break;
+//                     case 6:
+//                         schedule.saturday = slots
+//                         break;
+//                     case 0:
+//                         schedule.sunday = slots
+//                         break;
+//                     default:
+//                         console.log('currentDayOfWeek',currentDayOfWeek);
+//                   }
+//             }
+//             slots=[]
+//             initial++
+//             currentDate.setDate(currentDate.getDate() + 1); // Move to next day
+//         }
+//         console.log(schedule);
+
+//     } catch (error) {
+//         console.error('Error generating slots:', error);
+//         throw new Error('Failed to generate slots');
+//     }
+// }
+
+
+function generateCustomTimeSlots(customStartTime: Date, endTime: Date, interval: number): string[] {
+    const timeSlots: string[] = [];
+    let currentTime = new Date(customStartTime);
+
+    // Loop until the currentTime exceeds the endTime
+    while (currentTime < endTime) {
+        const hours = currentTime.getHours();
+        const minutes = currentTime.getMinutes();
+
+        // Format the time string
+        const formattedTime = `${hours}:${minutes < 10 ? '0' : ''}${minutes}`;
+
+        // Add the formatted time to the timeSlots array
+        timeSlots.push(formattedTime);
+
+        // Increment the currentTime by the interval (in minutes)
+        currentTime.setMinutes(currentTime.getMinutes() + interval);
+    }
+
+    return timeSlots;
+}
+
+
+
+export function generateSlots(startTime: number, endTime: number, interval: number,workingDays:number[]): any {
+    const slots: any = [];
+    const customStartTime = new Date();
+    customStartTime.setHours(startTime, 0, 0); 
+    const customEndTime = new Date();
+    customEndTime.setHours(endTime, 0, 0);
+    const timeSlots: string[] = generateCustomTimeSlots(customStartTime, customEndTime, interval);
+    
+    const schedule = {
+        monday:[],
+        tuesday:[],
+        wednesday:[],
+        thursday:[],
+        friday:[],
+        saturday:[],
+        sunday:[]
+    }
+
+    for(let i=0;i<timeSlots.length-1;i++){
+        slots.push({
+            startTime:timeSlots[i],
+            endTime:timeSlots[i+1],
+            break:false,
+            isReserved: false,
+        })
+    }
+
+    for(let i=0;i<7;i++){
+        if(workingDays.includes(i)){
+            switch (i) {
+                case 1:
+                  schedule.monday = slots
+                  break;
+                case 2:
+                  schedule.tuesday = slots
+                  break;
+                case 3:
+                    schedule.wednesday = slots
+                    break;
+                case 4:
+                    schedule.thursday = slots
+                    break;
+                case 5:
+                    schedule.friday = slots
+                    break;
+                case 6:
+                    schedule.saturday = slots
+                    break;
+                case 0:
+                    schedule.sunday = slots
+                    break;
+                default:
+                    console.log('currentDayOfWeek',i);
+              }
+        }
+    }
+
+    return schedule;
+}
+
+

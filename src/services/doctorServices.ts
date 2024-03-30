@@ -1,15 +1,19 @@
 import bcrypt from 'bcrypt';
 import DoctorRepositories from "../repositories/doctorRepositories";
+import ScheduleRepository from '../repositories/scheduleRepository';
 import { DoctorDoc, DoctorRes, IDoctorData } from '../interfaces/IDoctor';
 import { Res } from '../interfaces/Icommon';
 import { uploadFile } from '../utils/cloudinary';
 import { generateToken } from '../utils/jwt';
+import { generateSlots } from '../utils/schedule';
 
 class DoctorServices {
     private doctorRepo: DoctorRepositories;
+    private scheduleRepo:ScheduleRepository
 
-    constructor(doctorRepo: DoctorRepositories) {
+    constructor(doctorRepo: DoctorRepositories,scheduleRepo:ScheduleRepository) {
         this.doctorRepo = doctorRepo;
+        this.scheduleRepo = scheduleRepo
     }
 
     async checkExistingEmail(email: string): Promise<boolean> {
@@ -31,12 +35,39 @@ class DoctorServices {
 
             const hashedPass: string = await bcrypt.hash(password, 10);
             const imagePublicId:string = await uploadFile(data.image, "doctor_image");
-            const newData: IDoctorData = { ...data, password: hashedPass,image:imagePublicId };
+            const slotsObject = await generateSlots(data.schedule.startTime,data.schedule.endTime,data.schedule.interval,data.workingDays)
+            const slotData = await this.scheduleRepo.createSchedule(slotsObject)
+            const newData: IDoctorData = { ...data, password: hashedPass,image:imagePublicId,slots:slotData?._id};
 
             const doctorData:DoctorDoc | null = await this.doctorRepo.createDoctor(newData);
             return { data: doctorData, status: true, message: 'Doctor registered successfully' };
         } catch (error) {
             console.error("Error in addDoctor:", error);
+            return null;
+        }
+    }
+
+    async ediDoctor(data: IDoctorData,_id:string): Promise<Res | null> {
+        try {
+            let imagePublicId:string
+            const oldDoctorData:IDoctorData | null = await this.doctorRepo.findDoctorById(_id)
+
+            if(data.image.split("/").includes('Mediheal')){
+                imagePublicId=data.image
+            }else{
+                imagePublicId = await uploadFile(data.image,"doctor_image");
+            }
+
+            const slotsObject = await generateSlots(data.schedule.startTime,data.schedule.endTime,data.schedule.interval,data.workingDays)
+            const slotData = await this.scheduleRepo.findScheduleAndUpdate(oldDoctorData?.slots,slotsObject)
+            
+            const newData: IDoctorData = { ...data, image:imagePublicId,slots:slotData?._id };
+
+            const doctorData:DoctorDoc | null = await this.doctorRepo.updateDoctor(newData,_id);
+            return { data: doctorData, status: true, message: 'Doctor updated successfully' };
+
+        } catch (error) {
+            console.error("Error in editDoctor:", error);
             return null;
         }
     }
@@ -89,26 +120,7 @@ class DoctorServices {
         }
     }
 
-    async ediDoctor(data: IDoctorData,_id:string): Promise<Res | null> {
-        try {
-            let imagePublicId:string
-
-            if(data.image.split("/").includes('Mediheal')){
-                imagePublicId=data.image
-            }else{
-                imagePublicId = await uploadFile(data.image,"doctor_image");
-            }
-
-            const newData: IDoctorData = { ...data, image:imagePublicId };
-
-            const doctorData:DoctorDoc | null = await this.doctorRepo.updateDoctor(newData,_id);
-            return { data: doctorData, status: true, message: 'Doctor updated successfully' };
-
-        } catch (error) {
-            console.error("Error in editDoctor:", error);
-            return null;
-        }
-    }
+    
 
     async changeBlockStatus(_id:string,is_blocked:Boolean): Promise<Res | null> {
         try {

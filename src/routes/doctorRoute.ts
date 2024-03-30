@@ -4,9 +4,11 @@ import DoctorRepository from '../repositories/doctorRepositories'
 import DoctorServices from '../services/doctorServices'
 import DoctorController from '../controllers/doctorController'
 
+import ScheduleRepository from '../repositories/scheduleRepository'
 
+const scheduleRepository = new ScheduleRepository()
 const doctorRepositories = new DoctorRepository()
-const doctorServices = new DoctorServices(doctorRepositories)
+const doctorServices = new DoctorServices(doctorRepositories,scheduleRepository)
 const doctorController = new DoctorController(doctorServices)
 
 
