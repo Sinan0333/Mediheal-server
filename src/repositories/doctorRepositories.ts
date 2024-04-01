@@ -26,7 +26,7 @@ class DoctorRepository {
 
     async findDoctorById(_id: string): Promise<DoctorDoc | null> {
         try {
-            const doctorData:DoctorDoc | null = await Doctor.findOne({ _id }).populate('department');
+            const doctorData:DoctorDoc | null = await Doctor.findOne({ _id }).populate('department slots').exec();
             return doctorData;
         } catch (error) {
             console.error("Error finding doctor by email:", error);
