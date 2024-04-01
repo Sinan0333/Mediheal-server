@@ -26,6 +26,19 @@ class PatientController{
         }
     }
 
+    async getUserPatients(req:Request,res:Response):Promise<void>{
+        try {
+            
+            const {userId} = req.params
+            const result: Res | null = await this.patientServices.getUserPatients(userId)  
+            res.json(result)
+            
+        } catch (error) {
+            console.error("Error in Department.addDepartment:", error);
+            res.status(500).json({ error: "Internal server error" });
+        }
+    }
+
 }
 
 

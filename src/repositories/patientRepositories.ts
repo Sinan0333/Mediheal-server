@@ -3,12 +3,12 @@ import Patient from "../models/patientModel";
 
 class PatientRepository {
 
-    async findPatientByUserId(userId:string): Promise<PatientDoc | null> {
+    async findPatientsByUserId(userId:string): Promise<PatientDoc[] | null> {
         try {
-            const patientData:PatientDoc | null = await Patient.findOne({ userId }).exec();
+            const patientData:PatientDoc[] | null = await Patient.find({ userId }).exec();
             return patientData;
         } catch (error) {
-            console.error("Error in findPatientByUserId:", error);
+            console.error("Error in findPatientsByUserId:", error);
             return null;
         }
     }

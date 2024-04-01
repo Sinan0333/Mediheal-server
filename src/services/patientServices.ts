@@ -25,6 +25,18 @@ class PatientServices {
         }
     }
 
+    async getUserPatients(userId:string): Promise<Res | null> {
+        try {
+
+            const patientsData:PatientDoc[] | null = await this.patientRepo.findPatientsByUserId(userId);
+            return { data: patientsData, status: true, message: "Complete patients list of a specific user" };
+
+        } catch (error) {
+            console.error("Error in addPatient:", error);
+            return null;
+        }
+    }
+
 }
 
 export default PatientServices;

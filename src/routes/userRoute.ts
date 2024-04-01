@@ -33,6 +33,7 @@ userRoute.post('/list/view',userController.getUserData.bind(userController))
 userRoute.post('/list/edit',userController.updateProfile.bind(userController))
 userRoute.post('/list/block/:_id',userController.changeBlockStatus.bind(userController))
 userRoute.post('/patient/add',patientController.addPatient.bind(patientController))
+userRoute.get('/patient/:userId',patientController.getUserPatients.bind(patientController))
 
 
 export default userRoute
