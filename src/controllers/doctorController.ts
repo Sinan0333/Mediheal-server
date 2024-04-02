@@ -109,6 +109,18 @@ class DoctorController{
         }
     }
 
+    async getBestDoctors(_req:Request,res:Response):Promise<void>{
+        try {
+            
+            const result: Res | null = await this.doctorServices.bestDoctors()
+            res.json(result)
+            
+        } catch (error) {
+            console.error("Error in DoctorController.addDoctor:", error);
+            res.status(500).json({ error: "Internal server error" });
+        }
+    }
+
 
 }
 

@@ -134,6 +134,21 @@ class DoctorServices {
         }
     }
 
+    async bestDoctors(): Promise<Res | null> {
+        try {
+
+            const doctorData:DoctorDoc[] | null = await this.doctorRepo.findDoctors()
+            const filterDoctors: DoctorDoc[] | undefined = doctorData?.sort((a, b) => {
+                return b.experience - a.experience;
+            })
+            return {data:filterDoctors,status:true,message:"Doctors is descending order based on the experience"}
+
+        } catch (error) {
+            console.error("Error in changeBlockStatus:", error);
+            return null;
+        }
+    }
+
 }
 
 export default DoctorServices;

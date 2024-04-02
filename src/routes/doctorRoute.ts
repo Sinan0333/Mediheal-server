@@ -20,6 +20,7 @@ doctorRoute.post('/add',doctorController.addDoctor.bind(doctorController))
 doctorRoute.get('/view/:_id',doctorController.viewDoctor.bind(doctorController))
 doctorRoute.post('/edit/:_id',doctorController.ediDoctor.bind(doctorController))
 doctorRoute.get('/list',doctorController.listDoctors.bind(doctorController))
+doctorRoute.get('/list/best',doctorController.getBestDoctors.bind(doctorController))
 doctorRoute.get('/list/unblocked',doctorController.unBlockedDoctors.bind(doctorController))
 doctorRoute.post('/block/:_id',doctorController.changeBlockStatus.bind(doctorController))
 
