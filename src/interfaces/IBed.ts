@@ -11,4 +11,5 @@ export interface BedDoc {
     description?:string
     available:boolean
     total?:number
+    is_blocked:Boolean
 }

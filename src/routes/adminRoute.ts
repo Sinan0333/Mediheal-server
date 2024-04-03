@@ -35,7 +35,9 @@ adminRoute.get('/department/unblocked',departmentController.unBlockedDepartments
 adminRoute.post('/department/add',departmentController.addDepartment.bind(departmentController))
 adminRoute.post('/department/edit/:_id',departmentController.editDepartment.bind(departmentController))
 adminRoute.post('/department/block/:_id',departmentController.changeBlockStatus.bind(departmentController))
+adminRoute.get('/bed',bedController.getAllBeds.bind(bedController))
 adminRoute.post('/bed/add',bedController.addBed.bind(bedController))
+adminRoute.post('/bed/block/:_id',bedController.changeBlockStatus.bind(bedController))
 
 
 

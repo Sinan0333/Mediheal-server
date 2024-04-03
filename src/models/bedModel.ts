@@ -31,7 +31,12 @@ const bedSchema = new Schema <BedDoc>({
         type:Number
     },
     available:{
-        type:Boolean
+        type:Boolean,
+        required:true
+    },
+    is_blocked:{
+        type:Boolean,
+        required:true
     }
 })
 
