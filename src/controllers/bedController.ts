@@ -66,6 +66,19 @@ class BedController{
         }
     }
 
+    async assignPatient(req:Request,res:Response):Promise<void>{
+        try {
+            
+            const {patient,type,assignDate,dischargeDate,description,assignBy}:BedDoc = req.body
+            const result: Res | null = await this.bedServices.assignPatient({patient,type,assignDate,dischargeDate,description,assignBy,available:false})  
+            res.json(result)
+            
+        } catch (error) {
+            console.error("Error in BedController.assignPatient:", error);
+            res.status(500).json({ error: "Internal server error" });
+        }
+    }
+
 }
 
 

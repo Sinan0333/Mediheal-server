@@ -12,6 +12,8 @@ import BedRepository from '../repositories/bedRepositories'
 import BedServices from '../services/bedServices'
 import BedController from '../controllers/bedController'
 
+import PatientRepository from '../repositories/patientRepositories'
+
 const adminRoute:Router = express.Router()
 
 
@@ -23,8 +25,10 @@ const departmentRepository = new DepartmentRepository()
 const departmentServices = new DepartmentServices(departmentRepository)
 const departmentController = new DepartmentController(departmentServices)
 
+const patientRepositories = new PatientRepository()
+
 const bedRepositories = new BedRepository()
-const bedServices = new BedServices(bedRepositories)
+const bedServices = new BedServices(bedRepositories,patientRepositories)
 const bedController = new BedController(bedServices)
 
 
@@ -37,7 +41,9 @@ adminRoute.post('/department/edit/:_id',departmentController.editDepartment.bind
 adminRoute.post('/department/block/:_id',departmentController.changeBlockStatus.bind(departmentController))
 adminRoute.get('/bed',bedController.getAllBeds.bind(bedController))
 adminRoute.post('/bed/add',bedController.addBed.bind(bedController))
+adminRoute.get('/bed/view/:_id',bedController.getBedDetails.bind(bedController))
 adminRoute.post('/bed/block/:_id',bedController.changeBlockStatus.bind(bedController))
+adminRoute.post('/bed/assign',bedController.assignPatient.bind(bedController))
 
 
 

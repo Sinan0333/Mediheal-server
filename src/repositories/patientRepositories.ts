@@ -22,6 +22,16 @@ class PatientRepository {
             throw error;
         }
     }
+
+    async findPatientById(_id:string): Promise<PatientDoc  | null> {
+        try {
+            const patientData:PatientDoc | null = await Patient.findOne({ _id }).exec();
+            return patientData;
+        } catch (error) {
+            console.error("Error in findPatientById:", error);
+            throw error;
+        }
+    }
     
 }
 

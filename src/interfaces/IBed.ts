@@ -13,3 +13,17 @@ export interface BedDoc {
     total?:number
     is_blocked:Boolean
 }
+
+export interface UpdateBedDoc {
+    _id?:string
+    type?:string
+    charge?:number
+    assignDate?:Date
+    dischargeDate?:Date
+    assignBy?:string
+    patient?:ObjectId
+    description?:string
+    available?:boolean
+    total?:number
+    is_blocked?:Boolean
+}
