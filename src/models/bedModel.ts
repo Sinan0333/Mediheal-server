@@ -16,7 +16,8 @@ const bedSchema = new Schema <BedDoc>({
         ref:'Patient',
     },
     assignBy:{
-        type:String
+        type:Schema.Types.ObjectId,
+        ref:'Doctor'
     },
     assignDate:{
         type:Date

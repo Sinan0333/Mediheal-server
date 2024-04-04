@@ -5,7 +5,7 @@ class BedRepository {
 
     async findBedById(_id:string): Promise<BedDoc | null> {
         try {
-            const bedData:BedDoc | null = await Bed.findOne({ _id }).exec();
+            const bedData:BedDoc | null = await Bed.findOne({ _id }).populate('assignBy patient');
             return bedData;
         } catch (error) {
             console.error("Error in findBedById:", error);
@@ -25,7 +25,7 @@ class BedRepository {
 
     async findBeds(): Promise<BedDoc[] | null> {
         try {
-            const bedData:BedDoc[] | null = await Bed.find().exec();
+            const bedData:BedDoc[] | null = await Bed.find().populate('assignBy');
             return bedData;
         } catch (error) {
             console.error("Error in findBedById:", error);
