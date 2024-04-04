@@ -69,8 +69,21 @@ class BedController{
     async assignPatient(req:Request,res:Response):Promise<void>{
         try {
             
-            const {patient,type,assignDate,dischargeDate,description,assignBy}:BedDoc = req.body
-            const result: Res | null = await this.bedServices.assignPatient({patient,type,assignDate,dischargeDate,description,assignBy,available:false})  
+            const {patient,type,assignDate,dischargeDate,description,assignBy,charge}:BedDoc = req.body
+            const result: Res | null = await this.bedServices.assignPatient({patient,type,assignDate,dischargeDate,description,assignBy,charge,available:false})  
+            res.json(result)
+            
+        } catch (error) {
+            console.error("Error in BedController.assignPatient:", error);
+            res.status(500).json({ error: "Internal server error" });
+        }
+    }
+
+    async updateBed(req:Request,res:Response):Promise<void>{
+        try {
+            const {_id} = req.params
+            const {patient,type,charge,assignDate,dischargeDate,description,assignBy,available}:BedDoc = req.body
+            const result: Res | null = await this.bedServices.updateBed(_id,{patient,type,charge,assignDate,dischargeDate,description,assignBy,available})  
             res.json(result)
             
         } catch (error) {

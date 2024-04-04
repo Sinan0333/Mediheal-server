@@ -63,12 +63,31 @@ class BedServices {
     
     async updateBed(_id:string,data:UpdateBedDoc ): Promise<Res | null> {
         try {
+            
+            if(data.patient){
+                const patientData:PatientDoc | null = await this.patientRepo.findPatientById(""+data.patient)                
+                if(!patientData) return {status:false,message:"Wrong patientID"}
+
+                const bedsData:BedDoc[] | null = await this.bedRepo.findBedByPatientId(""+data.patient)
+                const filterBeds:BedDoc[] | undefined = bedsData?.filter((bed)=>bed._id !=_id)
+                const checkExist:Boolean | undefined = filterBeds?.every((bed)=>bed.available === true && bed._id != _id)
+                if(!checkExist) return {status:false ,message:"This patient is already reserved a bed"}
+            }
+
+            const OldBedData:BedDoc | null = await this.bedRepo.findBedById(_id)
+            if(OldBedData?.type != data.type || OldBedData?.charge != data.charge){
+                const bedData:BedDoc | null = await this.bedRepo.findOneAndUpdate(data);
+                if(!bedData) return {status:false , message:"No Available Slots Please Select Another Bed Type"}
+
+                await this.bedRepo.findOneAndUnset(_id)
+                return { data: bedData, status: true, message: "Bed Updated Successfully" };
+            }
 
             const bedData:BedDoc | null = await this.bedRepo.findBedAndUpdate(_id,data);
-            return { data: bedData, status: true, message: "updateBed" };
+            return { data: bedData, status: true, message: "Bed Updated Successfully" };
 
         } catch (error) {
-            console.error("Error in getBedDetails:", error);
+            console.error("Error in updateBed:", error);
             return null;
         }
     }

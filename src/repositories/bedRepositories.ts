@@ -45,7 +45,7 @@ class BedRepository {
 
     async findOneAndUpdate(data:UpdateBedDoc): Promise<BedDoc | null> {
         try {
-            const bedData:BedDoc | null = await Bed.findOneAndUpdate({available:true,is_blocked:false,type:data.type},data,{new:true}).exec();
+            const bedData:BedDoc | null = await Bed.findOneAndUpdate({available:true,is_blocked:false,type:data.type,charge:data.charge},data,{new:true}).exec();
             return bedData;
         } catch (error) {
             console.error("Error in findOneAndUpdate:", error);
@@ -73,6 +73,15 @@ class BedRepository {
         }
     }
     
+    async findOneAndUnset(_id:string):Promise<BedDoc | null>{
+        try {
+            const bedData:BedDoc | null = await Bed.findOneAndUpdate({_id},{$set:{available:true}, $unset: { patient: "",assignBy:"",assignDate:"",dischargeDate:"",description:"",total:"", } })
+            return bedData
+        } catch (error) {
+            console.error("Error findOneAndUnset:", error);
+            return null;
+        }
+    }
     
 }
 
