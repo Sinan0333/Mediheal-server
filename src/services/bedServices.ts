@@ -113,6 +113,17 @@ class BedServices {
         }
     }
 
+    async dischargePatient(_id:string): Promise<Res | null> {
+        try {
+            const bedData:BedDoc | null = await this.bedRepo.findOneAndUnset(_id);
+            return { data: bedData, status: true, message: "Patient Discharged Successfully"};
+
+        } catch (error) {
+            console.error("Error in dischargePatient:", error);
+            return null;
+        }
+    }
+
 }
 
 export default BedServices;

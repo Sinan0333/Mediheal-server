@@ -45,6 +45,7 @@ adminRoute.get('/bed/view/:_id',bedController.getBedDetails.bind(bedController))
 adminRoute.post('/bed/edit/:_id',bedController.updateBed.bind(bedController))
 adminRoute.post('/bed/block/:_id',bedController.changeBlockStatus.bind(bedController))
 adminRoute.post('/bed/assign',bedController.assignPatient.bind(bedController))
+adminRoute.put('/bed/discharge/:_id',bedController.dischargePatient.bind(bedController))
 
 
 

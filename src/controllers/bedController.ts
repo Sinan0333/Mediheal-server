@@ -92,6 +92,20 @@ class BedController{
         }
     }
 
+    async dischargePatient(req:Request,res:Response):Promise<void>{
+        try {
+            
+            const {_id} = req.params
+            const result: Res | null = await this.bedServices.dischargePatient(_id)  
+            res.json(result)
+            
+        } catch (error) {
+            console.error("Error in BedController.dischargePatient:", error);
+            res.status(500).json({ error: "Internal server error" });
+        }
+    }
+
+
 }
 
 
