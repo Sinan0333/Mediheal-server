@@ -13,42 +13,43 @@ class BedServices {
         this.patientRepo = patientRepo
     }
 
-    async addBed(data: BedDoc): Promise<Res | null> {
+    async addBed(data: BedDoc): Promise<Res> {
         try {
 
             const patientData:BedDoc| null = await this.bedRepo.createBed(data);
             return { data: patientData, status: true, message: "Bed added successfully" };
         } catch (error) {
             console.error("Error in addBed:", error);
-            return null;
+            throw error;
         }
     }
 
-    async getBedDetails(_id:string ): Promise<Res | null> {
+    async getBedDetails(_id:string ): Promise<Res> {
         try {
 
             const bedData:BedDoc | null = await this.bedRepo.findBedById(_id);
+            if(!bedData) return {status:false,message:"Couldn't get the data"}
             return { data: bedData, status: true, message: "Bed Details" };
 
         } catch (error) {
             console.error("Error in getBedDetails:", error);
-            return null;
+            throw error;
         }
     }
 
-    async getAllBeds(): Promise<Res | null> {
+    async getAllBeds(): Promise<Res> {
         try {
 
-            const bedData:BedDoc[] | null = await this.bedRepo.findBeds();
+            const bedData:BedDoc[] | [] = await this.bedRepo.findBeds();
             return { data: bedData, status: true, message: "All Bed Data" };
 
         } catch (error) {
             console.error("Error in getAllBeds:", error);
-            return null;
+            throw error;
         }
     }
 
-    async changeBlockStatus(_id:string,is_blocked:Boolean): Promise<Res | null> {
+    async changeBlockStatus(_id:string,is_blocked:Boolean): Promise<Res> {
         try {
 
             const doctorData:BedDoc | null = await this.bedRepo.changeBlockStatus(_id,is_blocked)
@@ -56,12 +57,11 @@ class BedServices {
             
         } catch (error) {
             console.error("Error in ChangeBLockStatus:", error);
-            return null;
+            throw error;
         }
     }
 
-    
-    async updateBed(_id:string,data:UpdateBedDoc ): Promise<Res | null> {
+    async updateBed(_id:string,data:UpdateBedDoc ): Promise<Res> {
         try {
             
             if(data.patient){
@@ -75,6 +75,7 @@ class BedServices {
             }
 
             const OldBedData:BedDoc | null = await this.bedRepo.findBedById(_id)
+            if(!OldBedData) return {status:false,message:"Couldn't get the data"}
             if(OldBedData?.type != data.type || OldBedData?.charge != data.charge){
                 const bedData:BedDoc | null = await this.bedRepo.findOneAndUpdate(data);
                 if(!bedData) return {status:false , message:"No Available Slots Please Select Another Bed Type"}
@@ -84,11 +85,12 @@ class BedServices {
             }
 
             const bedData:BedDoc | null = await this.bedRepo.findBedAndUpdate(_id,data);
+            if(!bedData) return {status:false,message:"Couldn't get the data"}
             return { data: bedData, status: true, message: "Bed Updated Successfully" };
 
         } catch (error) {
             console.error("Error in updateBed:", error);
-            return null;
+            throw error;
         }
     }
 
@@ -109,7 +111,7 @@ class BedServices {
 
         } catch (error) {
             console.error("Error in assignPatient:", error);
-            return null;
+            throw error;
         }
     }
 
@@ -120,7 +122,7 @@ class BedServices {
 
         } catch (error) {
             console.error("Error in dischargePatient:", error);
-            return null;
+            throw error;
         }
     }
 

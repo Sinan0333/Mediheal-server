@@ -9,7 +9,7 @@ class OtpRepository {
             return otpData;
         } catch (error) {
             console.error("Error in findOtpByEmail:", error);
-            return null;
+            throw error;
         }
     }
 

@@ -7,6 +7,7 @@ import { sendVerifyMail } from '../utils/otpVerification';
 import { Res } from '../interfaces/Icommon';
 import { uploadFile } from '../utils/cloudinary';
 import { OtpDoc } from '../interfaces/IOtp';
+import { error } from 'console';
 
 class UserServices {
     private userRepo: UserRepositories;
@@ -23,11 +24,11 @@ class UserServices {
             return !!userData;
         } catch (error) {
             console.error("Error in checkExistingEmail:", error);
-            return false;
+            throw error;
         }
     }
 
-    async createUser(name: string, phone: string , email: string, password: string): Promise<UserRes | null> {
+    async createUser(name: string, phone: string , email: string, password: string): Promise<UserRes> {
         try {
             // Validate required fields
             if (!name || !phone || !email || !password) {
@@ -48,20 +49,23 @@ class UserServices {
 
             // Create user
             const userData:UserDoc | null = await this.userRepo.createUser(name, phone, email, hashedPass);
-            return {userData,status: true, message: 'User created successfully' };
+            if(!userData) throw error
+            return {userData,status: true, message: 'User Signup successfully' };
         } catch (error) {
             console.error("Error in createUser:", error);
-            return null;
+            throw error;
         }
     }
 
-    async verifyOtp(_id:string,otp:string): Promise<UserRes | null> {
+    async verifyOtp(_id:string,otp:string): Promise<UserRes> {
         try {
 
             const userData:UserDoc | null = await this.userRepo.findUserById(_id)
-            const otpData:OtpDoc | null = await this.otpRepo.findOtpByEmail(userData?.email);
+            if(!userData) throw error
+            const otpData:OtpDoc | null = await this.otpRepo.findOtpByEmail(userData.email);
+            if(!otpData) throw error
 
-            if(otpData?.otp == otp){
+            if(otpData.otp == otp){
                 const userData:UserDoc | null = await this.userRepo.findUserByIdAndUpdate(_id,{verified:true})
                 return { userData, status: true, message: 'Verification successful' };
             }else{
@@ -69,26 +73,27 @@ class UserServices {
             }
 
         } catch (error) {
-            console.error("Error in authUser:", error);
-            return null;
+            console.error("Error in verifyOtp:", error);
+            throw error;
         }
     }
 
-    async getOtp(_id:string): Promise<Res | null> {
+    async getOtp(_id:string): Promise<Res> {
         try {
 
             const userData:UserDoc | null = await this.userRepo.findUserById(_id)
+            if(!userData) return {status:false,message:"Cant find the user"}
             const otpData:OtpDoc | null = await this.otpRepo.findOtpByEmail(userData?.email);
             return otpData ? {data:otpData.otp,status:true ,message:"Otp get"} : {status:false ,message:"Can't find the otp"}
 
         } catch (error) {
-            console.error("Error in authUser:", error);
-            return null;
+            console.error("Error in getOtp:", error);
+            throw error;
         }
     }
 
 
-    async authUser(email: string, password: string): Promise<UserRes | null> {
+    async authUser(email: string, password: string): Promise<UserRes> {
         try {
             const userData:UserDoc | null = await this.userRepo.findUserByEmail(email);
             if (userData) {
@@ -108,30 +113,31 @@ class UserServices {
             }
         } catch (error) {
             console.error("Error in authUser:", error);
-            return null;
+            throw error;
         }
     }
 
-    async listUsers(): Promise<Res | null> {
+    async listUsers(): Promise<Res> {
         try {
             const userData:UserDoc[] | null= await this.userRepo.findUsers()
             return {data:userData,status:true, message:'Users find successful'}
 
         } catch (error) {
             console.error("Error in listUsers:", error);
-            return null;
+            throw error;
         }
     }
 
-    async getUserData(_id:string): Promise<Res | null> {
+    async getUserData(_id:string): Promise<Res> {
         try {
 
             const userData:UserDoc | null= await this.userRepo.findUserById(_id)
+            if(!userData) return {status:false,message:"Cant find the user"}
             return {data:userData,status:true, message:'User find successful'}
 
         } catch (error) {
             console.error("Error in getUserData:", error);
-            return null;
+            throw error;
         }
     }
 
@@ -139,6 +145,7 @@ class UserServices {
         try {
 
             const oldUserData:UserDoc | null = await this.userRepo.findUserById(_id)
+            if(!oldUserData) return {status:false,message:'Cant find the user'}
             let newImage:string = ""
             
             if(password && oldUserData){
@@ -159,6 +166,7 @@ class UserServices {
 
                     const hashedPass: string = await bcrypt.hash(newPassword, 10);
                     const userData:UserDoc | null = await this.userRepo.findUserByIdAndUpdate(_id,{name,phone,email,password:hashedPass,image:newImage})
+                    if(!userData) return {status:false,message:"Something error in updating the data"}
                     return { userData, status: true, message: 'Profile Updated successfully' };
 
                 }else{
@@ -186,20 +194,21 @@ class UserServices {
             return {status:false ,message:"Something wrong"}
 
         } catch (error) {
-            console.error("Error in createUser:", error);
-            return null;
+            console.error("Error in updateProfile:", error);
+            throw error;
         }
     }
 
-    async changeBlockStatus(_id:string,is_blocked:Boolean): Promise<Res | null> {
+    async changeBlockStatus(_id:string,is_blocked:Boolean): Promise<Res> {
         try {
 
-            const doctorData:UserDoc | null = await this.userRepo.changeBlockStatus(_id,is_blocked)
-            return {data:doctorData,status:true,message:`User is ${is_blocked ? "blocked" : "unblocked"}`}
+            const userData:UserDoc | null = await this.userRepo.changeBlockStatus(_id,is_blocked)
+            if(!userData) return {status:false,message:"Cant find the user"}
+            return {data:userData,status:true,message:`User is ${is_blocked ? "blocked" : "unblocked"}`}
             
         } catch (error) {
-            console.error("Error in editDoctor:", error);
-            return null;
+            console.error("Error in changeBlockStatus:", error);
+            throw error;
         }
     }
 

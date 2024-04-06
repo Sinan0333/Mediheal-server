@@ -10,7 +10,7 @@ class AdminServices {
         this.adminRepo = adminRepo;
     }
 
-    async authAdmin(email: string, password: string): Promise<UserRes | null> {
+    async authAdmin(email: string, password: string): Promise<UserRes > {
         try {
             const userData: UserDoc | null = await this.adminRepo.findAdminByEmail(email);
 
@@ -28,7 +28,7 @@ class AdminServices {
             }
         } catch (error) {
             console.error("Error in authAdmin:", error);
-            return null;
+            throw error;
         }
     }
 }

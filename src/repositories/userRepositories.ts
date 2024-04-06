@@ -9,7 +9,7 @@ class UserRepository {
             return userData;
         } catch (error) {
             console.error("Error in findUserByEmail:", error);
-            return null;
+            throw error;
         }
     }
 
@@ -19,7 +19,7 @@ class UserRepository {
             return userData;
         } catch (error) {
             console.error("Error in findUserById:", error);
-            return null;
+            throw error;
         }
     }
 
@@ -29,7 +29,7 @@ class UserRepository {
             return await userModel.save();
         } catch (error) {
             console.error("Error in createUser:", error);
-            throw error;
+            throw error
         }
     }
 
@@ -43,13 +43,13 @@ class UserRepository {
         }
     }
 
-    async findUsers(): Promise<UserDoc[] | null > {
+    async findUsers(): Promise<UserDoc[] | [] > {
         try {
             const userData:UserDoc[] = await User.find();
             return userData
         } catch (error) {
-            console.error("Error in findUserByIdAndUpdate:", error);
-            throw error;
+            console.error("Error in findUsers:", error);
+            throw error
         }
     }
 
@@ -59,7 +59,7 @@ class UserRepository {
             return doctorData
         } catch (error) {
             console.error("Error changeBlockStatus:", error);
-            return null;
+            throw error;
         }
     }
 }

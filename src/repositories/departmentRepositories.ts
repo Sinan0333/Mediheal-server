@@ -10,7 +10,7 @@ class DepartmentRepository {
             return savedDepartment;
         } catch (error) {
             console.error("Error creating department:", error);
-            return null;
+            throw error;
         }
     }
 
@@ -20,7 +20,7 @@ class DepartmentRepository {
             return departmentData;
         } catch (error) {
             console.error("Error updating department:", error);
-            return null;
+            throw error;
         }
     }
 
@@ -30,7 +30,7 @@ class DepartmentRepository {
             return departmentData;
         } catch (error) {
             console.error("Error finding department by name:", error);
-            return null;
+            throw error;
         }
     }
 
@@ -40,7 +40,7 @@ class DepartmentRepository {
             return departmentData;
         } catch (error) {
             console.error("Error finding department by Id:", error);
-            return null;
+            throw error;
         }
     }
 
@@ -50,7 +50,7 @@ class DepartmentRepository {
             return departmentData;
         } catch (error) {
             console.error("Error finding departments:", error);
-            return null;
+            throw error;
         }
     }
 
@@ -60,7 +60,7 @@ class DepartmentRepository {
             return departmentData
         } catch (error) {
             console.error("Error changeBlockStatus:", error);
-            return null;
+            throw error;
         }
     }
 }

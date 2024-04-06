@@ -10,7 +10,7 @@ class DoctorRepository {
             return savedDoctor;
         } catch (error) {
             console.error("Error creating doctor:", error);
-            return null;
+            throw error;
         }
     }
 
@@ -20,7 +20,7 @@ class DoctorRepository {
             return doctorData;
         } catch (error) {
             console.error("Error finding doctor by email:", error);
-            return null;
+            throw error;
         }
     }
 
@@ -30,17 +30,17 @@ class DoctorRepository {
             return doctorData;
         } catch (error) {
             console.error("Error finding doctor by email:", error);
-            return null;
+            throw error;
         }
     }
 
-    async findDoctors(): Promise<DoctorDoc[] | null> {
+    async findDoctors(): Promise<DoctorDoc[] | []> {
         try {
             const doctorData: DoctorDoc[] = await Doctor.find().populate('department');
             return doctorData;
         } catch (error) {
             console.error("Error finding doctors:", error);
-            return null;
+            throw error;
         }
     }
 
@@ -50,7 +50,7 @@ class DoctorRepository {
             return doctorData
         } catch (error) {
             console.error("Error update doctor:", error);
-            return null;
+            throw error;
         }
     }
 
@@ -60,7 +60,7 @@ class DoctorRepository {
             return doctorData
         } catch (error) {
             console.error("Error changeBlockStatus:", error);
-            return null;
+            throw error;
         }
     }
 }

@@ -19,6 +19,7 @@ export const uploadFile = async (file: string, folder:string):Promise<any> => {
         
     } catch (error) {
         console.log("Error in UploadFile:", error);
+        throw error
     }
 };
 

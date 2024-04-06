@@ -11,11 +11,16 @@ class DepartmentServices {
     }
 
     async checkExistingDepartment(name: string): Promise<boolean> {
-        const departmentData:DepartmentDoc | null = await this.departmentRepo.findDepartmentByName(name);
-        return !!departmentData;
+        try {
+            const departmentData:DepartmentDoc | null = await this.departmentRepo.findDepartmentByName(name);
+            return !!departmentData;
+        } catch (error) {
+            console.error("Error in addDepartment:", error);
+            throw error;
+        }
     }
 
-    async addDepartment(data: IDepartmentData): Promise<Res | null> {
+    async addDepartment(data: IDepartmentData): Promise<Res> {
         try {
             const { name, title, description, logo, image } = data;
             if (!name || !title || !description || !logo || !image) {
@@ -32,11 +37,11 @@ class DepartmentServices {
             return { data: departmentData, status: true, message: "Department added successfully" };
         } catch (error) {
             console.error("Error in addDepartment:", error);
-            return null;
+            throw error;
         }
     }
 
-    async editDepartment(_id:string,data: IDepartmentData): Promise<Res | null> {
+    async editDepartment(_id:string,data: IDepartmentData): Promise<Res> {
         try {
             const { name, title, description, logo, image } = data;
             if (!name || !title || !description || !logo || !image) {
@@ -60,22 +65,23 @@ class DepartmentServices {
             const departmentData:DepartmentDoc | null = await this.departmentRepo.updateDepartment(_id,name, title, description, logoPublicId, imagePublicId);
             return { data: departmentData, status: true, message: "Department updated successfully" };
         } catch (error) {
-            console.error("Error in addDepartment:", error);
-            return null;
+            console.error("Error in editDepartment:", error);
+            throw error;
         }
     }
 
     async getDepartmentData(_id:string): Promise<Res | null> {
         try {
             const departmentData:DepartmentDoc | null = await this.departmentRepo.findDepartmentById(_id)
+            if(!departmentData) return {status:false,message:"Couldn't get the data"}
             return { data: departmentData, status: true, message: 'Departments Data' };
         } catch (error) {
-            console.error("Error in listDepartment:", error);
-            return null;
+            console.error("Error in getDepartmentData:", error);
+            throw error;
         }
     }
 
-    async listDepartment(isBlocked?: boolean): Promise<Res | null> {
+    async listDepartment(isBlocked?: boolean): Promise<Res> {
         try {
             const departmentData: DepartmentDoc[] | null = await this.departmentRepo.findDepartments();
             if(isBlocked !==undefined){
@@ -86,7 +92,7 @@ class DepartmentServices {
             return { data: departmentData, status: true, message: 'Complete list of departments' };
         } catch (error) {
             console.error("Error in listDepartment:", error);
-            return null;
+            throw error;
         }
     }
 
@@ -94,11 +100,12 @@ class DepartmentServices {
         try {
 
             const doctorData:DepartmentDoc | null = await this.departmentRepo.changeBlockStatus(_id,is_blocked)
+            if(!doctorData) return {status:false,message:"Couldn't get the data"}
             return {data:doctorData,status:true,message:`Department is ${is_blocked ? "blocked" : "unblocked"}`}
             
         } catch (error) {
-            console.error("Error in editDoctor:", error);
-            return null;
+            console.error("Error in changeBlockStatus:", error);
+            throw error;
         }
     }
 }

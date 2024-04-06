@@ -4,14 +4,14 @@ import Schedule from "../models/scheduleModel";
 
 class ScheduleRepository {
 
-    async createSchedule(data: ScheduleDoc): Promise<ScheduleDoc | null> {
+    async createSchedule(data: ScheduleDoc): Promise<ScheduleDoc> {
         try {
             const scheduleModel = new Schedule(data);
             const savedSchedule = await scheduleModel.save();
             return savedSchedule;
         } catch (error) {
             console.error("Error creating schedule:", error);
-            return null;
+            throw error;
         }
     }
 
@@ -20,8 +20,8 @@ class ScheduleRepository {
             const scheduleData = await Schedule.findOneAndUpdate({_id},data,{new:true})
             return scheduleData;
         } catch (error) {
-            console.error("Error creating schedule:", error);
-            return null;
+            console.error("Error in findScheduleAndUpdate", error);
+            throw error;
         }
     }
 

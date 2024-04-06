@@ -7,3 +7,7 @@ export interface Res{
 export interface ReqParams {
     is_blocked:string
 }
+
+export interface ErrRes {
+    error:string
+}

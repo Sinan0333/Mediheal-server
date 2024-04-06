@@ -10,7 +10,7 @@ class PatientServices {
         this.patientRepo = patientRepo;
     }
 
-    async addPatient(data: IPatientData): Promise<Res | null> {
+    async addPatient(data: IPatientData): Promise<Res> {
         try {
 
             let patientPublicId:string=""
@@ -21,19 +21,19 @@ class PatientServices {
             return { data: patientData, status: true, message: "Patient added successfully" };
         } catch (error) {
             console.error("Error in addPatient:", error);
-            return null;
+            throw error;
         }
     }
 
-    async getUserPatients(userId:string): Promise<Res | null> {
+    async getUserPatients(userId:string): Promise<Res> {
         try {
 
-            const patientsData:PatientDoc[] | null = await this.patientRepo.findPatientsByUserId(userId);
+            const patientsData:PatientDoc[] | [] = await this.patientRepo.findPatientsByUserId(userId);
             return { data: patientsData, status: true, message: "Complete patients list of a specific user" };
 
         } catch (error) {
             console.error("Error in addPatient:", error);
-            return null;
+            throw error;
         }
     }
 

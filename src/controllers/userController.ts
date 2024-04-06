@@ -21,7 +21,7 @@ class UserController{
             res.json(result)
 
         } catch (error) {
-             console.error("Error in UserController.signup:", error);
+            console.error("Error in UserController.signup:", error);
             res.status(500).json({ error: "Internal server error" });
         }
     }

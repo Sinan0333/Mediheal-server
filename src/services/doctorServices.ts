@@ -22,11 +22,11 @@ class DoctorServices {
             return !!userData;
         } catch (error) {
             console.error("Error in checkExistingEmail:", error);
-            return false;
+            throw error;
         }
     }
 
-    async addDoctor(data: IDoctorData): Promise<Res | null> {
+    async addDoctor(data: IDoctorData): Promise<Res> {
         try {
             const { email, password } = data;
 
@@ -43,14 +43,15 @@ class DoctorServices {
             return { data: doctorData, status: true, message: 'Doctor registered successfully' };
         } catch (error) {
             console.error("Error in addDoctor:", error);
-            return null;
+            throw error;
         }
     }
 
-    async ediDoctor(data: IDoctorData,_id:string): Promise<Res | null> {
+    async ediDoctor(data: IDoctorData,_id:string): Promise<Res> {
         try {
             let imagePublicId:string
             const oldDoctorData:IDoctorData | null = await this.doctorRepo.findDoctorById(_id)
+            if(!oldDoctorData) return {status:false,message:"Cant find the doctor data"}
 
             if(data.image.split("/").includes('Mediheal')){
                 imagePublicId=data.image
@@ -68,11 +69,11 @@ class DoctorServices {
 
         } catch (error) {
             console.error("Error in editDoctor:", error);
-            return null;
+            throw error;
         }
     }
 
-    async authDoctor(email: string, password: string): Promise<DoctorRes | null> {
+    async authDoctor(email: string, password: string): Promise<DoctorRes> {
         try {
             const userData:DoctorDoc | null = await this.doctorRepo.findDoctorByEmail(email);
             if (userData) {
@@ -88,11 +89,11 @@ class DoctorServices {
             }
         } catch (error) {
             console.error("Error in authUser:", error);
-            return null;
+            throw error;
         }
     }
 
-    async listDoctors(is_blocked?:Boolean):Promise <Res | null>{
+    async listDoctors(is_blocked?:Boolean):Promise <Res>{
         try {
             const doctorsData:DoctorDoc[] | null = await this.doctorRepo.findDoctors()
     
@@ -104,37 +105,39 @@ class DoctorServices {
 
         } catch (error) {
             console.error("Error in ListDoctors", error);
-            return null;
+            throw error;
         }
     }
 
-    async viewDoctor(_id:string):Promise <Res | null>{
+    async viewDoctor(_id:string):Promise <Res>{
         try {
 
             const doctorsData:IDoctorData | null = await this.doctorRepo.findDoctorById(_id)
+            if(!doctorsData) return {status:false,message:"Cant find the doctor data"}
             return {data:doctorsData,status:true, message:"Doctor Data"}
 
         } catch (error) {
             console.error("Error in ListDoctors", error);
-            return null;
+            throw error;
         }
     }
 
     
 
-    async changeBlockStatus(_id:string,is_blocked:Boolean): Promise<Res | null> {
+    async changeBlockStatus(_id:string,is_blocked:Boolean): Promise<Res> {
         try {
 
             const doctorData:DoctorDoc | null = await this.doctorRepo.changeBlockStatus(_id,is_blocked)
+            if(!doctorData) return {status:false,message:"Cant find the doctor data"}
             return {data:doctorData,status:true,message:`Doctor is ${is_blocked ? "blocked" : "unblocked"}`}
 
         } catch (error) {
             console.error("Error in changeBlockStatus:", error);
-            return null;
+            throw error;
         }
     }
 
-    async bestDoctors(): Promise<Res | null> {
+    async bestDoctors(): Promise<Res> {
         try {
 
             const doctorData:DoctorDoc[] | null = await this.doctorRepo.findDoctors()
@@ -145,7 +148,7 @@ class DoctorServices {
 
         } catch (error) {
             console.error("Error in changeBlockStatus:", error);
-            return null;
+            throw error;
         }
     }
 

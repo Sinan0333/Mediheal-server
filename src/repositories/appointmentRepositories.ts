@@ -9,11 +9,11 @@ class AppointmentRepository {
             return otpData;
         } catch (error) {
             console.error("Error in findAppointmentById:", error);
-            return null;
+            throw error;
         }
     }
 
-    async createAppointment(data:IAppointment): Promise<AppointmentDoc  | null> {
+    async createAppointment(data:IAppointment): Promise<AppointmentDoc> {
         try {
             const appointmentModel = new Appointment(data);
             const savedAppointment:AppointmentDoc = await appointmentModel.save();

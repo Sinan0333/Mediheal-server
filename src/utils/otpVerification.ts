@@ -28,6 +28,6 @@ export const sendVerifyMail = async (name: string, email: string): Promise<strin
 
     } catch (error:any) {
         console.log(error.message);
-        return 'false'
+        throw error
     }
 };

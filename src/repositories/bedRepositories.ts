@@ -9,7 +9,7 @@ class BedRepository {
             return bedData;
         } catch (error) {
             console.error("Error in findBedById:", error);
-            return null;
+            throw error;
         }
     }
 
@@ -23,13 +23,13 @@ class BedRepository {
         }
     }
 
-    async findBeds(): Promise<BedDoc[] | null> {
+    async findBeds(): Promise<BedDoc[] | []> {
         try {
-            const bedData:BedDoc[] | null = await Bed.find().populate('assignBy');
+            const bedData:BedDoc[] | [] = await Bed.find().populate('assignBy');
             return bedData;
         } catch (error) {
             console.error("Error in findBedById:", error);
-            return null;
+            throw error;
         }
     }
 
@@ -39,7 +39,7 @@ class BedRepository {
             return bedData;
         } catch (error) {
             console.error("Error in findBedAndUpdate:", error);
-            return null;
+            throw error;
         }
     }
 
@@ -49,7 +49,7 @@ class BedRepository {
             return bedData;
         } catch (error) {
             console.error("Error in findOneAndUpdate:", error);
-            return null;
+            throw error;
         }
     }
 
@@ -59,17 +59,17 @@ class BedRepository {
             return bedData
         } catch (error) {
             console.error("Error changeBlockStatus:", error);
-            return null;
+            throw error;
         }
     }
 
-    async findBedByPatientId(patient:string):Promise<BedDoc[] | null>{
+    async findBedByPatientId(patient:string):Promise<BedDoc[] | []>{
         try {
             const bedData:BedDoc[] | null = await Bed.find({patient})
             return bedData
         } catch (error) {
-            console.error("Error findPatientById:", error);
-            return null;
+            console.error("Error findBedByPatientId:", error);
+            throw error;
         }
     }
     
@@ -79,7 +79,7 @@ class BedRepository {
             return bedData
         } catch (error) {
             console.error("Error findOneAndUnset:", error);
-            return null;
+            throw error;
         }
     }
     

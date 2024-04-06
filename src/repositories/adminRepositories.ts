@@ -9,7 +9,7 @@ class AdminRepository{
             return userData
         } catch (error) {
             console.error("Error in findAdminByEmail:", error);
-            return null;
+            throw error;
         }
     }
 }
