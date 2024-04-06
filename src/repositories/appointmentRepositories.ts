@@ -5,7 +5,7 @@ class AppointmentRepository {
 
     async findAppointmentById(_id:string): Promise<AppointmentDoc | null> {
         try {
-            const otpData:AppointmentDoc | null = await Appointment.findOne({ _id}).exec();
+            const otpData:AppointmentDoc | null = await Appointment.findOne({ _id}).populate('schedule.thursday doctor patient')
             return otpData;
         } catch (error) {
             console.error("Error in findAppointmentById:", error);

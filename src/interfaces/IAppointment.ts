@@ -1,10 +1,11 @@
 import { Types ,Document} from "mongoose"
-import { ScheduleDoc } from "./Ischedule"
 import { DoctorDoc } from "./IDoctor"
 import { PatientDoc } from "./IPatient"
 
 export interface AppointmentDoc extends Document{
-    schedule:Types.ObjectId
+    startTime:string
+    endTime:string
+    day:string
     doctor:Types.ObjectId
     patient:Types.ObjectId
     status:"Pending" | "Checked" | "Cancelled"
@@ -12,7 +13,9 @@ export interface AppointmentDoc extends Document{
 }
 
 export interface IAppointment {
-    schedule:Types.ObjectId | ScheduleDoc
+    startTime:string
+    endTime:string
+    day:string
     doctor:Types.ObjectId | DoctorDoc
     patient:Types.ObjectId |PatientDoc
     status:"Pending" | "Checked" | "Cancelled"

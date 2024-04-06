@@ -3,9 +3,17 @@ import { AppointmentDoc } from '../interfaces/IAppointment'
 
 
 const appointmentSchema = new Schema <AppointmentDoc>({
-    schedule:{
-        type:Schema.Types.ObjectId,
-        ref:'Schedule',
+
+    startTime:{
+        type:String,
+        required:true
+    },
+    endTime:{
+        type:String,
+        required:true
+    },
+    day:{
+        type:String,
         required:true
     },
     doctor:{
