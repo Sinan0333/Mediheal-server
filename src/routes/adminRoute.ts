@@ -49,4 +49,5 @@ adminRoute.put('/bed/discharge/:_id',bedController.dischargePatient.bind(bedCont
 
 
 
+
 export default adminRoute

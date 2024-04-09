@@ -47,6 +47,7 @@ userRoute.post('/list/block/:_id',userController.changeBlockStatus.bind(userCont
 userRoute.post('/patient/add',patientController.addPatient.bind(patientController))
 userRoute.get('/patient/:userId',patientController.getUserPatients.bind(patientController))
 userRoute.get('/appointment/:_id',appointmentController.getAppointmentData.bind(appointmentController))
+userRoute.get('/patient',patientController.getPatients.bind(patientController))
 userRoute.post("/appointment/confirm_booking/:scheduleId",appointmentController.confirmBooking.bind(appointmentController))
 userRoute.post("/appointment/create-checkout-session",userController.createCheckoutSession.bind(userController))
 

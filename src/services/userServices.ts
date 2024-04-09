@@ -17,7 +17,6 @@ if(process.env.STRIPE_SECRET){
     });
 }
 
-
 class UserServices {
     private userRepo: UserRepositories;
     private otpRepo:OtpRepositories

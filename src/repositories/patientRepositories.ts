@@ -32,6 +32,16 @@ class PatientRepository {
             throw error;
         }
     }
+
+    async findPatients(): Promise<PatientDoc[]  | []> {
+        try {
+            const patientData:PatientDoc[] | null = await Patient.find().exec();
+            return patientData;
+        } catch (error) {
+            console.error("Error in findPatients:", error);
+            throw error;
+        }
+    }
     
 }
 

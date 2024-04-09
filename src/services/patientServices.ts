@@ -32,7 +32,19 @@ class PatientServices {
             return { data: patientsData, status: true, message: "Complete patients list of a specific user" };
 
         } catch (error) {
-            console.error("Error in addPatient:", error);
+            console.error("Error in getUserPatients:", error);
+            throw error;
+        }
+    }
+
+    async getPatients(): Promise<Res> {
+        try {
+
+            const patientsData:PatientDoc[] | [] = await this.patientRepo.findPatients();
+            return { data: patientsData, status: true, message: "Complete patients list" };
+
+        } catch (error) {
+            console.error("Error in findPatients:", error);
             throw error;
         }
     }
