@@ -47,20 +47,21 @@ class DepartmentServices {
             if (!name || !title || !description || !logo || !image) {
                 return { status: false, message: 'Missing required fields' };
             }
-
+            
             let logoPublicId:string
-            if(data.image.split("/").includes('Mediheal')){
+            if(data.logo.split("/").includes('Mediheal')){
                 logoPublicId=data.image
             }else{
                 logoPublicId = await uploadFile(data.logo,"department_logos");
             }
-
+            
             let imagePublicId:string
             if(data.image.split("/").includes('Mediheal')){
                 imagePublicId=data.image
             }else{
                 imagePublicId = await uploadFile(data.image,"department_images");
             }
+
 
             const departmentData:DepartmentDoc | null = await this.departmentRepo.updateDepartment(_id,name, title, description, logoPublicId, imagePublicId);
             return { data: departmentData, status: true, message: "Department updated successfully" };

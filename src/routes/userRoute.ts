@@ -14,6 +14,8 @@ import AppointmentController from '../controllers/appointmentController'
 import AppointmentServices from '../services/appointmentServices'
 import AppointmentRepository from '../repositories/appointmentRepositories'
 
+import ScheduleRepository from '../repositories/scheduleRepository'
+
 
 const userRoute:Router = express.Router()
 
@@ -27,8 +29,10 @@ const patientRepository = new PatientRepository()
 const patientServices = new PatientServices(patientRepository)
 const patientController = new PatientController(patientServices)
 
+const scheduleRepository = new ScheduleRepository()
+
 const appointmentRepository = new AppointmentRepository()
-const appointmentServices = new AppointmentServices(appointmentRepository)
+const appointmentServices = new AppointmentServices(appointmentRepository,scheduleRepository)
 const appointmentController = new AppointmentController(appointmentServices)
 
 
@@ -42,8 +46,9 @@ userRoute.post('/list/edit',userController.updateProfile.bind(userController))
 userRoute.post('/list/block/:_id',userController.changeBlockStatus.bind(userController))
 userRoute.post('/patient/add',patientController.addPatient.bind(patientController))
 userRoute.get('/patient/:userId',patientController.getUserPatients.bind(patientController))
-userRoute.post('/patient/book',appointmentController.createAppointment.bind(appointmentController))
 userRoute.get('/appointment/:_id',appointmentController.getAppointmentData.bind(appointmentController))
+userRoute.post("/appointment/confirm_booking/:scheduleId",appointmentController.confirmBooking.bind(appointmentController))
+userRoute.post("/appointment/create-checkout-session",userController.createCheckoutSession.bind(userController))
 
 
 export default userRoute

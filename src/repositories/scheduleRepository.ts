@@ -25,6 +25,20 @@ class ScheduleRepository {
         }
     }
 
+    async changeScheduleIsReserved(_id:string ,day:string,slot_id:string | undefined): Promise<ScheduleDoc | null> {
+        try {
+            const scheduleData = await Schedule.findOneAndUpdate(
+                {_id, [`${day}._id`]: slot_id }, 
+                { $set: { [`${day}.$.isReserved`]: true } }, 
+                { new: true }
+            );
+            return scheduleData;
+        } catch (error) {
+            console.error("Error in changeScheduleIsReserved", error);
+            throw error;
+        }
+    }
+
 }
 
 export default ScheduleRepository;

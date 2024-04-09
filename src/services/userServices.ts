@@ -9,6 +9,15 @@ import { uploadFile } from '../utils/cloudinary';
 import { OtpDoc } from '../interfaces/IOtp';
 import { error } from 'console';
 
+import { Stripe } from 'stripe'
+let stripe:any
+if(process.env.STRIPE_SECRET){
+    stripe = new Stripe(process.env.STRIPE_SECRET, {
+        apiVersion: '2023-10-16', 
+    });
+}
+
+
 class UserServices {
     private userRepo: UserRepositories;
     private otpRepo:OtpRepositories
@@ -208,6 +217,37 @@ class UserServices {
             
         } catch (error) {
             console.error("Error in changeBlockStatus:", error);
+            throw error;
+        }
+    }
+
+    async createCheckoutSession(amount:number):Promise<Res>{
+        try {
+
+            let line_items = [
+                {
+                    price_data:{
+                        currency:'inr',
+                        product_data:{
+                            name:"Booking"
+                        },
+                        unit_amount : amount*100
+                    },
+                    quantity:1
+                }
+            ]
+            const session = await stripe.checkout.sessions.create({
+                success_url: 'http://localhost:5173/payment_success',
+                cancel_url : 'http://localhost:5173/payment_cancel',
+                line_items:line_items,  
+                mode: 'payment',
+                billing_address_collection:'required',
+              });
+              
+              return {data:session.id,status:true,message:"Create checkout session successful"};
+
+        } catch (error) {
+            console.error("Error in createCheckoutSession:", error);
             throw error;
         }
     }

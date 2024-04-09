@@ -13,6 +13,7 @@ export interface AppointmentDoc extends Document{
 }
 
 export interface IAppointment {
+    _id?:string
     startTime:string
     endTime:string
     day:string

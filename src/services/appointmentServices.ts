@@ -1,17 +1,23 @@
 import AppointmentRepository from "../repositories/appointmentRepositories";
+import ScheduleRepository from "../repositories/scheduleRepository";
 import { AppointmentDoc, IAppointment} from '../interfaces/IAppointment';
 import { Res } from '../interfaces/Icommon';
 
 class AppointmentServices {
     private appointmentRepo: AppointmentRepository;
+    private scheduleRepo : ScheduleRepository
 
-    constructor(appointmentRepo: AppointmentRepository) {
+    constructor(appointmentRepo: AppointmentRepository,scheduleRepo : ScheduleRepository) {
         this.appointmentRepo = appointmentRepo;
+        this.scheduleRepo = scheduleRepo
     }
 
-    async createAppointment(data: IAppointment): Promise<Res | null> {
+    async confirmBooking(data: IAppointment,slot_id:string | undefined,scheduleId:string): Promise<Res | null> {
         try {
+
             const appointmentData:AppointmentDoc | null = await this.appointmentRepo.createAppointment(data)
+            await this.scheduleRepo.changeScheduleIsReserved(scheduleId,data.day,slot_id)
+
             return{data:appointmentData,status:true,message:'Booked Successfully'}
         } catch (error) {
             console.error("Error in createAppointment:", error);
