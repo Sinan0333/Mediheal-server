@@ -83,6 +83,7 @@ class BedController{
         try {
             const {_id} = req.params
             const {patient,type,charge,assignDate,dischargeDate,description,assignBy,available}:BedDoc = req.body
+            
             const result: Res | null = await this.bedServices.updateBed(_id,{patient,type,charge,assignDate,dischargeDate,description,assignBy,available})  
             res.json(result)
             

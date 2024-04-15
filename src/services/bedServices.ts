@@ -74,17 +74,30 @@ class BedServices {
                 if(!checkExist) return {status:false ,message:"This patient is already reserved a bed"}
             }
 
+            const date1:Date | undefined= data.assignDate
+            const date2:Date | undefined = data.dischargeDate
+            if(!date1 || !date2 || !data.charge) return {status:false,message:'Missing required fields'} 
+
+            const parsedDate1 = new Date(date1);
+            const parsedDate2 = new Date(date2);
+
+            const differenceInMilliseconds = Math.abs(parsedDate2.getTime() - parsedDate1.getTime());
+            const differenceInDays = Math.ceil(differenceInMilliseconds / (1000 * 3600 * 24));
+            const total = differenceInDays * data.charge
+            
+            const newData:UpdateBedDoc = {total,...data}
+
             const OldBedData:BedDoc | null = await this.bedRepo.findBedById(_id)
             if(!OldBedData) return {status:false,message:"Couldn't get the data"}
             if(OldBedData?.type != data.type || OldBedData?.charge != data.charge){
-                const bedData:BedDoc | null = await this.bedRepo.findOneAndUpdate(data);
+                const bedData:BedDoc | null = await this.bedRepo.findOneAndUpdate(newData);
                 if(!bedData) return {status:false , message:"No Available Slots Please Select Another Bed Type"}
 
                 await this.bedRepo.findOneAndUnset(_id)
                 return { data: bedData, status: true, message: "Bed Updated Successfully" };
             }
 
-            const bedData:BedDoc | null = await this.bedRepo.findBedAndUpdate(_id,data);
+            const bedData:BedDoc | null = await this.bedRepo.findBedAndUpdate(_id,newData);
             if(!bedData) return {status:false,message:"Couldn't get the data"}
             return { data: bedData, status: true, message: "Bed Updated Successfully" };
 
@@ -96,6 +109,7 @@ class BedServices {
 
     async assignPatient(data:UpdateBedDoc ): Promise<Res | null> {
         try {
+
             if(data.patient){
                 const patientData:PatientDoc | null = await this.patientRepo.findPatientById(""+data.patient)                
                 if(!patientData) return {status:false,message:"Wrong patientID"}
@@ -105,7 +119,20 @@ class BedServices {
                 if(!checkExist) return {status:false ,message:"This patient is already reserved a bed"}
             }
 
-            const bedData:BedDoc | null = await this.bedRepo.findOneAndUpdate(data);
+            const date1:Date | undefined= data.assignDate
+            const date2:Date | undefined = data.dischargeDate
+            if(!date1 || !date2 || !data.charge) return {status:false,message:'Missing required fields'} 
+
+            const parsedDate1 = new Date(date1);
+            const parsedDate2 = new Date(date2);
+
+            const differenceInMilliseconds = Math.abs(parsedDate2.getTime() - parsedDate1.getTime());
+            const differenceInDays = Math.ceil(differenceInMilliseconds / (1000 * 3600 * 24));
+            const total = differenceInDays * data.charge
+            
+            const newData:UpdateBedDoc = {total,...data}
+
+            const bedData:BedDoc | null = await this.bedRepo.findOneAndUpdate(newData);
             if(!bedData) return {status:false , message:"No Available Slots Please Select Another Bed Type"}
             return { data: bedData, status: true, message: "Patient Assigned to the bed" };
 

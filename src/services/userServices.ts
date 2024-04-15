@@ -10,12 +10,9 @@ import { OtpDoc } from '../interfaces/IOtp';
 import { error } from 'console';
 
 import { Stripe } from 'stripe'
-let stripe:any
-if(process.env.STRIPE_SECRET){
-    stripe = new Stripe(process.env.STRIPE_SECRET, {
-        apiVersion: '2023-10-16', 
-    });
-}
+const stripe = new Stripe("sk_test_51P3GiN06Grjj2WCtKumtQNTabouOyBTdztUjl0axEOx7yAhdWew77vc1WeKT9PmveUMUaK4Vy68phvmgABfgbPxq00ZPxjhMlr", {
+    apiVersion: '2023-10-16', 
+  });
 
 class UserServices {
     private userRepo: UserRepositories;
