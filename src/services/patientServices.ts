@@ -49,6 +49,20 @@ class PatientServices {
         }
     }
 
+    async getPatient(_id:string): Promise<Res> {
+        try {
+
+            const patientsData:PatientDoc | null = await this.patientRepo.findPatientById(_id);
+            if(!patientsData) return {status:false,message:"Couldn't get the data"}
+
+            return { data: patientsData, status: true, message: "Complete patient Data" };
+
+        } catch (error) {
+            console.error("Error in getPatient:", error);
+            throw error;
+        }
+    }
+
 }
 
 export default PatientServices;
