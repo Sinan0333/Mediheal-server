@@ -66,6 +66,19 @@ class AppointmentServices {
         }
     }
 
+    async getDoctorAppointments(_id:string): Promise<Res | null> {
+        try {
+
+           const appointmentData:AppointmentDoc[] | null = await this.appointmentRepo.findAppointmentsByDoctorId(_id)
+           if(!appointmentData) return {status:false,message:"Couldn't get the data"}
+           return{data:appointmentData,status:true,message:'Appointment Data get successfully'}
+
+        } catch (error) {
+            console.error("Error in getDoctorAppointments:", error);
+            throw error;
+        }
+    }
+
 }
 
 export default AppointmentServices;
