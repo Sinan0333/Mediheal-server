@@ -7,6 +7,8 @@ export interface UserDoc extends Document{
     password:string
     verified:boolean
     image:string
+    wallet:number
+    history:History[]
     is_blocked:boolean
 }
 
@@ -19,3 +21,8 @@ export interface UserRes{
     message:string
 }
 
+export interface History {
+    amount:number
+    description:string
+    date:Date
+}

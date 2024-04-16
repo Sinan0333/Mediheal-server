@@ -32,7 +32,7 @@ const patientController = new PatientController(patientServices)
 const scheduleRepository = new ScheduleRepository()
 
 const appointmentRepository = new AppointmentRepository()
-const appointmentServices = new AppointmentServices(appointmentRepository,scheduleRepository)
+const appointmentServices = new AppointmentServices(appointmentRepository,scheduleRepository,userRepository)
 const appointmentController = new AppointmentController(appointmentServices)
 
 
@@ -50,6 +50,8 @@ userRoute.get('/appointment/:_id',appointmentController.getAppointmentData.bind(
 userRoute.get('/patient',patientController.getPatients.bind(patientController))
 userRoute.post("/appointment/confirm_booking/:scheduleId",appointmentController.confirmBooking.bind(appointmentController))
 userRoute.post("/appointment/create-checkout-session",userController.createCheckoutSession.bind(userController))
+userRoute.get("/appointment/history/:userId",appointmentController.userAppointmentHistory.bind(appointmentController))
+userRoute.post("/appointment/cancel/:_id",appointmentController.cancelBooking.bind(appointmentController))
 
 
 export default userRoute

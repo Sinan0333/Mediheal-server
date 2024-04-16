@@ -14,9 +14,9 @@ class AppointmentController{
     async confirmBooking(req: Request, res: Response): Promise<void> {
         try {
             const {scheduleId} = req.params
-            const {_id, startTime, endTime, day, doctor, patient, type }: IAppointment = req.body; 
+            const {_id, startTime, endTime, day, doctor, patient, type ,userId,bookedDate}: IAppointment = req.body; 
             
-            const result: Res | null = await this.appointmentServices.confirmBooking({startTime,endTime,day,doctor,patient,type,status:"Pending"},_id,scheduleId);
+            const result: Res | null = await this.appointmentServices.confirmBooking({userId,startTime,endTime,day,doctor,patient,bookedDate,type,status:"Pending"},_id,scheduleId);
             res.json(result);
 
         } catch (error) {
@@ -34,6 +34,33 @@ class AppointmentController{
             
         } catch (error) {
             console.error("Error in appointmentController.getAppointmentData", error);
+            res.status(500).json({ error: "Internal server error" });
+        }
+    }
+
+    async userAppointmentHistory(req:Request,res:Response):Promise<void>{
+        try {
+            
+            const {userId} = req.params
+            const result: Res | null = await this.appointmentServices.userAppointmentHistory(userId)  
+            res.json(result)
+            
+        } catch (error) {
+            console.error("Error in appointmentController.userAppointmentHistory", error);
+            res.status(500).json({ error: "Internal server error" });
+        }
+    }
+
+    async cancelBooking(req:Request,res:Response):Promise<void>{
+        try {
+            
+            const {_id} = req.params
+            const data = req.body
+            const result: Res | null = await this.appointmentServices.cancelBooking(_id,data)  
+            res.json(result)
+            
+        } catch (error) {
+            console.error("Error in appointmentController.cancelBooking", error);
             res.status(500).json({ error: "Internal server error" });
         }
     }

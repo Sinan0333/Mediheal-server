@@ -3,7 +3,11 @@ import { AppointmentDoc } from '../interfaces/IAppointment'
 
 
 const appointmentSchema = new Schema <AppointmentDoc>({
-
+    userId:{
+        type:Schema.Types.ObjectId,
+        ref:"User",
+        required:true
+    },
     startTime:{
         type:String,
         required:true
@@ -24,6 +28,10 @@ const appointmentSchema = new Schema <AppointmentDoc>({
     patient:{
         type:Schema.Types.ObjectId,
         ref:"Patient",
+        required:true
+    },
+    bookedDate:{
+        type:Date,
         required:true
     },
     status:{

@@ -26,6 +26,26 @@ const UserSchema = new Schema <UserDoc>({
         type:String,
         default:""
     },
+    wallet:{
+        type:Number,
+        default:0
+    },
+    history:[
+        {
+            amount:{
+                type:Number,
+                required:true
+            },
+            date:{
+                type:Date,
+                required:true
+            },
+            description:{
+                type:String,
+                required:true
+            }
+        }
+    ],
     is_blocked:{
         type:Boolean,
         default:false

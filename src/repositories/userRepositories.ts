@@ -1,4 +1,5 @@
-import { UserDoc } from "../interfaces/IUser";
+import { Types } from "mongoose";
+import { History, UserDoc } from "../interfaces/IUser";
 import User from "../models/userModel";
 
 class UserRepository {
@@ -59,6 +60,16 @@ class UserRepository {
             return doctorData
         } catch (error) {
             console.error("Error changeBlockStatus:", error);
+            throw error;
+        }
+    }
+
+    async updateHistory(_id:Types.ObjectId,data:History): Promise<UserDoc | null > {
+        try {
+            const userData:UserDoc | null = await User.findOneAndUpdate({_id},{$push:{history:data},$inc:{wallet:data.amount}},{new:true});
+            return userData
+        } catch (error) {
+            console.error("Error in findUserByIdAndUpdate:", error);
             throw error;
         }
     }
