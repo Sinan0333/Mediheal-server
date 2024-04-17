@@ -1,7 +1,6 @@
 import { Types ,Document} from "mongoose"
 import { DoctorDoc } from "./IDoctor"
 import { PatientDoc } from "./IPatient"
-import { UserDoc } from "./IUser"
 
 export interface AppointmentDoc extends Document{
     slotId:string
@@ -18,7 +17,7 @@ export interface AppointmentDoc extends Document{
 
 export interface IAppointment {
     slotId:string
-    userId:Types.ObjectId | UserDoc
+    userId:Types.ObjectId
     _id?:string
     startTime:string
     endTime:string

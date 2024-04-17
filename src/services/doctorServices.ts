@@ -158,7 +158,7 @@ class DoctorServices {
                         
             const scheduleData:ScheduleDoc | null = await this.scheduleRepo.changeAScheduleBreak(_id,day,slot_id);
             if(!scheduleData) return {status:false,message:"Cant find the schedule data"}
-            return {data:scheduleData,status:true,message:"Successfully taken a break"}
+            return {data:slot_id,status:true,message:"Successfully taken a break"}
 
         } catch (error) {
             console.error("Error in changeBlockStatus:", error);

@@ -53,6 +53,7 @@ userRoute.post("/appointment/confirm_booking/:scheduleId",appointmentController.
 userRoute.post("/appointment/create-checkout-session",userController.createCheckoutSession.bind(userController))
 userRoute.get("/appointment/history/:userId",appointmentController.userAppointmentHistory.bind(appointmentController))
 userRoute.post("/appointment/cancel/:_id",appointmentController.cancelBooking.bind(appointmentController))
+userRoute.get("/appointment/cancel_when_break/:_id",appointmentController.cancelBookingWhenBreak.bind(appointmentController))
 
 
 export default userRoute

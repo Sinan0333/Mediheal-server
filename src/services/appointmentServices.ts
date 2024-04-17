@@ -59,6 +59,24 @@ class AppointmentServices {
 
            await this.userRepo.updateHistory(appointmentData.userId,data)
             return{data:appointmentData,status:true,message:'Appointment Cancelled Successfully'}
+
+        } catch (error) {
+            console.error("Error in cancelBooking:", error);
+            throw error;
+        }
+    }
+
+    async cancelBookingWhenBreak(slotId:string): Promise<Res | null> {
+        try {
+
+           const appointmentData:IAppointment[] | [] = await this.appointmentRepo.findAppointmentsBySlotId(""+slotId)           
+           const filterAppointmentData:IAppointment[] | [] = appointmentData.filter((doc)=>doc.status==='Pending')
+
+            for(let i=0;i<filterAppointmentData.length;i++){
+                await this.userRepo.updateHistory(filterAppointmentData[i].userId,{date:new Date(),description:"Doctor Cancelled the Appointment",amount:200})
+            }
+
+            return{data:appointmentData,status:true,message:'Appointment Cancelled Successfully'}
             
         } catch (error) {
             console.error("Error in cancelBooking:", error);

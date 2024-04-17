@@ -63,6 +63,16 @@ class AppointmentRepository {
             throw error;
         }
     }
+
+    async findAppointmentsBySlotId(slotId:string): Promise<IAppointment[]> {
+        try {
+            const appointmentData:IAppointment[] | [] = await Appointment.find({ slotId}).populate('patient doctor')
+            return appointmentData;
+        } catch (error) {
+            console.error("Error in findAppointmentsBySlotId:", error);
+            throw error;
+        }
+    }
     
 }
 

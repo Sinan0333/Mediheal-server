@@ -39,4 +39,5 @@ doctorRoute.get('/appointment/list/:_id',appointmentController.getDoctorAppointm
 doctorRoute.post('/take_break/:scheduleId',doctorController.takeABreak.bind(doctorController))
 
 
+
 export default doctorRoute
