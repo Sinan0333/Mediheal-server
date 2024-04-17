@@ -16,11 +16,11 @@ class AppointmentServices {
         this.userRepo = userRepo
     }
 
-    async confirmBooking(data: IAppointment,slot_id:string | undefined,scheduleId:string): Promise<Res | null> {
+    async confirmBooking(data: IAppointment,scheduleId:string): Promise<Res | null> {
         try {
 
             const appointmentData:AppointmentDoc | null = await this.appointmentRepo.createAppointment(data)
-            await this.scheduleRepo.changeScheduleIsReserved(scheduleId,data.day,slot_id)
+            await this.scheduleRepo.changeScheduleIsReserved(scheduleId,data.day,data.slotId)
 
             return{data:appointmentData,status:true,message:'Booked Successfully'}
         } catch (error) {
@@ -58,8 +58,8 @@ class AppointmentServices {
            if(!appointmentData) return {status:false,message:"Couldn't get the data"}
 
            await this.userRepo.updateHistory(appointmentData.userId,data)
-
             return{data:appointmentData,status:true,message:'Appointment Cancelled Successfully'}
+            
         } catch (error) {
             console.error("Error in cancelBooking:", error);
             throw error;

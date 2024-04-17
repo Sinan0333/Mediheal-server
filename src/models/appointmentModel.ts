@@ -8,6 +8,10 @@ const appointmentSchema = new Schema <AppointmentDoc>({
         ref:"User",
         required:true
     },
+    slotId:{
+        type:String,
+        required:true
+    },
     startTime:{
         type:String,
         required:true

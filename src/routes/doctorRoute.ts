@@ -36,6 +36,7 @@ doctorRoute.get('/list/best',doctorController.getBestDoctors.bind(doctorControll
 doctorRoute.get('/list/unblocked',doctorController.unBlockedDoctors.bind(doctorController))
 doctorRoute.post('/block/:_id',doctorController.changeBlockStatus.bind(doctorController))
 doctorRoute.get('/appointment/list/:_id',appointmentController.getDoctorAppointments.bind(appointmentController))
+doctorRoute.post('/take_break/:scheduleId',doctorController.takeABreak.bind(doctorController))
 
 
 export default doctorRoute

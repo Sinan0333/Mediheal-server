@@ -4,6 +4,7 @@ import { PatientDoc } from "./IPatient"
 import { UserDoc } from "./IUser"
 
 export interface AppointmentDoc extends Document{
+    slotId:string
     userId:Types.ObjectId
     startTime:string
     endTime:string
@@ -16,6 +17,7 @@ export interface AppointmentDoc extends Document{
 }
 
 export interface IAppointment {
+    slotId:string
     userId:Types.ObjectId | UserDoc
     _id?:string
     startTime:string

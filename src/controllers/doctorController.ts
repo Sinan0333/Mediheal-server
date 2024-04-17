@@ -121,6 +121,19 @@ class DoctorController{
         }
     }
 
+    async takeABreak(req:Request,res:Response):Promise<void>{
+        try {
+            const {scheduleId} = req.params
+            const {_id,day} = req.body
+            const result: Res | null = await this.doctorServices.takeABreak(scheduleId,day,_id)
+            res.json(result)
+            
+        } catch (error) {
+            console.error("Error in DoctorController.takeABreak:", error);
+            res.status(500).json({ error: "Internal server error" });
+        }
+    }
+
 
 }
 

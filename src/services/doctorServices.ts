@@ -6,6 +6,7 @@ import { Res } from '../interfaces/Icommon';
 import { uploadFile } from '../utils/cloudinary';
 import { generateToken } from '../utils/jwt';
 import { generateSlots } from '../utils/schedule';
+import { ScheduleDoc } from '../interfaces/Ischedule';
 
 class DoctorServices {
     private doctorRepo: DoctorRepositories;
@@ -145,6 +146,19 @@ class DoctorServices {
                 return b.experience - a.experience;
             })
             return {data:filterDoctors,status:true,message:"Doctors is descending order based on the experience"}
+
+        } catch (error) {
+            console.error("Error in changeBlockStatus:", error);
+            throw error;
+        }
+    }
+
+    async takeABreak(_id:string,day:string,slot_id:string): Promise<Res> {
+        try {
+                        
+            const scheduleData:ScheduleDoc | null = await this.scheduleRepo.changeAScheduleBreak(_id,day,slot_id);
+            if(!scheduleData) return {status:false,message:"Cant find the schedule data"}
+            return {data:scheduleData,status:true,message:"Successfully taken a break"}
 
         } catch (error) {
             console.error("Error in changeBlockStatus:", error);

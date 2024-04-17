@@ -14,9 +14,9 @@ class AppointmentController{
     async confirmBooking(req: Request, res: Response): Promise<void> {
         try {
             const {scheduleId} = req.params
-            const {_id, startTime, endTime, day, doctor, patient, type ,userId,bookedDate}: IAppointment = req.body; 
+            const {startTime, endTime, day, doctor, patient, type ,userId,bookedDate,slotId}: IAppointment = req.body; 
             
-            const result: Res | null = await this.appointmentServices.confirmBooking({userId,startTime,endTime,day,doctor,patient,bookedDate,type,status:"Pending"},_id,scheduleId);
+            const result: Res | null = await this.appointmentServices.confirmBooking({userId,slotId,startTime,endTime,day,doctor,patient,bookedDate,type,status:"Pending"},scheduleId);
             res.json(result);
 
         } catch (error) {

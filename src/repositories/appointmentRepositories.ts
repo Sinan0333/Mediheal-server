@@ -44,6 +44,16 @@ class AppointmentRepository {
         }
     }
 
+    async cancelBookingBySlotId(slotId:string): Promise<AppointmentDoc | null> {
+        try {
+            const appointmentData:AppointmentDoc | null = await Appointment.findOneAndUpdate({slotId},{status:"Cancelled"})
+            return appointmentData;
+        } catch (error) {
+            console.error("Error in cancelBookingBySlotId:", error);
+            throw error;
+        }
+    }
+
     async findAppointmentsByDoctorId(doctor:string): Promise<AppointmentDoc[]> {
         try {
             const appointmentData:AppointmentDoc[] | null = await Appointment.find({ doctor}).populate('patient doctor')
