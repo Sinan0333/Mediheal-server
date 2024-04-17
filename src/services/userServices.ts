@@ -89,10 +89,27 @@ class UserServices {
             const userData:UserDoc | null = await this.userRepo.findUserById(_id)
             if(!userData) return {status:false,message:"Cant find the user"}
             const otpData:OtpDoc | null = await this.otpRepo.findOtpByEmail(userData?.email);
-            return otpData ? {data:otpData.otp,status:true ,message:"Otp get"} : {status:false ,message:"Can't find the otp"}
+            return otpData ? {data:otpData,status:true ,message:"Otp get"} : {status:false ,message:"Can't find the otp"}
 
         } catch (error) {
             console.error("Error in getOtp:", error);
+            throw error;
+        }
+    }
+
+    async resendOtp(_id:string): Promise<Res> {
+        try {
+
+            const userData:UserDoc | null = await this.userRepo.findUserById(_id)
+            if(!userData) return {status:false,message:"Cant find the user"}
+
+            const otp:string = await sendVerifyMail(userData.name,userData.email)
+            const otpData:OtpDoc | null = await this.otpRepo.createOrUpdateOtp(userData.email,otp);
+
+            return otpData ? {data:otpData,status:true ,message:"Otp get"} : {status:false ,message:"Can't find the otp"}
+
+        } catch (error) {
+            console.error("Error in resendOtp:", error);
             throw error;
         }
     }

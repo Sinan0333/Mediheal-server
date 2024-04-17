@@ -43,8 +43,21 @@ class UserController{
     async getOtp(req:Request,res:Response):Promise<void>{
         try {
 
-            const {_id} = req.body
+            const {_id} = req.params
             const result:Res | null = await this.userService.getOtp(_id)
+            res.json(result)
+            
+        } catch (error) {
+            console.error("Error in UserController.login:", error);
+            res.status(500).json({ error: "Internal server error" });
+        }
+    }
+
+    async resendOtp(req:Request,res:Response):Promise<void>{
+        try {
+
+            const {_id} = req.params
+            const result:Res | null = await this.userService.resendOtp(_id)
             res.json(result)
             
         } catch (error) {
