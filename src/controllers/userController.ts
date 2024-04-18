@@ -31,7 +31,8 @@ class UserController{
             
             const {email,password}:UserDoc = req.body
             const result:UserRes | null = await this.userService.authUser(email,password)
-            if(result?.token) setCookies(res,result.token)
+            
+            if(result?.token) setCookies(res,result.token,"userToken")  
             res.json(result)
             
         } catch (error) {

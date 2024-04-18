@@ -22,8 +22,8 @@ export interface IAppointment {
     startTime:string
     endTime:string
     day:string
-    doctor:Types.ObjectId | DoctorDoc
-    patient:Types.ObjectId |PatientDoc
+    doctor: DoctorDoc
+    patient:PatientDoc
     bookedDate:Date
     status:"Pending" | "Checked" | "Cancelled"
     type:"online" | "offline"

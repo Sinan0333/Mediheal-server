@@ -32,7 +32,7 @@ class DoctorController{
         try {
             const {email,password}:DoctorDoc = req.body
             const result:DoctorRes | null = await this.doctorServices.authDoctor(email,password)
-            if(result?.token) setCookies(res,result.token)
+            if(result?.token) setCookies(res,result.token,"doctorToken")
             
             res.json(result)
             

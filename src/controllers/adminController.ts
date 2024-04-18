@@ -17,7 +17,7 @@ class AdminController{
         try {
             const {email,password}:UserDoc = req.body
             const result:UserRes | null= await this.adminServices.authAdmin(email,password)
-            if(result?.token) setCookies(res,result.token)
+            if(result?.token) setCookies(res,result.token,"adminToken")
             res.json(result)
             
         } catch (error) {

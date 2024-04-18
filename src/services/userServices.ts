@@ -123,8 +123,8 @@ class UserServices {
                 if (isPasswordValid) {
                     if(userData.is_blocked){
                         return{status:false,message:"Admin blocked you"}
-                    }else{
-                        const token: string = generateToken(userData._id);
+                    }else{  
+                        const token: string = generateToken(userData);
                         return { userData, token, status: true, message: 'Authentication successful' };
                     }
                 } else {

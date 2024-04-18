@@ -80,7 +80,7 @@ class DoctorServices {
             if (userData) {
                 const isPasswordValid = await bcrypt.compare(password, userData.password);
                 if (isPasswordValid && userData._id) {
-                    const token: string = generateToken(userData._id);
+                    const token: string = generateToken(userData);
                     return { userData, token, status: true, message: 'Authentication successful' };
                 } else {
                     return { status: false, message: 'Incorrect password' };

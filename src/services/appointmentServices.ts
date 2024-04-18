@@ -73,7 +73,8 @@ class AppointmentServices {
            const filterAppointmentData:IAppointment[] | [] = appointmentData.filter((doc)=>doc.status==='Pending')
 
             for(let i=0;i<filterAppointmentData.length;i++){
-                await this.userRepo.updateHistory(filterAppointmentData[i].userId,{date:new Date(),description:"Doctor Cancelled the Appointment",amount:200})
+                await this.userRepo.updateHistory(filterAppointmentData[i].userId,{date:new Date(),description:"Doctor Cancelled the Appointment",amount:filterAppointmentData[i].doctor.fees})
+                await this.appointmentRepo.cancelBooking(filterAppointmentData[i]._id)
             }
 
             return{data:appointmentData,status:true,message:'Appointment Cancelled Successfully'}
