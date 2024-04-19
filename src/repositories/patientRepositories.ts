@@ -33,12 +33,32 @@ class PatientRepository {
         }
     }
 
+    async findPatientByCustomId(id:string): Promise<PatientDoc  | null> {
+        try {
+            const patientData:PatientDoc | null = await Patient.findOne({ id }).exec();
+            return patientData;
+        } catch (error) {
+            console.error("Error in findPatientByCustomId:", error);
+            throw error;
+        }
+    }
+
     async findPatients(): Promise<PatientDoc[]  | []> {
         try {
             const patientData:PatientDoc[] | null = await Patient.find().exec();
             return patientData;
         } catch (error) {
             console.error("Error in findPatients:", error);
+            throw error;
+        }
+    }
+
+    async countDocuments(): Promise<Number> {
+        try {
+            const count:Number  = await Patient.countDocuments().exec();
+            return count;
+        } catch (error) {
+            console.error("Error in countDocuments:", error);
             throw error;
         }
     }

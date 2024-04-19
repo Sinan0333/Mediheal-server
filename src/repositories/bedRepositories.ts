@@ -25,7 +25,7 @@ class BedRepository {
 
     async findBeds(): Promise<BedDoc[] | []> {
         try {
-            const bedData:BedDoc[] | [] = await Bed.find().populate('assignBy');
+            const bedData:BedDoc[] | [] = await Bed.find().populate('assignBy patient');
             return bedData;
         } catch (error) {
             console.error("Error in findBedById:", error);

@@ -1,4 +1,3 @@
-import { ObjectId } from "mongoose"
 
 export interface BedDoc {
     _id?:string
@@ -7,7 +6,7 @@ export interface BedDoc {
     assignDate?:Date
     dischargeDate?:Date
     assignBy?:string
-    patient?:ObjectId
+    patient?:string
     description?:string
     available:boolean
     total?:number
@@ -21,7 +20,7 @@ export interface UpdateBedDoc {
     assignDate?:Date
     dischargeDate?:Date
     assignBy?:string
-    patient?:ObjectId
+    patient?:string
     description?:string
     available?:boolean
     total?:number

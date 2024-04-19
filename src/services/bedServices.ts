@@ -64,14 +64,17 @@ class BedServices {
     async updateBed(_id:string,data:UpdateBedDoc ): Promise<Res> {
         try {
             
+            let patient:string = '';
             if(data.patient){
-                const patientData:PatientDoc | null = await this.patientRepo.findPatientById(""+data.patient)                
+                const patientData:PatientDoc | null = await this.patientRepo.findPatientByCustomId(""+data.patient)                
                 if(!patientData) return {status:false,message:"Wrong patientID"}
 
-                const bedsData:BedDoc[] | null = await this.bedRepo.findBedByPatientId(""+data.patient)
+                const bedsData:BedDoc[] | null = await this.bedRepo.findBedByPatientId(""+patientData._id)
                 const filterBeds:BedDoc[] | undefined = bedsData?.filter((bed)=>bed._id !=_id)
                 const checkExist:Boolean | undefined = filterBeds?.every((bed)=>bed.available === true && bed._id != _id)
                 if(!checkExist) return {status:false ,message:"This patient is already reserved a bed"}
+
+                patient = patientData._id ? ""+patientData._id : ""
             }
 
             const date1:Date | undefined= data.assignDate
@@ -86,6 +89,7 @@ class BedServices {
             const total = differenceInDays * data.charge
             
             const newData:UpdateBedDoc = {total,...data}
+            newData.patient = patient
 
             const OldBedData:BedDoc | null = await this.bedRepo.findBedById(_id)
             if(!OldBedData) return {status:false,message:"Couldn't get the data"}
@@ -109,14 +113,16 @@ class BedServices {
 
     async assignPatient(data:UpdateBedDoc ): Promise<Res | null> {
         try {
-
+            let patient:string = '';
             if(data.patient){
-                const patientData:PatientDoc | null = await this.patientRepo.findPatientById(""+data.patient)                
+                const patientData:PatientDoc | null = await this.patientRepo.findPatientByCustomId(""+data.patient)                
                 if(!patientData) return {status:false,message:"Wrong patientID"}
 
-                const bedsData:BedDoc[] | null = await this.bedRepo.findBedByPatientId(""+data.patient)
+                const bedsData:BedDoc[] | null = await this.bedRepo.findBedByPatientId(""+patientData._id)
                 const checkExist:Boolean | undefined = bedsData?.every((bed)=>bed.available === true)
                 if(!checkExist) return {status:false ,message:"This patient is already reserved a bed"}
+
+                patient = patientData._id ? ""+patientData._id : ""
             }
 
             const date1:Date | undefined= data.assignDate
@@ -131,7 +137,8 @@ class BedServices {
             const total = differenceInDays * data.charge
             
             const newData:UpdateBedDoc = {total,...data}
-
+            newData.patient = patient
+            
             const bedData:BedDoc | null = await this.bedRepo.findOneAndUpdate(newData);
             if(!bedData) return {status:false , message:"No Available Slots Please Select Another Bed Type"}
             return { data: bedData, status: true, message: "Patient Assigned to the bed" };

@@ -2,6 +2,7 @@ import PatientRepository from "../repositories/patientRepositories";
 import { IPatientData, PatientDoc} from '../interfaces/IPatient';
 import { Res } from '../interfaces/Icommon';
 import { uploadFile } from "../utils/cloudinary";
+import { generatePatientId } from "../utils/others";
 
 class PatientServices {
     private patientRepo: PatientRepository;
@@ -15,7 +16,10 @@ class PatientServices {
 
             let patientPublicId:string=""
             if(data.image) patientPublicId = await uploadFile(data.image,"patient_image")
-            const newData:IPatientData = {...data,image:patientPublicId}
+                
+            const count:Number  = await this.patientRepo.countDocuments();
+            const PatId:string = generatePatientId(count)
+            const newData:IPatientData = {...data,image:patientPublicId,id:PatId}
 
             const patientData:PatientDoc | null = await this.patientRepo.createPatient(newData);
             return { data: patientData, status: true, message: "Patient added successfully" };

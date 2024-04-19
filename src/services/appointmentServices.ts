@@ -57,6 +57,13 @@ class AppointmentServices {
            const appointmentData:AppointmentDoc | null = await this.appointmentRepo.cancelBooking(_id)
            if(!appointmentData) return {status:false,message:"Couldn't get the data"}
 
+           if(data.description === "Cancelled Booking"){
+            const amount:number = data.amount
+            const penalty:number = amount*0.1
+            const finalAmount:number = amount-penalty
+            data.amount = finalAmount
+           }
+
            await this.userRepo.updateHistory(appointmentData.userId,data)
             return{data:appointmentData,status:true,message:'Appointment Cancelled Successfully'}
 
