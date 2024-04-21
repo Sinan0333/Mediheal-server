@@ -1,5 +1,7 @@
 // import {ScheduleTime} from "../interfaces/Ischedule"
 
+import { ScheduleDoc } from "../interfaces/Ischedule";
+
 
 
 // export const geneateSlots = async (workingDays: number[]): Promise<void>=> {
@@ -165,3 +167,47 @@ export function generateSlots(startTime: number, endTime: number, interval: numb
 }
 
 
+export function generateSlotsForADay(startTime: number, endTime: number, interval: number,day:number,schedule:ScheduleDoc): any {
+    const slots: any = [];
+    const customStartTime = new Date();
+    customStartTime.setHours(startTime, 0, 0); 
+    const customEndTime = new Date();
+    customEndTime.setHours(endTime, 0, 0);
+    const timeSlots: string[] = generateCustomTimeSlots(customStartTime, customEndTime, interval);
+
+    for(let i=0;i<timeSlots.length-1;i++){
+        slots.push({
+            startTime:timeSlots[i],
+            endTime:timeSlots[i+1],
+            break:false,
+            isReserved: false,
+        })
+    }
+
+    switch (day) {
+        case 1:
+            schedule.monday = slots
+            break;
+        case 2:
+            schedule.tuesday = slots
+            break;
+        case 3:
+            schedule.wednesday = slots
+            break;
+        case 4:
+            schedule.thursday = slots
+            break;
+        case 5:
+            schedule.friday = slots
+            break;
+        case 6:
+            schedule.saturday = slots
+            break;
+        case 0:
+            schedule.sunday = slots
+            break;
+        default:
+    }
+
+    
+}

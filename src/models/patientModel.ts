@@ -20,6 +20,10 @@ const PatientSchema = new Schema <PatientDoc>({
         type:String,
         required:true
     },
+    bloodGroup:{
+        type:String,
+        required:true
+    },
     dob:{
         type:Date,
         required:true

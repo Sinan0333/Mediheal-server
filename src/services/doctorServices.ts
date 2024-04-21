@@ -5,7 +5,7 @@ import { DoctorDoc, DoctorRes, IDoctorData } from '../interfaces/IDoctor';
 import { Res } from '../interfaces/Icommon';
 import { uploadFile } from '../utils/cloudinary';
 import { generateToken } from '../utils/jwt';
-import { generateSlots } from '../utils/schedule';
+import { generateSlots, generateSlotsForADay } from '../utils/schedule';
 import { ScheduleDoc } from '../interfaces/Ischedule';
 
 class DoctorServices {
@@ -50,9 +50,15 @@ class DoctorServices {
 
     async ediDoctor(data: IDoctorData,_id:string): Promise<Res> {
         try {
+
             let imagePublicId:string
             const oldDoctorData:IDoctorData | null = await this.doctorRepo.findDoctorById(_id)
+
             if(!oldDoctorData) return {status:false,message:"Cant find the doctor data"}
+            if(!oldDoctorData.slots) return {status:false,message:"Cant find the doctor data"}
+
+            const scheduleData:ScheduleDoc | null = await this.scheduleRepo.findScheduleById(oldDoctorData.slots)
+            if(!scheduleData) return {status:false,message:"Cant find the schedule data"}
 
             if(data.image.split("/").includes('Mediheal')){
                 imagePublicId=data.image
@@ -60,8 +66,17 @@ class DoctorServices {
                 imagePublicId = await uploadFile(data.image,"doctor_image");
             }
 
-            const slotsObject = await generateSlots(data.schedule.startTime,data.schedule.endTime,data.schedule.interval,data.workingDays)
-            const slotData = await this.scheduleRepo.findScheduleAndUpdate(oldDoctorData?.slots,slotsObject)
+            if (data.workingDays.length !== oldDoctorData?.workingDays.length) {
+                if (data.workingDays.length > oldDoctorData?.workingDays.length) {
+                    const addedDays: number[] = data.workingDays.filter((day: number) => !oldDoctorData.workingDays.includes(day));
+                    for(let i=0;i<addedDays.length;i++){
+                        generateSlotsForADay(data.schedule.startTime,data.schedule.endTime,data.schedule.interval,addedDays[i],scheduleData)
+                    }
+                    
+                }
+            }
+            
+            const slotData = await this.scheduleRepo.findScheduleAndUpdate(oldDoctorData?.slots,scheduleData)
             
             const newData: IDoctorData = { ...data, image:imagePublicId,slots:slotData?._id };
 
