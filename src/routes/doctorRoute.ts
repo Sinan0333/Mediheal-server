@@ -10,7 +10,16 @@ import AppointmentRepository from '../repositories/appointmentRepositories'
 import AppointmentServices from '../services/appointmentServices'
 import AppointmentController from '../controllers/appointmentController'
 
+import PatientController from '../controllers/patientController'
+import PatientServices from '../services/patientServices'
+import PatientRepository from '../repositories/patientRepositories'
+
+const patientRepository = new PatientRepository()
+const patientServices = new PatientServices(patientRepository)
+const patientController = new PatientController(patientServices)
+
 import UserRepository from '../repositories/userRepositories'
+import { doctorAuthMiddleware } from '../middleware/doctorAuthMiddleware'
 
 const scheduleRepository = new ScheduleRepository()
 const doctorRepositories = new DoctorRepository()
@@ -25,20 +34,16 @@ const appointmentController = new AppointmentController(appointmentServices)
 
 
 const doctorRoute:Router = express.Router()
+doctorRoute.use(doctorAuthMiddleware)
 
+doctorRoute.get('/patient',patientController.getPatients.bind(patientController))
+doctorRoute.get('/patient/view/:_id',patientController.getPatient.bind(patientController))
 
-doctorRoute.post('/login',doctorController.login.bind(doctorController))
-
-doctorRoute.post('/add',doctorController.addDoctor.bind(doctorController))
-doctorRoute.get('/view/:_id',doctorController.viewDoctor.bind(doctorController))
-doctorRoute.post('/edit/:_id',doctorController.ediDoctor.bind(doctorController))
-
-doctorRoute.get('/list',doctorController.listDoctors.bind(doctorController))
-doctorRoute.get('/list/best',doctorController.getBestDoctors.bind(doctorController))
-doctorRoute.get('/list/unblocked',doctorController.unBlockedDoctors.bind(doctorController))
-doctorRoute.post('/block/:_id',doctorController.changeBlockStatus.bind(doctorController))
 
 doctorRoute.get('/appointment/list/:_id',appointmentController.getDoctorAppointments.bind(appointmentController))
+doctorRoute.post("/appointment/cancel/:_id",appointmentController.cancelBooking.bind(appointmentController))
+doctorRoute.get("/appointment/cancel_when_break/:_id",appointmentController.cancelBookingWhenBreak.bind(appointmentController))
+doctorRoute.post('/appointment/take_break/:scheduleId',doctorController.takeABreak.bind(doctorController))
 doctorRoute.post('/take_break/:scheduleId',doctorController.takeABreak.bind(doctorController))
 
 

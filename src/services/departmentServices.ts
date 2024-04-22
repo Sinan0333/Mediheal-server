@@ -50,7 +50,7 @@ class DepartmentServices {
             
             let logoPublicId:string
             if(data.logo.split("/").includes('Mediheal')){
-                logoPublicId=data.image
+                logoPublicId=data.logo
             }else{
                 logoPublicId = await uploadFile(data.logo,"department_logos");
             }

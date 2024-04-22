@@ -8,6 +8,8 @@ import configCloudinary from './utils/cloudinary'
 import userRoute from './routes/userRoute'
 import adminRoute from './routes/adminRoute'
 import doctorRoute from './routes/doctorRoute'
+import authRoute from './routes/authRoute'
+
 
 dotenv.config()
 configCloudinary()
@@ -28,6 +30,7 @@ app.use(
 );
 
 
+app.use('/auth',authRoute)
 app.use('/',userRoute)
 app.use('/admin',adminRoute)
 app.use('/doctor',doctorRoute)

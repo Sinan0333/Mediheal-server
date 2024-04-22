@@ -79,9 +79,7 @@ class DoctorServices {
                     if(response) return response
                 }
             }
-            
-            console.log(oldDoctorData);
-            
+                        
             const slotData = await this.scheduleRepo.findScheduleAndUpdate(oldDoctorData?.slots,scheduleData)
             
             const newData: IDoctorData = { ...data, image:imagePublicId,slots:slotData?._id };

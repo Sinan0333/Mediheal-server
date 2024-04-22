@@ -1,38 +1,62 @@
 import express,{Router} from 'express'
+import { adminAuthMiddleware } from '../middleware/adminAuthMiddleware'
 
-import AdminController from '../controllers/adminController'
-import AdminServices from '../services/adminServices'
-import AdminRepository from '../repositories/adminRepositories'
+import OtpRepository from '../repositories/otpRepositories'
+import ScheduleRepository from '../repositories/scheduleRepository'
+
+import UserController from '../controllers/userController'
+import UserServices from '../services/userServices'
+import UserRepository from '../repositories/userRepositories'
 
 import DepartmentController from '../controllers/departmentController'
 import DepartmentServices from '../services/departmentServices'
 import DepartmentRepository from '../repositories/departmentRepositories'
 
+import PatientController from '../controllers/patientController'
+import PatientServices from '../services/patientServices'
+import PatientRepository from '../repositories/patientRepositories'
+
 import BedRepository from '../repositories/bedRepositories'
 import BedServices from '../services/bedServices'
 import BedController from '../controllers/bedController'
 
-import PatientRepository from '../repositories/patientRepositories'
+import DoctorRepository from '../repositories/doctorRepositories' 
+import DoctorServices from '../services/doctorServices'
+import DoctorController from '../controllers/doctorController'
+
 
 const adminRoute:Router = express.Router()
+adminRoute.use(adminAuthMiddleware)
+
+const otpRepository = new OtpRepository()
 
 
-const adminRepository = new AdminRepository()
-const adminServices = new AdminServices(adminRepository)
-const adminController = new AdminController(adminServices)
+const userRepository = new UserRepository()
+const userServices = new UserServices(userRepository,otpRepository)
+const userController = new UserController(userServices)
 
 const departmentRepository = new DepartmentRepository()
 const departmentServices = new DepartmentServices(departmentRepository)
 const departmentController = new DepartmentController(departmentServices)
 
-const patientRepositories = new PatientRepository()
+const patientRepository = new PatientRepository()
+const patientServices = new PatientServices(patientRepository)
+const patientController = new PatientController(patientServices)
 
 const bedRepositories = new BedRepository()
-const bedServices = new BedServices(bedRepositories,patientRepositories)
+const bedServices = new BedServices(bedRepositories,patientRepository)
 const bedController = new BedController(bedServices)
 
+const scheduleRepository = new ScheduleRepository()
+const doctorRepositories = new DoctorRepository()
+const doctorServices = new DoctorServices(doctorRepositories,scheduleRepository)
+const doctorController = new DoctorController(doctorServices)
 
-adminRoute.post('/login',adminController.login.bind(adminController))
+
+adminRoute.get('/user',userController.listUsers.bind(userController))
+adminRoute.post('/user/view',userController.getUserData.bind(userController))
+adminRoute.post('/user/edit',userController.updateProfile.bind(userController))
+adminRoute.post('/user/block/:_id',userController.changeBlockStatus.bind(userController))
 
 adminRoute.get('/department',departmentController.listDepartment.bind(departmentController))
 adminRoute.get('/department/view/:_id',departmentController.getDepartment.bind(departmentController))
@@ -49,7 +73,15 @@ adminRoute.post('/bed/block/:_id',bedController.changeBlockStatus.bind(bedContro
 adminRoute.post('/bed/assign',bedController.assignPatient.bind(bedController))
 adminRoute.put('/bed/discharge/:_id',bedController.dischargePatient.bind(bedController))
 
+adminRoute.get('/patient',patientController.getPatients.bind(patientController))
+adminRoute.get('/patient/view/:_id',patientController.getPatient.bind(patientController))
 
+adminRoute.get('/doctor/list',doctorController.listDoctors.bind(doctorController))
+adminRoute.post('/doctor/add',doctorController.addDoctor.bind(doctorController))
+adminRoute.get('/doctor/view/:_id',doctorController.viewDoctor.bind(doctorController))
+adminRoute.post('/doctor/edit/:_id',doctorController.ediDoctor.bind(doctorController))
+adminRoute.post('/doctor/block/:_id',doctorController.changeBlockStatus.bind(doctorController))
+adminRoute.get('/doctor/unblocked',doctorController.unBlockedDoctors.bind(doctorController))
 
 
 export default adminRoute

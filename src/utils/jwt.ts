@@ -15,10 +15,9 @@ const verifyToken = (token: string): JwtPayload => {
 
     try {
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
-        console.log(decoded);
-        
         return decoded as JwtPayload;
     } catch (error) {
+        console.error('Token verification failed:', error);
         throw new Error('Token verification failed');
     }
 };
