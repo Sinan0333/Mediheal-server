@@ -24,12 +24,11 @@ import DoctorRepository from '../repositories/doctorRepositories'
 import DoctorServices from '../services/doctorServices'
 import DoctorController from '../controllers/doctorController'
 
-
 const adminRoute:Router = express.Router()
 adminRoute.use(adminAuthMiddleware)
 
 const otpRepository = new OtpRepository()
-
+const scheduleRepository = new ScheduleRepository()
 
 const userRepository = new UserRepository()
 const userServices = new UserServices(userRepository,otpRepository)
@@ -47,15 +46,12 @@ const bedRepositories = new BedRepository()
 const bedServices = new BedServices(bedRepositories,patientRepository)
 const bedController = new BedController(bedServices)
 
-const scheduleRepository = new ScheduleRepository()
 const doctorRepositories = new DoctorRepository()
 const doctorServices = new DoctorServices(doctorRepositories,scheduleRepository)
 const doctorController = new DoctorController(doctorServices)
 
-
 adminRoute.get('/user',userController.listUsers.bind(userController))
 adminRoute.post('/user/view',userController.getUserData.bind(userController))
-adminRoute.post('/user/edit',userController.updateProfile.bind(userController))
 adminRoute.post('/user/block/:_id',userController.changeBlockStatus.bind(userController))
 
 adminRoute.get('/department',departmentController.listDepartment.bind(departmentController))
@@ -65,6 +61,9 @@ adminRoute.post('/department/add',departmentController.addDepartment.bind(depart
 adminRoute.post('/department/edit/:_id',departmentController.editDepartment.bind(departmentController))
 adminRoute.post('/department/block/:_id',departmentController.changeBlockStatus.bind(departmentController))
 
+adminRoute.get('/patient',patientController.getPatients.bind(patientController))
+adminRoute.get('/patient/view/:_id',patientController.getPatient.bind(patientController))
+
 adminRoute.get('/bed',bedController.getAllBeds.bind(bedController))
 adminRoute.post('/bed/add',bedController.addBed.bind(bedController))
 adminRoute.get('/bed/view/:_id',bedController.getBedDetails.bind(bedController))
@@ -73,15 +72,11 @@ adminRoute.post('/bed/block/:_id',bedController.changeBlockStatus.bind(bedContro
 adminRoute.post('/bed/assign',bedController.assignPatient.bind(bedController))
 adminRoute.put('/bed/discharge/:_id',bedController.dischargePatient.bind(bedController))
 
-adminRoute.get('/patient',patientController.getPatients.bind(patientController))
-adminRoute.get('/patient/view/:_id',patientController.getPatient.bind(patientController))
-
 adminRoute.get('/doctor/list',doctorController.listDoctors.bind(doctorController))
 adminRoute.post('/doctor/add',doctorController.addDoctor.bind(doctorController))
 adminRoute.get('/doctor/view/:_id',doctorController.viewDoctor.bind(doctorController))
 adminRoute.post('/doctor/edit/:_id',doctorController.ediDoctor.bind(doctorController))
 adminRoute.post('/doctor/block/:_id',doctorController.changeBlockStatus.bind(doctorController))
 adminRoute.get('/doctor/unblocked',doctorController.unBlockedDoctors.bind(doctorController))
-
 
 export default adminRoute

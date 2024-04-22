@@ -1,6 +1,8 @@
 import express,{Router} from 'express'
+import { userAuthMiddleware } from '../middleware/userAuthMiddleware'
 
 import OtpRepository from '../repositories/otpRepositories'
+import ScheduleRepository from '../repositories/scheduleRepository'
 
 import UserController from '../controllers/userController'
 import UserServices from '../services/userServices'
@@ -22,16 +24,11 @@ import AppointmentController from '../controllers/appointmentController'
 import AppointmentServices from '../services/appointmentServices'
 import AppointmentRepository from '../repositories/appointmentRepositories'
 
-
-
-import ScheduleRepository from '../repositories/scheduleRepository'
-import { userAuthMiddleware } from '../middleware/userAuthMiddleware'
-
-
 const userRoute:Router = express.Router()
 userRoute.use(userAuthMiddleware)
 
 const otpRepository = new OtpRepository()
+const scheduleRepository = new ScheduleRepository()
 
 const userRepository = new UserRepository()
 const userServices = new UserServices(userRepository,otpRepository)
@@ -45,8 +42,6 @@ const departmentRepository = new DepartmentRepository()
 const departmentServices = new DepartmentServices(departmentRepository)
 const departmentController = new DepartmentController(departmentServices)
 
-const scheduleRepository = new ScheduleRepository()
-
 const doctorRepositories = new DoctorRepository()
 const doctorServices = new DoctorServices(doctorRepositories,scheduleRepository)
 const doctorController = new DoctorController(doctorServices)
@@ -54,9 +49,6 @@ const doctorController = new DoctorController(doctorServices)
 const appointmentRepository = new AppointmentRepository()
 const appointmentServices = new AppointmentServices(appointmentRepository,scheduleRepository,userRepository)
 const appointmentController = new AppointmentController(appointmentServices)
-
-
-
 
 userRoute.post('/profile',userController.getUserData.bind(userController))
 userRoute.post('/edit_profile',userController.updateProfile.bind(userController))
@@ -74,8 +66,5 @@ userRoute.post("/appointment/create-checkout-session",userController.createCheck
 userRoute.post("/appointment/confirm_booking/:scheduleId",appointmentController.confirmBooking.bind(appointmentController))
 userRoute.get("/appointment/history/:userId",appointmentController.userAppointmentHistory.bind(appointmentController))
 userRoute.post("/appointment/cancel/:_id",appointmentController.cancelBooking.bind(appointmentController))
-
-
-userRoute.get('/list/unblocked',doctorController.unBlockedDoctors.bind(doctorController))
 
 export default userRoute

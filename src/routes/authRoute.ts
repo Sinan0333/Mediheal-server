@@ -41,8 +41,4 @@ authRoute.post('/doctor/login',doctorController.login.bind(doctorController))
 
 authRoute.post('/admin/login',adminController.login.bind(adminController))
 
-
-
-
-
 export default authRoute
