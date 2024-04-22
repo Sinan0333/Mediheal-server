@@ -7,6 +7,7 @@ import { uploadFile } from '../utils/cloudinary';
 import { generateToken } from '../utils/jwt';
 import { generateSlots, generateSlotsForADay } from '../utils/schedule';
 import { ScheduleDoc } from '../interfaces/Ischedule';
+import { removeDays } from '../utils/others';
 
 class DoctorServices {
     private doctorRepo: DoctorRepositories;
@@ -72,9 +73,14 @@ class DoctorServices {
                     for(let i=0;i<addedDays.length;i++){
                         generateSlotsForADay(data.schedule.startTime,data.schedule.endTime,data.schedule.interval,addedDays[i],scheduleData)
                     }
-                    
+                }else{
+                    const removedDays: number[] = oldDoctorData.workingDays.filter((day: number) => !data.workingDays.includes(day));
+                    const response:Res | void  = removeDays(removedDays,scheduleData)
+                    if(response) return response
                 }
             }
+            
+            console.log(oldDoctorData);
             
             const slotData = await this.scheduleRepo.findScheduleAndUpdate(oldDoctorData?.slots,scheduleData)
             

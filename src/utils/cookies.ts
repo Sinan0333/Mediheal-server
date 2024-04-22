@@ -1,8 +1,6 @@
 import {Response} from 'express'
 const setCookies = (res:Response,token:string,name:string)=>{
 
-    
-
     res.cookie(name, token, {
         httpOnly: true,
         secure: false, 
