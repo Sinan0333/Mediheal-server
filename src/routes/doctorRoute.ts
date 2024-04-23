@@ -16,6 +16,10 @@ import PatientController from '../controllers/patientController'
 import PatientServices from '../services/patientServices'
 import PatientRepository from '../repositories/patientRepositories'
 
+import PrescriptionController from '../controllers/prescriptionController'
+import PrescriptionServices from '../services/prescriptionServices'
+import PrescriptionRepository from '../repositories/prescriptionRepositories'
+
 const doctorRoute:Router = express.Router()
 doctorRoute.use(doctorAuthMiddleware)
 
@@ -34,6 +38,10 @@ const patientRepository = new PatientRepository()
 const patientServices = new PatientServices(patientRepository)
 const patientController = new PatientController(patientServices)
 
+const prescriptionRepository = new PrescriptionRepository()
+const prescriptionServices = new PrescriptionServices(prescriptionRepository)
+const prescriptionController = new PrescriptionController(prescriptionServices)
+
 doctorRoute.post('/take_break/:scheduleId',doctorController.takeABreak.bind(doctorController))
 
 doctorRoute.get('/appointment/list/:_id',appointmentController.getDoctorAppointments.bind(appointmentController))
@@ -42,5 +50,8 @@ doctorRoute.get("/appointment/cancel_when_break/:_id",appointmentController.canc
 
 doctorRoute.get('/patient',patientController.getPatients.bind(patientController))
 doctorRoute.get('/patient/view/:_id',patientController.getPatient.bind(patientController))
+
+doctorRoute.post('/prescription/add',prescriptionController.createPrescription.bind(prescriptionController))
+doctorRoute.get('/prescription/:_id',prescriptionController.getPrescriptionData.bind(prescriptionController))
 
 export default doctorRoute

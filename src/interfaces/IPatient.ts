@@ -15,7 +15,7 @@ export interface PatientDoc extends Document{
     appointment?:ObjectId
 }
 
- export interface IPatientData{
+ export interface  IPatientData{
     _id?:string
     id?:string
     userId:Types.ObjectId | UserDoc
