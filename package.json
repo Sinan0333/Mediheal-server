@@ -41,6 +41,7 @@
     "mongoose": "^8.2.1",
     "nodemailer": "^6.9.13",
     "raw-body": "^2.5.2",
+    "socket.io": "^4.7.5",
     "stripe": "^14.24.0"
   }
 }

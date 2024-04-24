@@ -1,10 +1,10 @@
-import app from "./app";
+import server from "./utils/socketIo";
 import connectDB from "./db";
 
 
 connectDB()
 
-app.listen(process.env.PORT, () => {
+server.listen(process.env.PORT, () => {
     console.log('Server started');
 }).on('error', (error: any) => {
     console.error('Error starting the server:', error);

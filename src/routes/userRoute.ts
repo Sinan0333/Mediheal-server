@@ -1,5 +1,5 @@
 import express,{Router} from 'express'
-import { userAuthMiddleware } from '../middleware/userAuthMiddleware'
+// import { userAuthMiddleware } from '../middleware/userAuthMiddleware'
 
 import OtpRepository from '../repositories/otpRepositories'
 import ScheduleRepository from '../repositories/scheduleRepository'
@@ -25,7 +25,7 @@ import AppointmentServices from '../services/appointmentServices'
 import AppointmentRepository from '../repositories/appointmentRepositories'
 
 const userRoute:Router = express.Router()
-userRoute.use(userAuthMiddleware)
+// userRoute.use(userAuthMiddleware)
 
 const otpRepository = new OtpRepository()
 const scheduleRepository = new ScheduleRepository()
