@@ -73,6 +73,21 @@ class AppointmentServices {
         }
     }
 
+    async changeStatus(_id:string,status:string): Promise<Res | null> {
+        try {
+
+           const appointmentData:AppointmentDoc | null = await this.appointmentRepo.findOneAndChangeStatus(_id,status)
+           if(!appointmentData) return {status:false,message:"Couldn't get the data"}
+
+            return{data:appointmentData,status:true,message:'Appointment status has successfully updated'}
+
+        } catch (error) {
+            console.error("Error in changeStatus:", error);
+            throw error;
+        }
+    }
+
+
     async cancelBookingWhenBreak(slotId:string): Promise<Res | null> {
         try {
 

@@ -47,6 +47,7 @@ doctorRoute.post('/take_break/:scheduleId',doctorController.takeABreak.bind(doct
 doctorRoute.get('/appointment/list/:_id',appointmentController.getDoctorAppointments.bind(appointmentController))
 doctorRoute.post("/appointment/cancel/:_id",appointmentController.cancelBooking.bind(appointmentController))
 doctorRoute.get("/appointment/cancel_when_break/:_id",appointmentController.cancelBookingWhenBreak.bind(appointmentController))
+doctorRoute.get("/appointment/change_status",appointmentController.changeStatus.bind(appointmentController))
 
 doctorRoute.get('/patient',patientController.getPatients.bind(patientController))
 doctorRoute.get('/patient/view/:_id',patientController.getPatient.bind(patientController))

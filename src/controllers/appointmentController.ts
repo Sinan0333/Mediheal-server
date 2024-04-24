@@ -65,6 +65,21 @@ class AppointmentController{
         }
     }
 
+    async changeStatus(req:Request,res:Response):Promise<void>{
+        try {
+            
+            const _id: string = req.query._id as string;
+            const status: string = req.query.status as string;
+
+            const result: Res | null = await this.appointmentServices.changeStatus(_id,status)  
+            res.json(result)
+            
+        } catch (error) {
+            console.error("Error in appointmentController.changeStatus", error);
+            res.status(500).json({ error: "Internal server error" });
+        }
+    }
+
     async getDoctorAppointments(req:Request,res:Response):Promise<void>{
         try {
             

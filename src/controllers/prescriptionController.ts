@@ -29,7 +29,10 @@ class PrescriptionController{
             
             const {patient,appointment,doctor,weight,height,bloodPressure,bodyTemperature,diagnosis,medicines}:PrescriptionDoc = req.body
             const result: Res | null = await this.prescriptionServices.createPrescription({patient,appointment,doctor,weight,height,bloodPressure,bodyTemperature,diagnosis,medicines})  
-            res.json(result)
+
+            if(result.status){
+                res.redirect(`/doctor/appointment/change_status?_id=${appointment}&status=Checked`)
+            }
             
         } catch (error) {
             console.error("Error in PrescriptionController.createPrescription:", error);

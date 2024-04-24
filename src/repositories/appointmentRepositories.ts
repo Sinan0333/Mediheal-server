@@ -54,6 +54,16 @@ class AppointmentRepository {
         }
     }
 
+    async findOneAndChangeStatus(_id:string,status:string): Promise<AppointmentDoc | null> {
+        try {
+            const appointmentData:AppointmentDoc | null = await Appointment.findOneAndUpdate({_id},{status})
+            return appointmentData;
+        } catch (error) {
+            console.error("Error in findOneAndChangeStatus:", error);
+            throw error;
+        }
+    }
+
     async findAppointmentsByDoctorId(doctor:string): Promise<AppointmentDoc[]> {
         try {
             const appointmentData:AppointmentDoc[] | null = await Appointment.find({ doctor}).populate('patient doctor')
