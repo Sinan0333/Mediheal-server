@@ -24,6 +24,10 @@ import AppointmentController from '../controllers/appointmentController'
 import AppointmentServices from '../services/appointmentServices'
 import AppointmentRepository from '../repositories/appointmentRepositories'
 
+import MessageController from '../controllers/messageController'
+import MessageServices from '../services/messageServices'
+import MessageRepository from '../repositories/messageRepositories'
+
 const userRoute:Router = express.Router()
 // userRoute.use(userAuthMiddleware)
 
@@ -50,6 +54,10 @@ const appointmentRepository = new AppointmentRepository()
 const appointmentServices = new AppointmentServices(appointmentRepository,scheduleRepository,userRepository)
 const appointmentController = new AppointmentController(appointmentServices)
 
+const messageRepository = new MessageRepository()
+const messageServices = new MessageServices(messageRepository)
+const messageController = new MessageController(messageServices)
+
 userRoute.post('/profile',userController.getUserData.bind(userController))
 userRoute.post('/edit_profile',userController.updateProfile.bind(userController))
 
@@ -66,5 +74,8 @@ userRoute.post("/appointment/create-checkout-session",userController.createCheck
 userRoute.post("/appointment/confirm_booking/:scheduleId",appointmentController.confirmBooking.bind(appointmentController))
 userRoute.get("/appointment/history/:userId",appointmentController.userAppointmentHistory.bind(appointmentController))
 userRoute.post("/appointment/cancel/:_id",appointmentController.cancelBooking.bind(appointmentController))
+
+userRoute.post('/chat/create',messageController.createMessage.bind(messageController))
+userRoute.post('/chat/chat_data',messageController.findConversationData.bind(messageController))
 
 export default userRoute

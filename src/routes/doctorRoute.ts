@@ -20,6 +20,10 @@ import PrescriptionController from '../controllers/prescriptionController'
 import PrescriptionServices from '../services/prescriptionServices'
 import PrescriptionRepository from '../repositories/prescriptionRepositories'
 
+import MessageController from '../controllers/messageController'
+import MessageServices from '../services/messageServices'
+import MessageRepository from '../repositories/messageRepositories'
+
 const doctorRoute:Router = express.Router()
 // doctorRoute.use(doctorAuthMiddleware)
 
@@ -42,6 +46,10 @@ const prescriptionRepository = new PrescriptionRepository()
 const prescriptionServices = new PrescriptionServices(prescriptionRepository)
 const prescriptionController = new PrescriptionController(prescriptionServices)
 
+const messageRepository = new MessageRepository()
+const messageServices = new MessageServices(messageRepository)
+const messageController = new MessageController(messageServices)
+
 doctorRoute.post('/take_break/:scheduleId',doctorController.takeABreak.bind(doctorController))
 
 doctorRoute.get('/appointment/list/:_id',appointmentController.getDoctorAppointments.bind(appointmentController))
@@ -54,5 +62,8 @@ doctorRoute.get('/patient/view/:_id',patientController.getPatient.bind(patientCo
 
 doctorRoute.post('/prescription/add',prescriptionController.createPrescription.bind(prescriptionController))
 doctorRoute.get('/prescription/:_id',prescriptionController.getPrescriptionData.bind(prescriptionController))
+
+doctorRoute.post('/chat/create',messageController.createMessage.bind(messageController))
+doctorRoute.post('/chat/chat_data',messageController.findConversationData.bind(messageController))
 
 export default doctorRoute
