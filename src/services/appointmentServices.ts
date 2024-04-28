@@ -120,6 +120,19 @@ class AppointmentServices {
         }
     }
 
+    async addChatId(_id:string,chatId:string): Promise<Res | null> {
+        try {
+
+           const appointmentData:AppointmentDoc | null = await this.appointmentRepo.addChatId(_id,chatId)
+           if(!appointmentData) return {status:false,message:"Couldn't get the data"}
+           return{data:appointmentData,status:true,message:'Appointment Data get successfully'}
+
+        } catch (error) {
+            console.error("Error in addChatId:", error);
+            throw error;
+        }
+    }
+
 }
 
 export default AppointmentServices;

@@ -83,6 +83,16 @@ class AppointmentRepository {
             throw error;
         }
     }
+
+    async addChatId(_id:string,chatId:string): Promise<AppointmentDoc | null> {
+        try {
+            const appointmentData:AppointmentDoc | null = await Appointment.findOneAndUpdate({ _id},{chatId}).populate('patient doctor')
+            return appointmentData;
+        } catch (error) {
+            console.error("Error in addChatId:", error);
+            throw error;
+        }
+    }
     
 }
 

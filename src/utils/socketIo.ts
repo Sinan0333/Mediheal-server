@@ -43,14 +43,19 @@ io.on('connection', (socket) => {
       const receiverData = getUser(receiver)
       const senderData = getUser(sender)
       
-      if(receiverData){
-        io.to(receiverData.socketId).emit('message',{sender,receiver,text})
+      if(receiverData?.socketId === sender.socketId){
+        if(senderData){
+          io.to(senderData.socketId).emit('message',{sender,receiver,text})
+        }
+      }else{
+        if(receiverData){
+          io.to(receiverData.socketId).emit('message',{sender,receiver,text})
+        }
+        if(senderData){
+          io.to(senderData.socketId).emit('message',{sender,receiver,text})
+        }
       }
-      if(senderData){
-        io.to(senderData.socketId).emit('message',{sender,receiver,text})
-      }
-      console.log(users);
-      
+           
     });
   
     socket.on('disconnect', () => {
