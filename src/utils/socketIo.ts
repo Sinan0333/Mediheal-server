@@ -27,6 +27,7 @@ const addUser = (userId:string,socketId:string)=>{
 }
 
 const getUser = (userId: string) => users.find(user => user.userId === userId)
+const removeUser = (userId:string) => users = users.filter(user => user.userId !== userId)
 
 io.on('connection', (socket) => {
     console.log('New user connected',socket.id);
@@ -43,20 +44,21 @@ io.on('connection', (socket) => {
       const receiverData = getUser(receiver)
       const senderData = getUser(sender)
       
-      if(receiverData?.socketId === sender.socketId){
-        if(senderData){
-          io.to(senderData.socketId).emit('message',{sender,receiver,text})
-        }
-      }else{
         if(receiverData){
           io.to(receiverData.socketId).emit('message',{sender,receiver,text})
         }
         if(senderData){
           io.to(senderData.socketId).emit('message',{sender,receiver,text})
-        }
-      }
-           
+        }  
     });
+
+    socket.on("end_session",(receiver)=>{
+      const user = getUser(receiver)
+      users =  removeUser(receiver)
+      if(user){
+        io.to(user.socketId).emit("exit_from_chat")
+      }
+    })
   
     socket.on('disconnect', () => {
       console.log('User disconnected');

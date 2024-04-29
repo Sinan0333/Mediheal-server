@@ -93,6 +93,16 @@ class AppointmentRepository {
             throw error;
         }
     }
+
+    async removeChatId(_id:string): Promise<AppointmentDoc | null> {
+        try {
+            const appointmentData:AppointmentDoc | null = await Appointment.findOneAndUpdate({patient:_id},{chatId:""}).populate('patient doctor')
+            return appointmentData;
+        } catch (error) {
+            console.error("Error in removeChatId:", error);
+            throw error;
+        }
+    }
     
 }
 

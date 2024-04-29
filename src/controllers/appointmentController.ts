@@ -118,6 +118,18 @@ class AppointmentController{
         }
     }
 
+      async removeChatId(req:Request,res:Response):Promise<void>{
+        try {
+            const{_id} = req.params
+            const result: Res | null = await this.appointmentServices.removeChatId(_id)  
+            res.json(result)
+            
+        } catch (error) {
+            console.error("Error in appointmentController.removeChatId", error);
+            res.status(500).json({ error: "Internal server error" });
+        }
+    }
+
 
 }
 
