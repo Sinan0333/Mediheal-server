@@ -84,22 +84,12 @@ class AppointmentRepository {
         }
     }
 
-    async addChatId(_id:string,chatId:string): Promise<AppointmentDoc | null> {
+    async changeChatStatus(_id:string,chat:boolean): Promise<AppointmentDoc | null> {
         try {
-            const appointmentData:AppointmentDoc | null = await Appointment.findOneAndUpdate({ _id},{chatId}).populate('patient doctor')
+            const appointmentData:AppointmentDoc | null = await Appointment.findOneAndUpdate({_id},{chat}).populate('patient doctor')
             return appointmentData;
         } catch (error) {
-            console.error("Error in addChatId:", error);
-            throw error;
-        }
-    }
-
-    async removeChatId(_id:string): Promise<AppointmentDoc | null> {
-        try {
-            const appointmentData:AppointmentDoc | null = await Appointment.findOneAndUpdate({patient:_id},{chatId:""}).populate('patient doctor')
-            return appointmentData;
-        } catch (error) {
-            console.error("Error in removeChatId:", error);
+            console.error("Error in changeChatStatus:", error);
             throw error;
         }
     }

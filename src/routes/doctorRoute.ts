@@ -56,8 +56,7 @@ doctorRoute.get('/appointment/list/:_id',appointmentController.getDoctorAppointm
 doctorRoute.post("/appointment/cancel/:_id",appointmentController.cancelBooking.bind(appointmentController))
 doctorRoute.get("/appointment/cancel_when_break/:_id",appointmentController.cancelBookingWhenBreak.bind(appointmentController))
 doctorRoute.get("/appointment/change_status",appointmentController.changeStatus.bind(appointmentController))
-doctorRoute.post('/appointment/add_chatId',appointmentController.addChatId.bind(appointmentController))
-doctorRoute.post('/appointment/remove_chatId/:_id',appointmentController.removeChatId.bind(appointmentController))
+doctorRoute.post('/appointment/change_chat_status',appointmentController.changeChatStatus.bind(appointmentController))
 
 doctorRoute.get('/patient',patientController.getPatients.bind(patientController))
 doctorRoute.get('/patient/view/:_id',patientController.getPatient.bind(patientController))

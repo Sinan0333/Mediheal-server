@@ -38,9 +38,9 @@ const appointmentSchema = new Schema <AppointmentDoc>({
         type:Date,
         required:true
     },
-    chatId:{
-        type:String,
-        default:""
+    chat:{
+        type:Boolean,
+        default:false
     },
     status:{
         type:String,

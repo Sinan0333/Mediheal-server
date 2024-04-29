@@ -16,7 +16,7 @@ class AppointmentController{
             const {scheduleId} = req.params
             const {startTime, endTime, day, doctor, patient, type ,userId,bookedDate,slotId}: IAppointment = req.body; 
             
-            const result: Res | null = await this.appointmentServices.confirmBooking({userId,slotId,startTime,endTime,day,doctor,patient,bookedDate,chatId:"",type,status:"Pending"},scheduleId);
+            const result: Res | null = await this.appointmentServices.confirmBooking({userId,slotId,startTime,endTime,day,doctor,patient,bookedDate,chat:false,type,status:"Pending"},scheduleId);
             res.json(result);
 
         } catch (error) {
@@ -106,10 +106,10 @@ class AppointmentController{
         }
     }
 
-    async addChatId(req:Request,res:Response):Promise<void>{
+    async changeChatStatus(req:Request,res:Response):Promise<void>{
         try {
-            const{_id,chatId} = req.body
-            const result: Res | null = await this.appointmentServices.addChatId(_id,chatId)  
+            const{_id,chat} = req.body
+            const result: Res | null = await this.appointmentServices.changeChatStatus(_id,chat)  
             res.json(result)
             
         } catch (error) {
@@ -117,19 +117,6 @@ class AppointmentController{
             res.status(500).json({ error: "Internal server error" });
         }
     }
-
-      async removeChatId(req:Request,res:Response):Promise<void>{
-        try {
-            const{_id} = req.params
-            const result: Res | null = await this.appointmentServices.removeChatId(_id)  
-            res.json(result)
-            
-        } catch (error) {
-            console.error("Error in appointmentController.removeChatId", error);
-            res.status(500).json({ error: "Internal server error" });
-        }
-    }
-
 
 }
 

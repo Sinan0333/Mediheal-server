@@ -120,28 +120,15 @@ class AppointmentServices {
         }
     }
 
-    async addChatId(_id:string,chatId:string): Promise<Res | null> {
+    async changeChatStatus(_id:string,chat:boolean): Promise<Res | null> {
         try {
 
-           const appointmentData:AppointmentDoc | null = await this.appointmentRepo.addChatId(_id,chatId)
+           const appointmentData:AppointmentDoc | null = await this.appointmentRepo.changeChatStatus(_id,chat)
            if(!appointmentData) return {status:false,message:"Couldn't get the data"}
            return{data:appointmentData,status:true,message:'Appointment Data get successfully'}
 
         } catch (error) {
-            console.error("Error in addChatId:", error);
-            throw error;
-        }
-    }
-
-    async removeChatId(_id:string): Promise<Res | null> {
-        try {
-
-           const appointmentData:AppointmentDoc | null = await this.appointmentRepo.removeChatId(_id)
-           if(!appointmentData) return {status:false,message:"Couldn't get the data"}
-           return{data:appointmentData,status:true,message:'Appointment Data get successfully'}
-
-        } catch (error) {
-            console.error("Error in removeChatId:", error);
+            console.error("Error in v:", error);
             throw error;
         }
     }
