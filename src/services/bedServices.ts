@@ -52,8 +52,8 @@ class BedServices {
     async changeBlockStatus(_id:string,is_blocked:Boolean): Promise<Res> {
         try {
 
-            const doctorData:BedDoc | null = await this.bedRepo.changeBlockStatus(_id,is_blocked)
-            return {data:doctorData,status:true,message:`Bed is ${is_blocked ? "blocked" : "unblocked"}`}
+            const bedData:BedDoc | null = await this.bedRepo.changeBlockStatus(_id,is_blocked)
+            return {data:bedData,status:true,message:`Bed is ${is_blocked ? "blocked" : "unblocked"}`}
             
         } catch (error) {
             console.error("Error in ChangeBLockStatus:", error);
@@ -107,6 +107,18 @@ class BedServices {
 
         } catch (error) {
             console.error("Error in updateBed:", error);
+            throw error;
+        }
+    }
+
+    async updateBedTypeAndCharge(_id:string,type:string,charge:number,is_blocked:Boolean): Promise<Res> {
+        try {
+
+            const bedData:BedDoc | null = await this.bedRepo.findBedAndUpdate(_id,{type,charge,available:true,is_blocked});
+            return {data:bedData,status:true,message:"Bed Updated Successfully"}
+            
+        } catch (error) {
+            console.error("Error in updateBedTypeAndCharge:", error);
             throw error;
         }
     }

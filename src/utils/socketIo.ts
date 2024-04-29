@@ -30,26 +30,17 @@ const getUser = (userId: string) => users.find(user => user.userId === userId)
 const removeUser = (userId:string) => users = users.filter(user => user.userId !== userId)
 
 io.on('connection', (socket) => {
-    console.log('New user connected',socket.id);
 
     socket.on("add_user", (userId) => {
       addUser(userId,socket.id)
     })
   
-    socket.on("connect_error", (err) => {
-    console.log(`connect_error due to ${err.message}`);
-    });
-  
     socket.on('sendMessage', ({sender,receiver,text}) => {
       const receiverData = getUser(receiver)
       const senderData = getUser(sender)
       
-        if(receiverData){
-          io.to(receiverData.socketId).emit('message',{sender,receiver,text})
-        }
-        if(senderData){
-          io.to(senderData.socketId).emit('message',{sender,receiver,text})
-        }  
+      if(receiverData) io.to(receiverData.socketId).emit('message',{sender,receiver,text})
+      if(senderData) io.to(senderData.socketId).emit('message',{sender,receiver,text})
     });
 
     socket.on("end_session",(receiver)=>{
@@ -63,7 +54,10 @@ io.on('connection', (socket) => {
     socket.on('disconnect', () => {
       console.log('User disconnected');
     });
-  
+
+    socket.on("connect_error", (err) => {
+      console.log(`connect_error due to ${err.message}`);
+    });
 });
 
 export default server

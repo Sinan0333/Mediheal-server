@@ -93,6 +93,20 @@ class BedController{
         }
     }
 
+    async updateBedTypeAndCharge(req:Request,res:Response):Promise<void>{
+        try {
+            const {_id} = req.params
+            const {type,charge,is_blocked}:BedDoc = req.body
+            
+            const result: Res | null = await this.bedServices.updateBedTypeAndCharge(_id,type,charge,is_blocked)  
+            res.json(result)
+            
+        } catch (error) {
+            console.error("Error in BedController.assignPatient:", error);
+            res.status(500).json({ error: "Internal server error" });
+        }
+    }
+
     async dischargePatient(req:Request,res:Response):Promise<void>{
         try {
             
