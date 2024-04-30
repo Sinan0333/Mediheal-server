@@ -33,6 +33,7 @@ io.on('connection', (socket) => {
 
     socket.on("add_user", (userId) => {
       addUser(userId,socket.id)
+      
     })
   
     socket.on('sendMessage', ({sender,receiver,text}) => {
@@ -49,6 +50,35 @@ io.on('connection', (socket) => {
       if(user){
         io.to(user.socketId).emit("exit_from_chat")
       }
+    })
+
+    socket.on("call:start",({sender,receiver})=>{      
+      const user = getUser(sender)
+      if(user){
+        io.to(user.socketId).emit("call:start",{receiver})
+      }
+      
+    })
+
+    socket.on("user:call",({to,offer})=>{
+      const user = getUser(to)
+      
+      if(user){
+        io.to(user.socketId).emit("incoming:call",{from:socket.id,offer})
+      }
+      
+    })
+
+    socket.on("call:accepted",({to,ans})=>{
+      io.to(to).emit("call:accepted",{from:socket.id,ans})
+    })
+
+    socket.on("peer:negotiationneeded",({to,offer})=>{
+      io.to(to).emit("peer:negotiationneeded",{from:socket.id,offer})
+    })
+
+    socket.on("peer:negotiationDone",({to,ans})=>{
+      io.to(to).emit("peer:negotiationFinal",{from:socket.id,ans})
     })
   
     socket.on('disconnect', () => {
