@@ -35,6 +35,13 @@ io.on('connection', (socket) => {
       addUser(userId,socket.id)
       
     })
+
+    socket.on("chat:started",({to})=>{
+      const user = getUser(to)
+      if(user){
+        io.to(user.socketId).emit("chat:started")
+      }
+    })
   
     socket.on('sendMessage', ({sender,receiver,text}) => {
       const receiverData = getUser(receiver)
