@@ -53,9 +53,13 @@ io.on('connection', (socket) => {
     })
 
     socket.on("call:start",({sender,receiver})=>{      
-      const user = getUser(sender)
-      if(user){
-        io.to(user.socketId).emit("call:start",{receiver})
+      const senderData = getUser(sender)
+      const receiverData = getUser(receiver)
+      if(senderData){
+        io.to(senderData.socketId).emit("call:start",{receiver})
+      }
+      if(receiverData){
+        io.to(receiverData.socketId).emit("call:start")
       }
       
     })
@@ -88,6 +92,10 @@ io.on('connection', (socket) => {
     socket.on("connect_error", (err) => {
       console.log(`connect_error due to ${err.message}`);
     });
+
+    socket.on("call:end",({to})=>{
+      io.to(to).emit("call:end")
+    })
 });
 
 export default server
