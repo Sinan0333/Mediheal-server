@@ -12,6 +12,10 @@ import PatientController from '../controllers/patientController'
 import PatientServices from '../services/patientServices'
 import PatientRepository from '../repositories/patientRepositories'
 
+import PrescriptionController from '../controllers/prescriptionController'
+import PrescriptionServices from '../services/prescriptionServices'
+import PrescriptionRepository from '../repositories/prescriptionRepositories'
+
 import DepartmentController from '../controllers/departmentController'
 import DepartmentServices from '../services/departmentServices'
 import DepartmentRepository from '../repositories/departmentRepositories'
@@ -42,6 +46,10 @@ const patientRepository = new PatientRepository()
 const patientServices = new PatientServices(patientRepository)
 const patientController = new PatientController(patientServices)
 
+const prescriptionRepository = new PrescriptionRepository()
+const prescriptionServices = new PrescriptionServices(prescriptionRepository)
+const prescriptionController = new PrescriptionController(prescriptionServices)
+
 const departmentRepository = new DepartmentRepository()
 const departmentServices = new DepartmentServices(departmentRepository)
 const departmentController = new DepartmentController(departmentServices)
@@ -63,6 +71,8 @@ userRoute.post('/edit_profile',userController.updateProfile.bind(userController)
 
 userRoute.post('/patient/add',patientController.addPatient.bind(patientController))
 userRoute.get('/patient/:userId',patientController.getUserPatients.bind(patientController))
+
+userRoute.get('/patient/prescription/:_id',prescriptionController.getPatientPrescriptions.bind(prescriptionController))
 
 userRoute.get('/department/unblocked',departmentController.unBlockedDepartments.bind(departmentController))
 

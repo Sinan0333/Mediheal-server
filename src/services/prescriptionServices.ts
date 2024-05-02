@@ -35,6 +35,19 @@ class PrescriptionServices {
         }
     }
 
+    async getPatientPrescriptions(_id:string): Promise<Res | null> {
+        try {
+
+           const prescriptionData:PrescriptionDoc[] | [] = await this.prescriptionRepo.findPrescriptionsByPatientId(_id)
+           if(!prescriptionData) return {status:false,message:"Couldn't get the data"}
+            return{data:prescriptionData,status:true,message:'Prescription Data get successfully'}
+
+        } catch (error) {
+            console.error("Error in getPatientPrescriptions:", error);
+            throw error;
+        }
+    }
+
 }
 
 export default PrescriptionServices;

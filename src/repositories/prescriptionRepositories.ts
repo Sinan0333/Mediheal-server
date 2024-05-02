@@ -23,6 +23,16 @@ class PrescriptionRepository {
             throw error;
         }
     }
+
+    async findPrescriptionsByPatientId(patient:string): Promise<PrescriptionDoc[]> {
+        try {
+            const appointmentData:PrescriptionDoc[] | [] = await Prescription.find({ patient}).populate('patient appointment doctor')
+            return appointmentData;
+        } catch (error) {
+            console.error("Error in findPrescriptionsByPatientId:", error);
+            throw error;
+        }
+    }
     
 }
 

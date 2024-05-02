@@ -63,6 +63,7 @@ doctorRoute.get('/patient/view/:_id',patientController.getPatient.bind(patientCo
 
 doctorRoute.post('/prescription/add',prescriptionController.createPrescription.bind(prescriptionController))
 doctorRoute.get('/prescription/:_id',prescriptionController.getPrescriptionData.bind(prescriptionController))
+doctorRoute.get('/prescription/patient/:_id',prescriptionController.getPatientPrescriptions.bind(prescriptionController))
 
 doctorRoute.post('/chat/create',messageController.createMessage.bind(messageController))
 doctorRoute.post('/chat/chat_data',messageController.findConversationData.bind(messageController))
