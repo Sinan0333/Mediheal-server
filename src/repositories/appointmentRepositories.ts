@@ -26,7 +26,7 @@ class AppointmentRepository {
 
     async findAppointmentsByUserId(userId:string): Promise<AppointmentDoc[]> {
         try {
-            const appointmentData:AppointmentDoc[] | null = await Appointment.find({ userId}).populate('doctor patient')
+            const appointmentData:AppointmentDoc[] | null = await Appointment.find({ userId}).populate('doctor patient').sort({bookedDate:-1})
             return appointmentData;
         } catch (error) {
             console.error("Error in findAppointmentsByUserId:", error);
@@ -66,7 +66,7 @@ class AppointmentRepository {
 
     async findAppointmentsByDoctorId(doctor:string): Promise<AppointmentDoc[]> {
         try {
-            const appointmentData:AppointmentDoc[] | null = await Appointment.find({ doctor}).populate('patient doctor')
+            const appointmentData:AppointmentDoc[] | null = await Appointment.find({ doctor}).populate('patient doctor').sort({bookedDate:-1})
             return appointmentData;
         } catch (error) {
             console.error("Error in findAppointmentsByDoctorId:", error);

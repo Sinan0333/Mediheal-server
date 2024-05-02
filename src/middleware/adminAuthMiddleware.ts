@@ -10,6 +10,11 @@ export const adminAuthMiddleware = (req: Request, res: Response, next: NextFunct
 
     try {
         verifyToken(adminToken);
+
+        // if (decodedToken.role !== 'admin') {
+        //     return res.status(403).json({ message: 'Forbidden: Insufficient privileges' });
+        // }
+
         next(); 
     } catch (error) {
         return res.status(403).json({ message: 'Forbidden: Invalid token' });

@@ -1,5 +1,5 @@
 import express,{Router} from 'express'
-// import { userAuthMiddleware } from '../middleware/userAuthMiddleware'
+import { userAuthMiddleware } from '../middleware/userAuthMiddleware'
 
 import OtpRepository from '../repositories/otpRepositories'
 import ScheduleRepository from '../repositories/scheduleRepository'
@@ -33,7 +33,7 @@ import MessageServices from '../services/messageServices'
 import MessageRepository from '../repositories/messageRepositories'
 
 const userRoute:Router = express.Router()
-// userRoute.use(userAuthMiddleware)
+userRoute.use(userAuthMiddleware)
 
 const otpRepository = new OtpRepository()
 const scheduleRepository = new ScheduleRepository()

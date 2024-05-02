@@ -1,5 +1,5 @@
 import { AdmitHistoryDoc} from "../interfaces/IAdmitHistory";
-import AdmitHistory from "../models/AdmitHistory";
+import AdmitHistory from "../models/admitHistory";
 
 class AdmitHistoryRepository {
 
@@ -25,7 +25,7 @@ class AdmitHistoryRepository {
 
     async findAdmitHistory(): Promise<AdmitHistoryDoc[] | []> {
         try {
-            const admitHistoryData:AdmitHistoryDoc[] | [] = await AdmitHistory.find().populate('assignBy patient');
+            const admitHistoryData:AdmitHistoryDoc[] | [] = await AdmitHistory.find().populate('assignBy patient').sort({dischargeDate:-1});
             return admitHistoryData;
         } catch (error) {
             console.error("Error in findAdmitHistory:", error);
