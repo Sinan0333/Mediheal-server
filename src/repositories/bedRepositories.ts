@@ -75,7 +75,7 @@ class BedRepository {
     
     async findOneAndUnset(_id:string):Promise<BedDoc | null>{
         try {
-            const bedData:BedDoc | null = await Bed.findOneAndUpdate({_id},{$set:{available:true}, $unset: { patient: "",assignBy:"",assignDate:"",dischargeDate:"",description:"",total:"", } })
+            const bedData:BedDoc | null = await Bed.findOneAndUpdate({_id},{$set:{available:true}, $unset: { patient: "",assignBy:"",assignDate:"",dischargeDate:"",description:"",total:"", }},{new:false})
             return bedData
         } catch (error) {
             console.error("Error findOneAndUnset:", error);

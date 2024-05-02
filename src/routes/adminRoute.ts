@@ -16,6 +16,10 @@ import PatientController from '../controllers/patientController'
 import PatientServices from '../services/patientServices'
 import PatientRepository from '../repositories/patientRepositories'
 
+import AdmitHistoryRepository from '../repositories/admitHistoryRepositories'
+import AdmitHistoryServices from '../services/admitHistoryServices'
+import AdmitHistoryController from '../controllers/admitHistoryController'
+
 import BedRepository from '../repositories/bedRepositories'
 import BedServices from '../services/bedServices'
 import BedController from '../controllers/bedController'
@@ -42,8 +46,12 @@ const patientRepository = new PatientRepository()
 const patientServices = new PatientServices(patientRepository)
 const patientController = new PatientController(patientServices)
 
+const admitHistoryRepository = new AdmitHistoryRepository()
+const admitHistoryServices = new AdmitHistoryServices(admitHistoryRepository)
+const admitHistoryController = new AdmitHistoryController(admitHistoryServices)
+
 const bedRepositories = new BedRepository()
-const bedServices = new BedServices(bedRepositories,patientRepository)
+const bedServices = new BedServices(bedRepositories,patientRepository,admitHistoryRepository)
 const bedController = new BedController(bedServices)
 
 const doctorRepositories = new DoctorRepository()
@@ -63,6 +71,9 @@ adminRoute.post('/department/block/:_id',departmentController.changeBlockStatus.
 
 adminRoute.get('/patient',patientController.getPatients.bind(patientController))
 adminRoute.get('/patient/view/:_id',patientController.getPatient.bind(patientController))
+
+adminRoute.get('/admit_history',admitHistoryController.getAllAdmitHistory.bind(admitHistoryController))
+adminRoute.get('/admit_history/view/:_id',admitHistoryController.getAdmitHistoryDetails.bind(admitHistoryController))
 
 adminRoute.get('/bed',bedController.getAllBeds.bind(bedController))
 adminRoute.post('/bed/add',bedController.addBed.bind(bedController))

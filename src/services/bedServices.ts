@@ -1,16 +1,20 @@
 import BedRepository from "../repositories/bedRepositories";
 import PatientRepository from "../repositories/patientRepositories";
+import AdmitHistoryRepository from "../repositories/admitHistoryRepositories";
 import { BedDoc, UpdateBedDoc} from '../interfaces/IBed';
 import { Res } from '../interfaces/Icommon';
 import { PatientDoc } from "../interfaces/IPatient";
+import { AdmitHistoryDoc } from "../interfaces/IAdmitHistory";
 
 class BedServices {
     private bedRepo: BedRepository;
     private patientRepo: PatientRepository
+    private admitHistoryRepo: AdmitHistoryRepository
 
-    constructor(bedRepo: BedRepository,patientRepo: PatientRepository) {
+    constructor(bedRepo: BedRepository,patientRepo: PatientRepository,admitHistoryRepo: AdmitHistoryRepository) {
         this.bedRepo = bedRepo;
         this.patientRepo = patientRepo
+        this.admitHistoryRepo = admitHistoryRepo
     }
 
     async addBed(data: BedDoc): Promise<Res> {
@@ -161,9 +165,37 @@ class BedServices {
         }
     }
 
+    async createAdmitHistory(data:BedDoc): Promise<Res | null> {
+        try {
+            
+            if(!(data.assignBy && data.assignDate && data.dischargeDate && data.patient && data.description && data._id && data.total) ) return {status:false,message:'Missing required fields'}
+            const adminHistory:AdmitHistoryDoc = {
+                bedId:data._id,
+                assignBy: data.assignBy,
+                assignDate: data.assignDate,
+                dischargeDate: data.dischargeDate,
+                patient: data.patient,
+                description: data.description,
+                type:data.type,
+                charge:data.charge,
+                total:data.total
+            }
+
+            const adminHistoryData:AdmitHistoryDoc  = await this.admitHistoryRepo.createAdmitHistory(adminHistory)
+            return { data: adminHistoryData, status: true, message: "Admit History Created Successfully"}
+
+        } catch (error) {
+            console.error("Error in createAdmitHistory:", error);
+            throw error;
+        }
+    }
+
     async dischargePatient(_id:string): Promise<Res | null> {
         try {
             const bedData:BedDoc | null = await this.bedRepo.findOneAndUnset(_id);
+            if(!bedData) return {status:false , message:"Can't Find the Bed"}
+
+            await this.createAdmitHistory(bedData)
             return { data: bedData, status: true, message: "Patient Discharged Successfully"};
 
         } catch (error) {
