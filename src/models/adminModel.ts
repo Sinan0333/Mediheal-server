@@ -25,6 +25,10 @@ const AdminSchema = new Schema <UserDoc>({
     image:{
         type:String,
         default:""
+    },
+    role:{
+        type:String,
+        default:"admin"
     }
 })
 

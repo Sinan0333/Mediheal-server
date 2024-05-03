@@ -9,11 +9,13 @@ export const userAuthMiddleware = (req: Request, res: Response, next: NextFuncti
     }
 
     try {
-        verifyToken(userToken);
+        const decodedToken = verifyToken(userToken);
 
-        // if (decodedToken.role !== 'user') {
-        //     return res.status(403).json({ message: 'Forbidden: Insufficient privileges' });
-        // }
+        
+        if (decodedToken.role !== 'user') {     
+            return res.status(403).json({ message: 'Forbidden: Insufficient privileges' });
+        }
+
         next(); 
     } catch (error) {
         return res.status(403).json({ message: 'Forbidden: Invalid token' });

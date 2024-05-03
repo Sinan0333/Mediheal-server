@@ -10,6 +10,7 @@ export interface UserDoc extends Document{
     wallet:number
     history:History[]
     is_blocked:boolean
+    role:string
 }
 
 

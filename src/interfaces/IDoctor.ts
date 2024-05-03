@@ -27,6 +27,7 @@ export interface DoctorDoc extends Document{
    fees:number
    image:string 
    is_blocked:boolean
+   role:string
 }
 
 export interface IDoctorData {

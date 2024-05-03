@@ -49,6 +49,10 @@ const UserSchema = new Schema <UserDoc>({
     is_blocked:{
         type:Boolean,
         default:false
+    },
+    role:{
+        type:String,
+        default:"user"
     }
 })
 

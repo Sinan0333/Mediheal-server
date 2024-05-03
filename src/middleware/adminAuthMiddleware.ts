@@ -4,16 +4,16 @@ import { verifyToken } from '../utils/jwt';
 export const adminAuthMiddleware = (req: Request, res: Response, next: NextFunction) => {
     const adminToken = req.headers.authorization?.split(' ')[1];
     
-    if (!adminToken) {
+    if (!adminToken) {     
         return res.status(401).json({ message: 'Unauthorized: No token provided' });
     }
 
     try {
-        verifyToken(adminToken);
+        const decodedToken = verifyToken(adminToken);
 
-        // if (decodedToken.role !== 'admin') {
-        //     return res.status(403).json({ message: 'Forbidden: Insufficient privileges' });
-        // }
+        if (decodedToken.role !== 'admin') {
+            return res.status(403).json({ message: 'Forbidden: Insufficient privileges' });
+        }
 
         next(); 
     } catch (error) {

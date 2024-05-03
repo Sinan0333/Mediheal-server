@@ -81,6 +81,10 @@ const DoctorSchema = new Schema <DoctorDoc>({
     is_blocked:{
         type:Boolean,
         default:false
+    },
+    role:{
+        type:String,
+        default:'doctor'
     }
     
 })

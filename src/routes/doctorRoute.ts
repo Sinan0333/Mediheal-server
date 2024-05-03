@@ -1,5 +1,5 @@
 import express,{Router} from 'express'
-import { doctorAuthMiddleware } from '../middleware/doctorAuthMiddleware'
+// import { doctorAuthMiddleware } from '../middleware/doctorAuthMiddleware'
 
 import ScheduleRepository from '../repositories/scheduleRepository'
 import UserRepository from '../repositories/userRepositories'
@@ -25,7 +25,7 @@ import MessageServices from '../services/messageServices'
 import MessageRepository from '../repositories/messageRepositories'
 
 const doctorRoute:Router = express.Router()
-doctorRoute.use(doctorAuthMiddleware)
+// doctorRoute.use(doctorAuthMiddleware)
 
 const scheduleRepository = new ScheduleRepository()
 const userRepositories = new UserRepository()
