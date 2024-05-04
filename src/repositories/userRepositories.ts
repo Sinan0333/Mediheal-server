@@ -73,6 +73,16 @@ class UserRepository {
             throw error;
         }
     }
+
+    async countDocuments(): Promise<Number> {
+        try {
+            const count:Number  = await User.countDocuments().exec();
+            return count;
+        } catch (error) {
+            console.error("Error in countDocuments:", error);
+            throw error;
+        }
+    }
 }
 
 export default UserRepository;

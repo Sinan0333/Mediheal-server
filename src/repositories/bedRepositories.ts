@@ -82,6 +82,26 @@ class BedRepository {
             throw error;
         }
     }
+
+    async countDocuments(): Promise<Number> {
+        try {
+            const count:Number  = await Bed.countDocuments().exec();
+            return count;
+        } catch (error) {
+            console.error("Error in countDocuments:", error);
+            throw error;
+        }
+    }
+
+    async vacantBedsCountDocuments(): Promise<Number> {
+        try {
+            const count: number = await Bed.countDocuments({ available:true,is_blocked:false }).exec();
+            return count;
+        } catch (error) {
+            console.error("Error in vacantBedsCountDocuments:", error);
+            throw error;
+        }
+    }
     
 }
 

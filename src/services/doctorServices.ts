@@ -185,6 +185,18 @@ class DoctorServices {
         }
     }
 
+    async totalDoctors(): Promise<Res> {
+        try {
+
+            const count:Number = await this.doctorRepo.countDocuments();
+            return { data: count, status: true, message: "Total Doctors count" };
+
+        } catch (error) {
+            console.error("Error in countDocuments:", error);
+            throw error;
+        }
+    }
+
 }
 
 export default DoctorServices;

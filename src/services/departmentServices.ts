@@ -109,6 +109,18 @@ class DepartmentServices {
             throw error;
         }
     }
+
+    async totalDepartments(): Promise<Res> {
+        try {
+
+            const count:Number = await this.departmentRepo.countDocuments();
+            return { data: count, status: true, message: "Total Department count" };
+
+        } catch (error) {
+            console.error("Error in countDocuments:", error);
+            throw error;
+        }
+    }
 }
 
 export default DepartmentServices;

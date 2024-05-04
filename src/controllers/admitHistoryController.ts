@@ -36,6 +36,18 @@ class AdmitHistoryController{
         }
     }
 
+    async totalAdmits(_req:Request,res:Response):Promise<void>{
+        try {
+            
+            const result: Res | null = await this.admitHistoryServices.totalAdmits()  
+            res.json(result)
+            
+        } catch (error) {
+            console.error("Error in AdmitHistoryController.totalAdmits:", error);
+            res.status(500).json({ error: "Internal server error" });
+        }
+    }
+
 }
 
 

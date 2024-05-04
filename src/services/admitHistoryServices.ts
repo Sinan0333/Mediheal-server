@@ -33,6 +33,18 @@ class AdmitHistoryServices {
             throw error;
         }
     }
+
+    async totalAdmits(): Promise<Res> {
+        try {
+
+            const count:Number = await this.admitHistoryRepo.countDocuments();
+            return { data: count, status: true, message: "Total AdmitHIstory count" };
+
+        } catch (error) {
+            console.error("Error in countDocuments:", error);
+            throw error;
+        }
+    }
 }
 
 export default AdmitHistoryServices;

@@ -32,6 +32,16 @@ class AdmitHistoryRepository {
             throw error;
         }
     }
+
+    async countDocuments(): Promise<Number> {
+        try {
+            const count:Number  = await AdmitHistory.countDocuments().exec();
+            return count;
+        } catch (error) {
+            console.error("Error in countDocuments:", error);
+            throw error;
+        }
+    }
     
 }
 

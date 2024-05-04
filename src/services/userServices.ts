@@ -265,6 +265,18 @@ class UserServices {
         }
     }
 
+    async totalUsers(): Promise<Res> {
+        try {
+
+            const count:Number = await this.userRepo.countDocuments();
+            return { data: count, status: true, message: "Total Users count" };
+
+        } catch (error) {
+            console.error("Error in countDocuments:", error);
+            throw error;
+        }
+    }
+
 }
 
 export default UserServices;

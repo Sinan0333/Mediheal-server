@@ -63,6 +63,16 @@ class DoctorRepository {
             throw error;
         }
     }
+
+    async countDocuments(): Promise<Number> {
+        try {
+            const count:Number  = await Doctor.countDocuments().exec();
+            return count;
+        } catch (error) {
+            console.error("Error in countDocuments:", error);
+            throw error;
+        }
+    }
 }
 
 export default DoctorRepository;

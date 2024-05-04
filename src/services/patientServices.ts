@@ -90,6 +90,18 @@ class PatientServices {
         }
     }
 
+    async totalPatients(): Promise<Res> {
+        try {
+
+            const count:Number = await this.patientRepo.countDocuments();
+            return { data: count, status: true, message: "Total Patients count" };
+
+        } catch (error) {
+            console.error("Error in countDocuments:", error);
+            throw error;
+        }
+    }
+
 }
 
 export default PatientServices;

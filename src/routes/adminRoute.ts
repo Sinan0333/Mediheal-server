@@ -61,6 +61,7 @@ const doctorController = new DoctorController(doctorServices)
 adminRoute.get('/user',userController.listUsers.bind(userController))
 adminRoute.post('/user/view',userController.getUserData.bind(userController))
 adminRoute.post('/user/block/:_id',userController.changeBlockStatus.bind(userController))
+adminRoute.get('/user/count',userController.totalUsers.bind(userController))
 
 adminRoute.get('/department',departmentController.listDepartment.bind(departmentController))
 adminRoute.get('/department/view/:_id',departmentController.getDepartment.bind(departmentController))
@@ -68,12 +69,15 @@ adminRoute.get('/department/unblocked',departmentController.unBlockedDepartments
 adminRoute.post('/department/add',departmentController.addDepartment.bind(departmentController))
 adminRoute.post('/department/edit/:_id',departmentController.editDepartment.bind(departmentController))
 adminRoute.post('/department/block/:_id',departmentController.changeBlockStatus.bind(departmentController))
+adminRoute.get('/department/count',departmentController.totalDepartments.bind(departmentController))
 
 adminRoute.get('/patient',patientController.getPatients.bind(patientController))
 adminRoute.get('/patient/view/:_id',patientController.getPatient.bind(patientController))
+adminRoute.get('/patient/count',patientController.totalPatients.bind(patientController))
 
 adminRoute.get('/admit_history',admitHistoryController.getAllAdmitHistory.bind(admitHistoryController))
 adminRoute.get('/admit_history/view/:_id',admitHistoryController.getAdmitHistoryDetails.bind(admitHistoryController))
+adminRoute.get('/admit_history/count',admitHistoryController.totalAdmits.bind(admitHistoryController))
 
 adminRoute.get('/bed',bedController.getAllBeds.bind(bedController))
 adminRoute.post('/bed/add',bedController.addBed.bind(bedController))
@@ -83,6 +87,8 @@ adminRoute.post('/bed/update/:_id',bedController.updateBedTypeAndCharge.bind(bed
 adminRoute.post('/bed/block/:_id',bedController.changeBlockStatus.bind(bedController))
 adminRoute.post('/bed/assign',bedController.assignPatient.bind(bedController))
 adminRoute.put('/bed/discharge/:_id',bedController.dischargePatient.bind(bedController))
+adminRoute.get('/bed/count',bedController.totalBeds.bind(bedController))
+adminRoute.get('/bed/vacant_beds_count',bedController.totalVacantBeds.bind(bedController))
 
 adminRoute.get('/doctor/list',doctorController.listDoctors.bind(doctorController))
 adminRoute.post('/doctor/add',doctorController.addDoctor.bind(doctorController))
@@ -90,5 +96,6 @@ adminRoute.get('/doctor/view/:_id',doctorController.viewDoctor.bind(doctorContro
 adminRoute.post('/doctor/edit/:_id',doctorController.ediDoctor.bind(doctorController))
 adminRoute.post('/doctor/block/:_id',doctorController.changeBlockStatus.bind(doctorController))
 adminRoute.get('/doctor/unblocked',doctorController.unBlockedDoctors.bind(doctorController))
+adminRoute.get('/doctor/count',doctorController.totalDoctors.bind(doctorController))
 
 export default adminRoute

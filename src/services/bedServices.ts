@@ -204,6 +204,30 @@ class BedServices {
         }
     }
 
+    async totalBeds(): Promise<Res> {
+        try {
+
+            const count:Number = await this.bedRepo.countDocuments();
+            return { data: count, status: true, message: "Total Bed count" };
+
+        } catch (error) {
+            console.error("Error in countDocuments:", error);
+            throw error;
+        }
+    }
+
+    async totalVacantBeds(): Promise<Res> {
+        try {
+
+            const count:Number = await this.bedRepo.vacantBedsCountDocuments();
+            return { data: count, status: true, message: "Total Vacant Bed count" };
+
+        } catch (error) {
+            console.error("Error in countDocuments:", error);
+            throw error;
+        }
+    }
+
 }
 
 export default BedServices;

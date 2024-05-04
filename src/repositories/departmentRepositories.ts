@@ -63,6 +63,16 @@ class DepartmentRepository {
             throw error;
         }
     }
+
+    async countDocuments(): Promise<Number> {
+        try {
+            const count:Number  = await Department.countDocuments().exec();
+            return count;
+        } catch (error) {
+            console.error("Error in countDocuments:", error);
+            throw error;
+        }
+    }
 }
 
 export default DepartmentRepository;

@@ -21,7 +21,7 @@ class PatientController{
             res.json(result)
             
         } catch (error) {
-            console.error("Error in Department.addDepartment:", error);
+            console.error("Error in PatientController.addPatient:", error);
             res.status(500).json({ error: "Internal server error" });
         }
     }
@@ -34,7 +34,7 @@ class PatientController{
             res.json(result)
             
         } catch (error) {
-            console.error("Error in Department.addDepartment:", error);
+            console.error("Error in PatientController.addPatient:", error);
             res.status(500).json({ error: "Internal server error" });
         }
     }
@@ -46,7 +46,7 @@ class PatientController{
             res.json(result)
             
         } catch (error) {
-            console.error("Error in Department.getPatients:", error);
+            console.error("Error in PatientController.getPatients:", error);
             res.status(500).json({ error: "Internal server error" });
         }
     }
@@ -59,7 +59,7 @@ class PatientController{
             res.json(result)
             
         } catch (error) {
-            console.error("Error in Department.getPatient:", error);
+            console.error("Error in PatientController.getPatient:", error);
             res.status(500).json({ error: "Internal server error" });
         }
     }
@@ -73,7 +73,19 @@ class PatientController{
             res.json(result)
             
         } catch (error) {
-            console.error("Error in Department.updatePatient:", error);
+            console.error("Error in PatientController.updatePatient:", error);
+            res.status(500).json({ error: "Internal server error" });
+        }
+    }
+
+    async totalPatients(_req:Request,res:Response):Promise<void>{
+        try {
+            
+            const result: Res | null = await this.patientServices.totalPatients()  
+            res.json(result)
+            
+        } catch (error) {
+            console.error("Error in DoctorController.totalPatients:", error);
             res.status(500).json({ error: "Internal server error" });
         }
     }

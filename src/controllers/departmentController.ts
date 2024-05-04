@@ -87,10 +87,23 @@ class DepartmentController{
             res.json(result)
             
         } catch (error) {
-            console.error("Error in DoctorController.addDoctor:", error);
+            console.error("Error in Department.addDoctor:", error);
             res.status(500).json({ error: "Internal server error" });
         }
     }
+
+    async totalDepartments(_req:Request,res:Response):Promise<void>{
+        try {
+            
+            const result: Res | null = await this.departmentServices.totalDepartments()  
+            res.json(result)
+            
+        } catch (error) {
+            console.error("Error in Department.totalDepartments:", error);
+            res.status(500).json({ error: "Internal server error" });
+        }
+    }
+    
 }
 
 
