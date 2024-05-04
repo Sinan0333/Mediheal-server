@@ -1,6 +1,6 @@
 import {Request,Response} from "express"
 import PatientServices from "../services/patientServices";
-import { PatientDoc } from '../interfaces/IPatient';
+import { PatientDoc, UpdatePatientData } from '../interfaces/IPatient';
 import { Res } from '../interfaces/Icommon';
 
 
@@ -60,6 +60,20 @@ class PatientController{
             
         } catch (error) {
             console.error("Error in Department.getPatient:", error);
+            res.status(500).json({ error: "Internal server error" });
+        }
+    }
+
+    async updatePatient(req:Request,res:Response):Promise<void>{
+        try {
+            
+            const {_id} = req.params
+            const {firstName,secondName,bloodGroup,dob,age,gender,image}:UpdatePatientData = req.body
+            const result: Res | null = await this.patientServices.updatePatient(_id,{firstName,secondName,bloodGroup,dob,age,gender,image})  
+            res.json(result)
+            
+        } catch (error) {
+            console.error("Error in Department.updatePatient:", error);
             res.status(500).json({ error: "Internal server error" });
         }
     }

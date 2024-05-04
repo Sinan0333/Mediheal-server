@@ -71,6 +71,8 @@ userRoute.post('/edit_profile',userController.updateProfile.bind(userController)
 
 userRoute.post('/patient/add',patientController.addPatient.bind(patientController))
 userRoute.get('/patient/:userId',patientController.getUserPatients.bind(patientController))
+userRoute.get('/patient/view/:_id',patientController.getPatient.bind(patientController))
+userRoute.post('/patient/edit/:_id',patientController.updatePatient.bind(patientController))
 
 userRoute.get('/patient/prescription/:_id',prescriptionController.getPatientPrescriptions.bind(prescriptionController))
 

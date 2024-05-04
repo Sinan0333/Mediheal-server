@@ -1,4 +1,4 @@
-import { IPatientData, PatientDoc } from "../interfaces/IPatient";
+import { IPatientData, PatientDoc, UpdatePatientData } from "../interfaces/IPatient";
 import Patient from "../models/patientModel";
 
 class PatientRepository {
@@ -59,6 +59,16 @@ class PatientRepository {
             return count;
         } catch (error) {
             console.error("Error in countDocuments:", error);
+            throw error;
+        }
+    }
+
+    async findPatientAndUpdate(_id:string,data:UpdatePatientData): Promise<PatientDoc  | null> {
+        try {
+            const patientData:PatientDoc | null = await Patient.findOneAndUpdate({_id},data,{new:true}).exec();
+            return patientData;
+        } catch (error) {
+            console.error("Error in findPatientAndUpdate:", error);
             throw error;
         }
     }

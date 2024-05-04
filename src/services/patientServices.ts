@@ -1,5 +1,5 @@
 import PatientRepository from "../repositories/patientRepositories";
-import { IPatientData, PatientDoc} from '../interfaces/IPatient';
+import { IPatientData, PatientDoc, UpdatePatientData} from '../interfaces/IPatient';
 import { Res } from '../interfaces/Icommon';
 import { uploadFile } from "../utils/cloudinary";
 import { generatePatientId } from "../utils/others";
@@ -63,6 +63,29 @@ class PatientServices {
 
         } catch (error) {
             console.error("Error in getPatient:", error);
+            throw error;
+        }
+    }
+
+    async updatePatient(_id:string,data:UpdatePatientData): Promise<Res> {
+        try {
+
+            let imagePublicId:string
+            if(data.image.split("/").includes('Mediheal')){
+                imagePublicId=data.image
+            }else{
+                imagePublicId = await uploadFile(data.image,"doctor_image");
+            } 
+
+            const newData:UpdatePatientData = {...data,image:imagePublicId}
+
+            const patientsData:PatientDoc | null = await this.patientRepo.findPatientAndUpdate(_id,newData);
+            if(!patientsData) return {status:false,message:"Couldn't get the data"}
+
+            return { data: patientsData, status: true, message: "Complete patient Data" };
+
+        } catch (error) {
+            console.error("Error in updatePatient:", error);
             throw error;
         }
     }
