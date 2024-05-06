@@ -1,4 +1,4 @@
-import { AppointmentDoc, IAppointment } from "../interfaces/IAppointment";
+import { AppointmentDoc, IAppointment, statusWiseAppointmentsCount } from "../interfaces/IAppointment";
 import Appointment from "../models/appointmentModel";
 
 class AppointmentRepository {
@@ -106,6 +106,40 @@ class AppointmentRepository {
             return appointmentData;
         } catch (error) {
             console.error("Error in findAppointmentByYear:", error);
+            throw error;
+        }
+    }
+
+    async findStatusWiseAppointmentCount(startDateOfMonth:Date,endDateOfMonth:Date): Promise<statusWiseAppointmentsCount[] | []> {
+        try {
+            const pipeline = [
+                {
+                    $match: {
+                        bookedDate: {
+                            $gte: startDateOfMonth,
+                            $lte: endDateOfMonth
+                        }
+                    }
+                },
+                {
+                    $group: {
+                        _id: "$status",
+                        count: { $sum: 1 } 
+                    }
+                },
+                {
+                    $project: {
+                        label: "$_id",
+                        value: "$count",
+                        _id: 0 
+                    }
+                }
+            ];
+
+            const appointmentData:statusWiseAppointmentsCount[] | [] = await Appointment.aggregate(pipeline)
+            return appointmentData;
+        } catch (error) {
+            console.error("Error in findStatusWiseAppointmentCount:", error);
             throw error;
         }
     }

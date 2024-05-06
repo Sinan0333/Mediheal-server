@@ -1,6 +1,6 @@
 import AppointmentRepository from "../repositories/appointmentRepositories";
 import ScheduleRepository from "../repositories/scheduleRepository";
-import { AppointmentDoc, IAppointment} from '../interfaces/IAppointment';
+import { AppointmentDoc, IAppointment, statusWiseAppointmentsCount} from '../interfaces/IAppointment';
 import { Res } from '../interfaces/Icommon';
 import UserRepository from "../repositories/userRepositories";
 import { History } from "../interfaces/IUser";
@@ -151,7 +151,29 @@ class AppointmentServices {
            return{data:monthlyRevenue,status:true,message:'Monthly Appointment Revenue get successfully'}
 
         } catch (error) {
-            console.error("Error in v:", error);
+            console.error("Error in getMonthlyRevenue:", error);
+            throw error;
+        }
+    }
+
+    async statusWiseAppointmentsCount(): Promise<Res | null> {
+        try {
+
+            const currentDate = new Date();
+            const currentYear = currentDate.getFullYear();
+            const currentMonth = currentDate.getMonth() + 1; 
+            const startDateOfMonth = new Date(currentYear, currentMonth - 1, 1); 
+            const endDateOfMonth = new Date(currentYear, currentMonth, 0); 
+
+           const appointmentData:statusWiseAppointmentsCount[] | [] = await this.appointmentRepo.findStatusWiseAppointmentCount(startDateOfMonth,endDateOfMonth)
+           for(let i=0;i<appointmentData.length;i++){
+               appointmentData[i].id = i
+               appointmentData[i].color = '#'+Math.floor(Math.random()*16777215).toString(16)
+           }
+           return{data:appointmentData,status:true,message:'Appointment Data get successfully'}
+
+        } catch (error) {
+            console.error("Error in statusWiseAppointmentsCount:", error);
             throw error;
         }
     }

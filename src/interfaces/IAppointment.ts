@@ -32,3 +32,11 @@ export interface IAppointment {
     status:"Pending" | "Checked" | "Cancelled"
     type:"online" | "offline"
 }
+
+
+export interface statusWiseAppointmentsCount{
+    id:number
+    label:string
+    value:number
+    color:string
+}

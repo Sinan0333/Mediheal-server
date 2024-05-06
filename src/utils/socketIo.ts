@@ -92,17 +92,18 @@ io.on('connection', (socket) => {
       io.to(to).emit("peer:negotiationFinal",{from:socket.id,ans})
     })
   
+    socket.on("call:end",({to})=>{
+      io.to(to).emit("call:end")
+    })
+
     socket.on('disconnect', () => {
-      console.log('User disconnected');
+      // console.log('User disconnected');
     });
 
     socket.on("connect_error", (err) => {
       console.log(`connect_error due to ${err.message}`);
     });
 
-    socket.on("call:end",({to})=>{
-      io.to(to).emit("call:end")
-    })
 });
 
 export default server
