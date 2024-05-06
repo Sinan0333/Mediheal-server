@@ -14,9 +14,9 @@ class AppointmentController{
     async confirmBooking(req: Request, res: Response): Promise<void> {
         try {
             const {scheduleId} = req.params
-            const {startTime, endTime, day, doctor, patient, type ,userId,bookedDate,slotId}: IAppointment = req.body; 
+            const {startTime, endTime, day, doctor, patient, type ,userId,bookedDate,fees,slotId}: IAppointment = req.body; 
             
-            const result: Res | null = await this.appointmentServices.confirmBooking({userId,slotId,startTime,endTime,day,doctor,patient,bookedDate,chat:false,type,status:"Pending"},scheduleId);
+            const result: Res | null = await this.appointmentServices.confirmBooking({userId,slotId,startTime,endTime,day,doctor,patient,bookedDate,fees,chat:false,type,status:"Pending"},scheduleId);
             res.json(result);
 
         } catch (error) {
@@ -114,6 +114,17 @@ class AppointmentController{
             
         } catch (error) {
             console.error("Error in appointmentController.addChatId", error);
+            res.status(500).json({ error: "Internal server error" });
+        }
+    }
+
+    async getMonthlyRevenue(_req:Request,res:Response):Promise<void>{
+        try {
+            const result: Res | null = await this.appointmentServices.getMonthlyRevenue()  
+            res.json(result)
+            
+        } catch (error) {
+            console.error("Error in appointmentController.getMonthlyRevenue", error);
             res.status(500).json({ error: "Internal server error" });
         }
     }

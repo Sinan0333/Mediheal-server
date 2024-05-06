@@ -38,6 +38,10 @@ const appointmentSchema = new Schema <AppointmentDoc>({
         type:Date,
         required:true
     },
+    fees:{
+        type:Number,
+        required:true
+    },
     chat:{
         type:Boolean,
         default:false

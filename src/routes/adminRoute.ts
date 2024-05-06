@@ -28,6 +28,10 @@ import DoctorRepository from '../repositories/doctorRepositories'
 import DoctorServices from '../services/doctorServices'
 import DoctorController from '../controllers/doctorController'
 
+import AppointmentRepository from '../repositories/appointmentRepositories'
+import AppointmentServices from '../services/appointmentServices'
+import AppointmentController from '../controllers/appointmentController'
+
 const adminRoute:Router = express.Router()
 // adminRoute.use(adminAuthMiddleware)
 
@@ -58,6 +62,10 @@ const doctorRepositories = new DoctorRepository()
 const doctorServices = new DoctorServices(doctorRepositories,scheduleRepository)
 const doctorController = new DoctorController(doctorServices)
 
+const appointmentRepositories = new AppointmentRepository()
+const appointmentServices = new AppointmentServices(appointmentRepositories,scheduleRepository,userRepository)
+const appointmentController = new AppointmentController(appointmentServices)
+
 adminRoute.get('/user',userController.listUsers.bind(userController))
 adminRoute.post('/user/view',userController.getUserData.bind(userController))
 adminRoute.post('/user/block/:_id',userController.changeBlockStatus.bind(userController))
@@ -78,6 +86,7 @@ adminRoute.get('/patient/count',patientController.totalPatients.bind(patientCont
 adminRoute.get('/admit_history',admitHistoryController.getAllAdmitHistory.bind(admitHistoryController))
 adminRoute.get('/admit_history/view/:_id',admitHistoryController.getAdmitHistoryDetails.bind(admitHistoryController))
 adminRoute.get('/admit_history/count',admitHistoryController.totalAdmits.bind(admitHistoryController))
+adminRoute.get('/admit_history/revenue',admitHistoryController.getMonthlyRevenue.bind(admitHistoryController))
 
 adminRoute.get('/bed',bedController.getAllBeds.bind(bedController))
 adminRoute.post('/bed/add',bedController.addBed.bind(bedController))
@@ -97,5 +106,7 @@ adminRoute.post('/doctor/edit/:_id',doctorController.ediDoctor.bind(doctorContro
 adminRoute.post('/doctor/block/:_id',doctorController.changeBlockStatus.bind(doctorController))
 adminRoute.get('/doctor/unblocked',doctorController.unBlockedDoctors.bind(doctorController))
 adminRoute.get('/doctor/count',doctorController.totalDoctors.bind(doctorController))
+
+adminRoute.get('/appointment/revenue',appointmentController.getMonthlyRevenue.bind(appointmentController))
 
 export default adminRoute

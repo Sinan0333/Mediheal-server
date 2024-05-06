@@ -93,6 +93,22 @@ class AppointmentRepository {
             throw error;
         }
     }
+
+    async findAppointmentByYear(year:number): Promise<AppointmentDoc[] | []> {
+        try {
+            const appointmentData:AppointmentDoc[] | [] = await Appointment.find({
+                bookedDate: {
+                    $gte: new Date(`${year}-01-01`),
+                    $lt: new Date(`${year + 1}-01-01`)
+                  },
+                  status: { $ne: 'Cancelled' } 
+            })
+            return appointmentData;
+        } catch (error) {
+            console.error("Error in findAppointmentByYear:", error);
+            throw error;
+        }
+    }
     
 }
 

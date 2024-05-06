@@ -45,6 +45,29 @@ class AdmitHistoryServices {
             throw error;
         }
     }
+
+    async getMonthlyRevenue(): Promise<Res | null> {
+        try {
+
+            const currentYear = new Date().getFullYear();
+           const admitHistoryData:AdmitHistoryDoc[] | [] = await this.admitHistoryRepo.findAdmitsByYear(currentYear)           
+
+           const monthlyRevenue = admitHistoryData.reduce((result:any, admits) => {
+            const month = admits.dischargeDate.getMonth();            
+            const amount:number = admits.total || 0
+            const penalty:number = amount*0.5
+            const revenue:number = amount-penalty 
+            result[month] = (result[month] || 0) + revenue;
+            return result;
+          }, {});
+
+           return{data:monthlyRevenue,status:true,message:'Monthly  Admits Revenue  get successfully'}
+
+        } catch (error) {
+            console.error("Error in v:", error);
+            throw error;
+        }
+    }
 }
 
 export default AdmitHistoryServices;

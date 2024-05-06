@@ -11,6 +11,7 @@ export interface AppointmentDoc extends Document{
     doctor:Types.ObjectId
     patient:Types.ObjectId
     bookedDate:Date
+    fees:number
     chat:boolean
     status:"Pending" | "Checked" | "Cancelled"
     type:"online" | "offline"
@@ -27,6 +28,7 @@ export interface IAppointment {
     patient:PatientDoc
     chat:boolean
     bookedDate:Date
+    fees:number
     status:"Pending" | "Checked" | "Cancelled"
     type:"online" | "offline"
 }

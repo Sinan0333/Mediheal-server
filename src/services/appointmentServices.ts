@@ -133,6 +133,29 @@ class AppointmentServices {
         }
     }
 
+    async getMonthlyRevenue(): Promise<Res | null> {
+        try {
+
+            const currentYear = new Date().getFullYear();
+           const appointmentData:AppointmentDoc[] | [] = await this.appointmentRepo.findAppointmentByYear(currentYear)
+
+           const monthlyRevenue = appointmentData.reduce((result:any, appointment) => {
+            const month = appointment.bookedDate.getMonth(); 
+            const amount:number = appointment.fees || 0
+            const penalty:number = amount*0.2
+            const revenue:number = amount-penalty           
+            result[month] = (result[month] || 0) + revenue;
+            return result;
+          }, {});
+
+           return{data:monthlyRevenue,status:true,message:'Monthly Appointment Revenue get successfully'}
+
+        } catch (error) {
+            console.error("Error in v:", error);
+            throw error;
+        }
+    }
+
 }
 
 export default AppointmentServices;

@@ -42,6 +42,21 @@ class AdmitHistoryRepository {
             throw error;
         }
     }
+
+    async findAdmitsByYear(year:number): Promise<AdmitHistoryDoc[] | []> {
+        try {
+            const admitHistoryData:AdmitHistoryDoc[] | [] = await AdmitHistory.find({
+                dischargeDate: {
+                    $gte: new Date(`${year}-01-01`),
+                    $lt: new Date(`${year + 1}-01-01`)
+                  },
+            })
+            return admitHistoryData;
+        } catch (error) {
+            console.error("Error in findAdmitHistory:", error);
+            throw error;
+        }
+    }
     
 }
 
