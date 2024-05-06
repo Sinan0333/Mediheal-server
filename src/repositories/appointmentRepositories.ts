@@ -1,5 +1,6 @@
 import { AppointmentDoc, IAppointment, statusWiseAppointmentsCount, typeWiseAppointmentsCount } from "../interfaces/IAppointment";
 import Appointment from "../models/appointmentModel";
+import {ObjectId} from 'mongodb'
 
 class AppointmentRepository {
 
@@ -94,15 +95,31 @@ class AppointmentRepository {
         }
     }
 
-    async findAppointmentByYear(year:number): Promise<AppointmentDoc[] | []> {
+    async countDoctorDocuments(doctor:string): Promise<Number> {
         try {
-            const appointmentData:AppointmentDoc[] | [] = await Appointment.find({
+            const count:Number  = await Appointment.countDocuments({doctor}).exec();
+            return count;
+        } catch (error) {
+            console.error("Error in countDocuments:", error);
+            throw error;
+        }
+    }
+
+    async findAppointmentByYear(year:number,doctor?:string): Promise<AppointmentDoc[] | []> {
+        try {
+
+            const filter:any = {
                 bookedDate: {
                     $gte: new Date(`${year}-01-01`),
                     $lt: new Date(`${year + 1}-01-01`)
-                  },
-                  status: { $ne: 'Cancelled' } 
-            })
+                  }
+            }
+
+            if(doctor){
+                filter.doctor = doctor
+            }
+
+            const appointmentData:AppointmentDoc[] | [] = await Appointment.find(filter)
             return appointmentData;
         } catch (error) {
             console.error("Error in findAppointmentByYear:", error);
@@ -110,16 +127,23 @@ class AppointmentRepository {
         }
     }
 
-    async findStatusWiseAppointmentCount(startDateOfMonth:Date,endDateOfMonth:Date): Promise<statusWiseAppointmentsCount[] | []> {
+    async findStatusWiseAppointmentCount(startDateOfMonth:Date,endDateOfMonth:Date,doctor?:string): Promise<statusWiseAppointmentsCount[] | []> {
         try {
+
+            const matchStage:any = {
+                bookedDate: {
+                    $gte: startDateOfMonth,
+                    $lte: endDateOfMonth
+                }
+            };
+    
+            if (doctor) {
+                matchStage.doctor = new ObjectId(doctor);
+            }
+            
             const pipeline = [
                 {
-                    $match: {
-                        bookedDate: {
-                            $gte: startDateOfMonth,
-                            $lte: endDateOfMonth
-                        }
-                    }
+                    $match: matchStage
                 },
                 {
                     $group: {
@@ -144,16 +168,23 @@ class AppointmentRepository {
         }
     }
 
-    async findTypeWiseAppointmentCount(startDateOfMonth:Date,endDateOfMonth:Date): Promise<typeWiseAppointmentsCount[] | []> {
+    async findTypeWiseAppointmentCount(startDateOfMonth:Date,endDateOfMonth:Date,doctor?:string): Promise<typeWiseAppointmentsCount[] | []> {
         try {
+
+            const matchStage:any = {
+                bookedDate: {
+                    $gte: startDateOfMonth,
+                    $lte: endDateOfMonth
+                }
+            };
+    
+            if (doctor) {
+                matchStage.doctor = new ObjectId(doctor);
+            }
+
             const pipeline = [
                 {
-                    $match: {
-                        bookedDate: {
-                            $gte: startDateOfMonth,
-                            $lte: endDateOfMonth
-                        }
-                    }
+                    $match: matchStage
                 },
                 {
                     $group: {

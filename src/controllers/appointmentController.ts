@@ -1,14 +1,18 @@
 import {Request,Response} from "express"
 import AppointmentServices from "../services/appointmentServices";
+import PatientServices from "../services/patientServices";
 import {IAppointment } from '../interfaces/IAppointment';
 import { Res } from '../interfaces/Icommon';
+import { ObjectId } from "mongodb";
 
 
 class AppointmentController{
     private appointmentServices:AppointmentServices
+    private patientServices:PatientServices
 
-    constructor(appointmentServices:AppointmentServices){
+    constructor(appointmentServices:AppointmentServices,patientServices:PatientServices){
         this.appointmentServices = appointmentServices
+        this.patientServices = patientServices
     }
 
     async confirmBooking(req: Request, res: Response): Promise<void> {
@@ -113,14 +117,54 @@ class AppointmentController{
             res.json(result)
             
         } catch (error) {
-            console.error("Error in appointmentController.addChatId", error);
+            console.error("Error in appointmentController.changeChatStatus", error);
+            res.status(500).json({ error: "Internal server error" });
+        }
+    }
+
+    async doctorPatients(req:Request,res:Response):Promise<void>{
+        try {
+            const{_id} = req.params
+            const patientID: ObjectId[]  = await this.appointmentServices.getDoctorPatients(_id)
+
+            const result:Res | null = await this.patientServices.doctorPatients(patientID)
+            res.json(result)
+            
+        } catch (error) {
+            console.error("Error in appointmentController.doctorPatients", error);
+            res.status(500).json({ error: "Internal server error" });
+        }
+    }
+
+    async totalDoctorPatients(req:Request,res:Response):Promise<void>{
+        try {
+            const{_id} = req.params
+            const patientID: ObjectId[]  = await this.appointmentServices.getDoctorPatients(_id)
+
+            const result:Res | null = await this.patientServices.totalDoctorPatients(patientID)
+            res.json(result)
+            
+        } catch (error) {
+            console.error("Error in appointmentController.totalDoctorPatients", error);
+            res.status(500).json({ error: "Internal server error" });
+        }
+    }
+
+    async totalDoctorAppointments(req:Request,res:Response):Promise<void>{
+        try {
+            const {_id} = req.params
+            const result: Res | null = await this.appointmentServices.totalDoctorAppointments(_id)  
+            res.json(result)
+            
+        } catch (error) {
+            console.error("Error in BedController.totalBeds:", error);
             res.status(500).json({ error: "Internal server error" });
         }
     }
 
     async getMonthlyRevenue(_req:Request,res:Response):Promise<void>{
         try {
-            const result: Res | null = await this.appointmentServices.getMonthlyRevenue()  
+            const result: Res | null = await this.appointmentServices.getMonthlyRevenue(0.2)  
             res.json(result)
             
         } catch (error) {
@@ -147,6 +191,42 @@ class AppointmentController{
             
         } catch (error) {
             console.error("Error in appointmentController.typeWiseAppointmentsCount", error);
+            res.status(500).json({ error: "Internal server error" });
+        }
+    }
+
+    async getDoctorMonthlyRevenue(req:Request,res:Response):Promise<void>{
+        try {
+            const {_id} = req.params
+            const result: Res | null = await this.appointmentServices.getMonthlyRevenue(0.8,_id)  
+            res.json(result)
+            
+        } catch (error) {
+            console.error("Error in appointmentController.getDoctorMonthlyRevenue", error);
+            res.status(500).json({ error: "Internal server error" });
+        }
+    }
+
+    async statusWiseDoctorAppointmentsCount(req:Request,res:Response):Promise<void>{
+        try {
+            const {_id} = req.params
+            const result: Res | null = await this.appointmentServices.statusWiseAppointmentsCount(_id)  
+            res.json(result)
+            
+        } catch (error) {
+            console.error("Error in appointmentController.statusWiseDoctorAppointmentsCount", error);
+            res.status(500).json({ error: "Internal server error" });
+        }
+    }
+
+    async typeWiseDoctorAppointmentsCount(req:Request,res:Response):Promise<void>{
+        try {
+            const {_id} = req.params
+            const result: Res | null = await this.appointmentServices.typeWiseAppointmentsCount(_id)  
+            res.json(result)
+            
+        } catch (error) {
+            console.error("Error in appointmentController.typeWiseDoctorAppointmentsCount", error);
             res.status(500).json({ error: "Internal server error" });
         }
     }

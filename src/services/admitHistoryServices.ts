@@ -34,10 +34,10 @@ class AdmitHistoryServices {
         }
     }
 
-    async totalAdmits(): Promise<Res> {
+    async totalAdmits(doctor?:string): Promise<Res> {
         try {
 
-            const count:Number = await this.admitHistoryRepo.countDocuments();
+            const count:Number = await this.admitHistoryRepo.countDocuments(doctor);
             return { data: count, status: true, message: "Total AdmitHIstory count" };
 
         } catch (error) {
@@ -46,17 +46,16 @@ class AdmitHistoryServices {
         }
     }
 
-    async getMonthlyRevenue(): Promise<Res | null> {
+    async getMonthlyRevenue(percentage:number,doctor?:string): Promise<Res | null> {
         try {
 
             const currentYear = new Date().getFullYear();
-           const admitHistoryData:AdmitHistoryDoc[] | [] = await this.admitHistoryRepo.findAdmitsByYear(currentYear)           
+           const admitHistoryData:AdmitHistoryDoc[] | [] = await this.admitHistoryRepo.findAdmitsByYear(currentYear,doctor)           
 
            const monthlyRevenue = admitHistoryData.reduce((result:any, admits) => {
             const month = admits.dischargeDate.getMonth();            
-            const amount:number = admits.total || 0
-            const penalty:number = amount*0.5
-            const revenue:number = amount-penalty 
+            const total:number = admits.total || 0
+            const revenue:number = total*percentage
             result[month] = (result[month] || 0) + revenue;
             return result;
           }, {});

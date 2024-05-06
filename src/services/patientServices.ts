@@ -3,6 +3,7 @@ import { IPatientData, PatientDoc, UpdatePatientData} from '../interfaces/IPatie
 import { Res } from '../interfaces/Icommon';
 import { uploadFile } from "../utils/cloudinary";
 import { generatePatientId } from "../utils/others";
+import { ObjectId } from "mongodb";
 
 class PatientServices {
     private patientRepo: PatientRepository;
@@ -101,6 +102,31 @@ class PatientServices {
             throw error;
         }
     }
+
+    async doctorPatients(patientID:ObjectId[]): Promise<Res> {
+        try {
+        
+            const count:PatientDoc[] = await this.patientRepo.findDoctorPatients(patientID);
+            return { data: count, status: true, message: "Total Patients count" };
+
+        } catch (error) {
+            console.error("Error in findDoctorPatients:", error);
+            throw error;
+        }
+    }
+
+    async totalDoctorPatients(patientID:ObjectId[]): Promise<Res> {
+        try {
+        
+            const count:number = await this.patientRepo.countDoctorPatientsDocs(patientID);
+            return { data: count, status: true, message: "Total Doctor Patients Count" };
+
+        } catch (error) {
+            console.error("Error in doctorPatientsCount:", error);
+            throw error;
+        }
+    }
+
 
 }
 

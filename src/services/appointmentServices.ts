@@ -4,6 +4,7 @@ import { AppointmentDoc, IAppointment, statusWiseAppointmentsCount, typeWiseAppo
 import { Res } from '../interfaces/Icommon';
 import UserRepository from "../repositories/userRepositories";
 import { History } from "../interfaces/IUser";
+import { ObjectId } from "mongodb";
 
 class AppointmentServices {
     private appointmentRepo: AppointmentRepository;
@@ -110,12 +111,25 @@ class AppointmentServices {
     async getDoctorAppointments(_id:string): Promise<Res | null> {
         try {
 
-           const appointmentData:AppointmentDoc[] | null = await this.appointmentRepo.findAppointmentsByDoctorId(_id)
-           if(!appointmentData) return {status:false,message:"Couldn't get the data"}
+           const appointmentData:AppointmentDoc[] | [] = await this.appointmentRepo.findAppointmentsByDoctorId(_id)
            return{data:appointmentData,status:true,message:'Appointment Data get successfully'}
 
         } catch (error) {
             console.error("Error in getDoctorAppointments:", error);
+            throw error;
+        }
+    }
+
+    async getDoctorPatients(_id:string): Promise<ObjectId[]> {
+        try {
+
+           const appointmentData:AppointmentDoc[] | null = await this.appointmentRepo.findAppointmentsByDoctorId(_id)
+           const patientId:ObjectId[] = appointmentData.map((app)=>app.patient._id)
+           const uniquePatientId:ObjectId[] = [...new Set(patientId)]
+           return uniquePatientId
+
+        } catch (error) {
+            console.error("Error in getDoctorPatients:", error);
             throw error;
         }
     }
@@ -133,17 +147,28 @@ class AppointmentServices {
         }
     }
 
-    async getMonthlyRevenue(): Promise<Res | null> {
+    async totalDoctorAppointments(doctor:string): Promise<Res> {
+        try {
+
+            const count:Number = await this.appointmentRepo.countDoctorDocuments(doctor);
+            return { data: count, status: true, message: "Total Doctor Appointments count" };
+
+        } catch (error) {
+            console.error("Error in countDocuments:", error);
+            throw error;
+        }
+    }
+
+    async getMonthlyRevenue(percentage:number,doctor?:string): Promise<Res | null> {
         try {
 
             const currentYear = new Date().getFullYear();
-           const appointmentData:AppointmentDoc[] | [] = await this.appointmentRepo.findAppointmentByYear(currentYear)
+           const appointmentData:AppointmentDoc[] | [] = await this.appointmentRepo.findAppointmentByYear(currentYear,doctor)
 
            const monthlyRevenue = appointmentData.reduce((result:any, appointment) => {
             const month = appointment.bookedDate.getMonth(); 
-            const amount:number = appointment.fees || 0
-            const penalty:number = amount*0.2
-            const revenue:number = amount-penalty           
+            const fees:number = appointment.fees || 0
+            const revenue:number = fees*percentage      
             result[month] = (result[month] || 0) + revenue;
             return result;
           }, {});
@@ -156,7 +181,7 @@ class AppointmentServices {
         }
     }
 
-    async statusWiseAppointmentsCount(): Promise<Res | null> {
+    async statusWiseAppointmentsCount(doctor?:string): Promise<Res | null> {
         try {
 
             const currentDate = new Date();
@@ -165,11 +190,12 @@ class AppointmentServices {
             const startDateOfMonth = new Date(currentYear, currentMonth - 1, 1); 
             const endDateOfMonth = new Date(currentYear, currentMonth, 0); 
 
-           const appointmentData:statusWiseAppointmentsCount[] | [] = await this.appointmentRepo.findStatusWiseAppointmentCount(startDateOfMonth,endDateOfMonth)
+           const appointmentData:statusWiseAppointmentsCount[] | [] = await this.appointmentRepo.findStatusWiseAppointmentCount(startDateOfMonth,endDateOfMonth,doctor)
            for(let i=0;i<appointmentData.length;i++){
                appointmentData[i].id = i
                appointmentData[i].color = '#'+Math.floor(Math.random()*16777215).toString(16)
            }
+           
            return{data:appointmentData,status:true,message:'Status Wise Appointments Count get successfully'}
 
         } catch (error) {
@@ -178,7 +204,7 @@ class AppointmentServices {
         }
     }
 
-    async typeWiseAppointmentsCount(): Promise<Res | null> {
+    async typeWiseAppointmentsCount(doctor?:string): Promise<Res | null> {
         try {
 
             const currentDate = new Date();
@@ -187,7 +213,7 @@ class AppointmentServices {
             const startDateOfMonth = new Date(currentYear, currentMonth - 1, 1); 
             const endDateOfMonth = new Date(currentYear, currentMonth, 0); 
 
-           const appointmentData:typeWiseAppointmentsCount[] | [] = await this.appointmentRepo.findTypeWiseAppointmentCount(startDateOfMonth,endDateOfMonth)
+           const appointmentData:typeWiseAppointmentsCount[] | [] = await this.appointmentRepo.findTypeWiseAppointmentCount(startDateOfMonth,endDateOfMonth,doctor)
            return{data:appointmentData,status:true,message:'Type Wise Appointments Count get successfully'}
 
         } catch (error) {

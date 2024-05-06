@@ -60,7 +60,7 @@ const doctorController = new DoctorController(doctorServices)
 
 const appointmentRepository = new AppointmentRepository()
 const appointmentServices = new AppointmentServices(appointmentRepository,scheduleRepository,userRepository)
-const appointmentController = new AppointmentController(appointmentServices)
+const appointmentController = new AppointmentController(appointmentServices,patientServices)
 
 const messageRepository = new MessageRepository()
 const messageServices = new MessageServices(messageRepository)

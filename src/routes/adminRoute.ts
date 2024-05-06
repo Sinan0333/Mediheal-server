@@ -64,7 +64,7 @@ const doctorController = new DoctorController(doctorServices)
 
 const appointmentRepositories = new AppointmentRepository()
 const appointmentServices = new AppointmentServices(appointmentRepositories,scheduleRepository,userRepository)
-const appointmentController = new AppointmentController(appointmentServices)
+const appointmentController = new AppointmentController(appointmentServices,patientServices)
 
 adminRoute.get('/user',userController.listUsers.bind(userController))
 adminRoute.post('/user/view',userController.getUserData.bind(userController))

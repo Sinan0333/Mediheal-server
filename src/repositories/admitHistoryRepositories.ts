@@ -33,9 +33,15 @@ class AdmitHistoryRepository {
         }
     }
 
-    async countDocuments(): Promise<Number> {
+    async countDocuments(doctor?:string): Promise<Number> {
         try {
-            const count:Number  = await AdmitHistory.countDocuments().exec();
+
+            const filter:any = {}
+            if(doctor){
+                filter.assignBy = doctor
+            }
+
+            const count:Number  = await AdmitHistory.countDocuments(filter).exec();
             return count;
         } catch (error) {
             console.error("Error in countDocuments:", error);
@@ -43,14 +49,21 @@ class AdmitHistoryRepository {
         }
     }
 
-    async findAdmitsByYear(year:number): Promise<AdmitHistoryDoc[] | []> {
+    async findAdmitsByYear(year:number,doctor?:string): Promise<AdmitHistoryDoc[] | []> {
         try {
-            const admitHistoryData:AdmitHistoryDoc[] | [] = await AdmitHistory.find({
+
+            const filter:any = {
                 dischargeDate: {
                     $gte: new Date(`${year}-01-01`),
                     $lt: new Date(`${year + 1}-01-01`)
                   },
-            })
+            }
+            
+            if(doctor){
+                filter.assignBy = doctor
+            }
+
+            const admitHistoryData:AdmitHistoryDoc[] | [] = await AdmitHistory.find(filter)
             return admitHistoryData;
         } catch (error) {
             console.error("Error in findAdmitHistory:", error);

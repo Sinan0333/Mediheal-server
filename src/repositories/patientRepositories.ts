@@ -1,3 +1,4 @@
+import { ObjectId } from "mongodb";
 import { IPatientData, PatientDoc, UpdatePatientData } from "../interfaces/IPatient";
 import Patient from "../models/patientModel";
 
@@ -53,9 +54,30 @@ class PatientRepository {
         }
     }
 
+    async findDoctorPatients(patientID:ObjectId[]): Promise<PatientDoc[] | []> {
+        try {
+            const patientData: PatientDoc[] | null = await Patient.find({_id: { $in: patientID }}).exec();
+    
+            return patientData;
+        } catch (error) {
+            console.error("Error in findDoctorPatients:", error);
+            throw error;
+        }
+    }
+
     async countDocuments(): Promise<Number> {
         try {
             const count:Number  = await Patient.countDocuments().exec();
+            return count;
+        } catch (error) {
+            console.error("Error in countDocuments:", error);
+            throw error;
+        }
+    }
+
+    async countDoctorPatientsDocs(patientID:ObjectId[]): Promise<number> {
+        try {
+            const count:number  = await Patient.countDocuments({_id: { $in: patientID }}).exec();
             return count;
         } catch (error) {
             console.error("Error in countDocuments:", error);

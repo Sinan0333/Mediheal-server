@@ -48,13 +48,37 @@ class AdmitHistoryController{
         }
     }
 
+    async totalDoctorAdmits(_req:Request,res:Response):Promise<void>{
+        try {
+            const {_id} = _req.params
+            const result: Res | null = await this.admitHistoryServices.totalAdmits(_id)  
+            res.json(result)
+            
+        } catch (error) {
+            console.error("Error in AdmitHistoryController.totalAdmits:", error);
+            res.status(500).json({ error: "Internal server error" });
+        }
+    }
+
     async getMonthlyRevenue(_req:Request,res:Response):Promise<void>{
         try {
-            const result: Res | null = await this.admitHistoryServices.getMonthlyRevenue()  
+            const result: Res | null = await this.admitHistoryServices.getMonthlyRevenue(0.5)  
             res.json(result)
             
         } catch (error) {
             console.error("Error in appointmentController.getMonthlyRevenue", error);
+            res.status(500).json({ error: "Internal server error" });
+        }
+    }
+
+    async getDoctorMonthlyRevenue(req:Request,res:Response):Promise<void>{
+        try {
+            const {_id} = req.params
+            const result: Res | null = await this.admitHistoryServices.getMonthlyRevenue(0.5,_id)  
+            res.json(result)
+            
+        } catch (error) {
+            console.error("Error in appointmentController.getDoctorMonthlyRevenue", error);
             res.status(500).json({ error: "Internal server error" });
         }
     }
