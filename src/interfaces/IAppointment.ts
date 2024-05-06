@@ -40,3 +40,8 @@ export interface statusWiseAppointmentsCount{
     value:number
     color:string
 }
+
+export interface typeWiseAppointmentsCount{
+    type:string
+    count:number
+}

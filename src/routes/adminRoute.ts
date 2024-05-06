@@ -109,5 +109,6 @@ adminRoute.get('/doctor/count',doctorController.totalDoctors.bind(doctorControll
 
 adminRoute.get('/appointment/revenue',appointmentController.getMonthlyRevenue.bind(appointmentController))
 adminRoute.get('/appointment/status_wise_count',appointmentController.statusWiseAppointmentsCount.bind(appointmentController))
+adminRoute.get('/appointment/status_type_count',appointmentController.typeWiseAppointmentsCount.bind(appointmentController))
 
 export default adminRoute
