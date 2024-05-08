@@ -39,10 +39,11 @@ class BedController{
         }
     }
 
-    async getAllBeds(_req:Request,res:Response):Promise<void>{
+    async getAllBeds(req:Request,res:Response):Promise<void>{
         try {
             
-            const result: Res | null = await this.bedServices.getAllBeds()  
+            const {search,charge,filterData,sortBy,sortIn,page} = req.query
+            const result: Res | null = await this.bedServices.getAllBeds({search,charge,filterData,sortBy,sortIn,page})  
             res.json(result)
             
         } catch (error) {
@@ -120,10 +121,10 @@ class BedController{
         }
     }
 
-    async totalBeds(_req:Request,res:Response):Promise<void>{
+    async totalBeds(req:Request,res:Response):Promise<void>{
         try {
-            
-            const result: Res | null = await this.bedServices.totalBeds()  
+            const {search,charge,filterData,sortBy,sortIn,page} = req.query
+            const result: Res | null = await this.bedServices.totalBeds({search,charge,filterData,sortBy,sortIn,page})  
             res.json(result)
             
         } catch (error) {

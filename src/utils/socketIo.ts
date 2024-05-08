@@ -29,7 +29,7 @@ const addUser = (userId:string,socketId:string)=>{
 const getUser = (userId: string) => users.find(user => user.userId === userId)
 const removeUser = (userId:string) => users = users.filter(user => user.userId !== userId)
 
-io.on('connection', (socket) => {
+io.on('connection', (socket) => { 
 
     socket.on("add_user", (userId) => {
       addUser(userId,socket.id)

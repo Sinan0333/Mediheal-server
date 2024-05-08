@@ -1,4 +1,5 @@
 import { BedDoc, UpdateBedDoc} from "../interfaces/IBed";
+import { FilterCondition } from "../interfaces/Icommon";
 import Bed from "../models/bedModel";
 
 class BedRepository {
@@ -23,12 +24,25 @@ class BedRepository {
         }
     }
 
-    async findBeds(): Promise<BedDoc[] | []> {
+    async findBeds(filterCondition:FilterCondition): Promise<BedDoc[] | []> {
         try {
-            const bedData:BedDoc[] | [] = await Bed.find().populate('assignBy patient');
+            const query:any = {}
+            const sort:any = {}
+            const skip:number = (filterCondition.page - 1) * 13
+            if(filterCondition.charge &&filterCondition.charge !== "default" && filterCondition.charge !== "null"){
+                query.charge = parseInt(filterCondition.charge)
+            }
+            if(filterCondition.filterData && filterCondition.filterData !== "default" && filterCondition.filterData !== "null"){
+                query.type = filterCondition.filterData
+            }
+            if(filterCondition.sortBy && filterCondition.sortBy !== "default" && filterCondition.sortBy !== "null" && filterCondition.sortIn && filterCondition.sortIn !== "default" &&filterCondition.sortIn !== "null"){
+                sort[filterCondition.sortBy] = parseInt(filterCondition.sortIn)
+            }
+                      
+            const bedData:BedDoc[] | [] = await Bed.find(query).sort(sort).skip(skip).limit(13).populate('assignBy patient')
             return bedData;
         } catch (error) {
-            console.error("Error in findBedById:", error);
+            console.error("Error in findBeds:", error);
             throw error;
         }
     }
@@ -83,9 +97,17 @@ class BedRepository {
         }
     }
 
-    async countDocuments(): Promise<Number> {
+    async countDocuments(filterCondition:FilterCondition): Promise<Number> {
         try {
-            const count:Number  = await Bed.countDocuments().exec();
+            const query:any = {}
+            if(filterCondition.charge && filterCondition.charge !== "default" && filterCondition.charge !== "null"){
+                query.charge = parseInt(filterCondition.charge)
+            }
+            if(filterCondition.filterData &&filterCondition.filterData !== "default" && filterCondition.filterData !== "null"){
+                query.type = filterCondition.filterData
+            }
+
+            const count:Number  = await Bed.countDocuments(query).exec();
             return count;
         } catch (error) {
             console.error("Error in countDocuments:", error);

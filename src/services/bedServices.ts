@@ -2,7 +2,7 @@ import BedRepository from "../repositories/bedRepositories";
 import PatientRepository from "../repositories/patientRepositories";
 import AdmitHistoryRepository from "../repositories/admitHistoryRepositories";
 import { BedDoc, UpdateBedDoc} from '../interfaces/IBed';
-import { Res } from '../interfaces/Icommon';
+import { FilterCondition, Res } from '../interfaces/Icommon';
 import { PatientDoc } from "../interfaces/IPatient";
 import { AdmitHistoryDoc } from "../interfaces/IAdmitHistory";
 
@@ -41,10 +41,10 @@ class BedServices {
         }
     }
 
-    async getAllBeds(): Promise<Res> {
+    async getAllBeds(FilterCondition:FilterCondition): Promise<Res> {
         try {
 
-            const bedData:BedDoc[] | [] = await this.bedRepo.findBeds();
+            const bedData:BedDoc[] | [] = await this.bedRepo.findBeds(FilterCondition);
             return { data: bedData, status: true, message: "All Bed Data" };
 
         } catch (error) {
@@ -204,10 +204,10 @@ class BedServices {
         }
     }
 
-    async totalBeds(): Promise<Res> {
+    async totalBeds(filterCondition:FilterCondition): Promise<Res> {
         try {
 
-            const count:Number = await this.bedRepo.countDocuments();
+            const count:Number = await this.bedRepo.countDocuments(filterCondition);
             return { data: count, status: true, message: "Total Bed count" };
 
         } catch (error) {

@@ -11,3 +11,12 @@ export interface ReqParams {
 export interface ErrRes {
     error:string
 }
+
+export interface FilterCondition {
+    search:any
+    charge:any
+    filterData:any
+    sortBy:any
+    sortIn:any
+    page:any
+}
