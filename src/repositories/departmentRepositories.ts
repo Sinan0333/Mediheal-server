@@ -1,4 +1,5 @@
 import { DepartmentDoc } from "../interfaces/IDepartment";
+import { FilterCondition } from "../interfaces/Icommon";
 import Department from "../models/departmentModel";
 
 class DepartmentRepository {
@@ -44,9 +45,18 @@ class DepartmentRepository {
         }
     }
 
-    async findDepartments(): Promise<DepartmentDoc[] | null> {
+    async findDepartments(filterCondition:FilterCondition): Promise<DepartmentDoc[] | null> {
         try {
-            const departmentData: DepartmentDoc[] = await Department.find();
+
+            const query:any = {}
+            const skip:number = (filterCondition.page - 1) * 13
+
+            if(filterCondition.search && filterCondition.search !== "default" && filterCondition.search !== "null"){
+                const regex = new RegExp (`^${filterCondition.search}`, 'i')
+                query.name = {$regex: regex}
+            }
+
+            const departmentData: DepartmentDoc[] = await Department.find(query).skip(skip).limit(13);
             return departmentData;
         } catch (error) {
             console.error("Error finding departments:", error);
@@ -64,9 +74,16 @@ class DepartmentRepository {
         }
     }
 
-    async countDocuments(): Promise<Number> {
+    async countDocuments(filterCondition:FilterCondition): Promise<Number> {
         try {
-            const count:Number  = await Department.countDocuments().exec();
+
+            const query:any = {}
+            if(filterCondition.search && filterCondition.search !== "default" && filterCondition.search !== "null"){
+                const regex = new RegExp (`^${filterCondition.search}`, 'i')
+                query.name = {$regex: regex}
+            }
+
+            const count:Number  = await Department.countDocuments(query).exec();
             return count;
         } catch (error) {
             console.error("Error in countDocuments:", error);

@@ -1,6 +1,6 @@
 import DepartmentRepository from "../repositories/departmentRepositories";
 import { IDepartmentData, DepartmentDoc } from '../interfaces/IDepartment';
-import { Res } from '../interfaces/Icommon';
+import { FilterCondition, Res } from '../interfaces/Icommon';
 import { uploadFile } from "../utils/cloudinary";
 
 class DepartmentServices {
@@ -82,9 +82,9 @@ class DepartmentServices {
         }
     }
 
-    async listDepartment(isBlocked?: boolean): Promise<Res> {
+    async listDepartment(filterCondition:FilterCondition,isBlocked?: boolean): Promise<Res> {
         try {
-            const departmentData: DepartmentDoc[] | null = await this.departmentRepo.findDepartments();
+            const departmentData: DepartmentDoc[] | null = await this.departmentRepo.findDepartments(filterCondition);
             if(isBlocked !==undefined){
                 const filteredData: DepartmentDoc[] | undefined = departmentData?.filter(obj => obj.is_blocked === isBlocked);
                 return { data: filteredData, status: true, message: 'Complete list of departments' };
@@ -110,10 +110,10 @@ class DepartmentServices {
         }
     }
 
-    async totalDepartments(): Promise<Res> {
+    async totalDepartments(filterCondition:FilterCondition): Promise<Res> {
         try {
 
-            const count:Number = await this.departmentRepo.countDocuments();
+            const count:Number = await this.departmentRepo.countDocuments(filterCondition);
             return { data: count, status: true, message: "Total Department count" };
 
         } catch (error) {

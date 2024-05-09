@@ -53,10 +53,11 @@ class DepartmentController{
         }
     }
 
-    async listDepartment(_req:Request,res:Response):Promise<void>{
+    async listDepartment(req:Request,res:Response):Promise<void>{
         try {
 
-            const result : Res | null = await this.departmentServices.listDepartment()
+            const {search,charge,filterData,sortBy,sortIn,page} = req.query
+            const result : Res | null = await this.departmentServices.listDepartment({search,charge,filterData,sortBy,sortIn,page})
             res.json(result)
 
         } catch (error) {
@@ -65,10 +66,12 @@ class DepartmentController{
         }
     }
 
-    async unBlockedDepartments(_req:Request,res:Response):Promise<void>{
+    async unBlockedDepartments(req:Request,res:Response):Promise<void>{
         try {
+
+            const {search,charge,filterData,sortBy,sortIn,page} = req.query
             const isBlocked = false
-            const result : Res | null = await this.departmentServices.listDepartment(isBlocked)
+            const result : Res | null = await this.departmentServices.listDepartment({search,charge,filterData,sortBy,sortIn,page},isBlocked)
             res.json(result)
 
         } catch (error) {
@@ -92,10 +95,11 @@ class DepartmentController{
         }
     }
 
-    async totalDepartments(_req:Request,res:Response):Promise<void>{
+    async totalDepartments(req:Request,res:Response):Promise<void>{
         try {
             
-            const result: Res | null = await this.departmentServices.totalDepartments()  
+            const {search,charge,filterData,sortBy,sortIn,page} = req.query
+            const result: Res | null = await this.departmentServices.totalDepartments({search,charge,filterData,sortBy,sortIn,page})  
             res.json(result)
             
         } catch (error) {
