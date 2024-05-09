@@ -4,7 +4,7 @@ import { UserDoc, UserRes } from '../interfaces/IUser';
 import { generateToken } from '../utils/jwt';
 import OtpRepositories from '../repositories/otpRepositories';
 import { sendVerifyMail } from '../utils/otpVerification';
-import { Res } from '../interfaces/Icommon';
+import { FilterCondition, Res } from '../interfaces/Icommon';
 import { uploadFile } from '../utils/cloudinary';
 import { OtpDoc } from '../interfaces/IOtp';
 import { error } from 'console';
@@ -139,9 +139,9 @@ class UserServices {
         }
     }
 
-    async listUsers(): Promise<Res> {
+    async listUsers(filterCondition:FilterCondition): Promise<Res> {
         try {
-            const userData:UserDoc[] | null= await this.userRepo.findUsers()
+            const userData:UserDoc[] | null= await this.userRepo.findUsers(filterCondition)
             return {data:userData,status:true, message:'Users find successful'}
 
         } catch (error) {
@@ -265,10 +265,10 @@ class UserServices {
         }
     }
 
-    async totalUsers(): Promise<Res> {
+    async totalUsers(filterCondition:FilterCondition): Promise<Res> {
         try {
 
-            const count:Number = await this.userRepo.countDocuments();
+            const count:Number = await this.userRepo.countDocuments(filterCondition);
             return { data: count, status: true, message: "Total Users count" };
 
         } catch (error) {

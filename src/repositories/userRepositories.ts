@@ -1,6 +1,7 @@
 import { Types } from "mongoose";
 import { History, UserDoc } from "../interfaces/IUser";
 import User from "../models/userModel";
+import { FilterCondition } from "../interfaces/Icommon";
 
 class UserRepository {
 
@@ -44,9 +45,18 @@ class UserRepository {
         }
     }
 
-    async findUsers(): Promise<UserDoc[] | [] > {
+    async findUsers(filterCondition:FilterCondition): Promise<UserDoc[] | [] > {
         try {
-            const userData:UserDoc[] = await User.find();
+
+            const query:any = {}
+            const skip:number = (filterCondition.page - 1) * 13
+
+            if(filterCondition.search && filterCondition.search !== "default" && filterCondition.search !== "null"){
+                const regex = new RegExp (`^${filterCondition.search}`, 'i')
+                query.name = {$regex: regex}
+            }
+
+            const userData:UserDoc[] = await User.find(query).skip(skip).limit(13);
             return userData
         } catch (error) {
             console.error("Error in findUsers:", error);
@@ -74,9 +84,16 @@ class UserRepository {
         }
     }
 
-    async countDocuments(): Promise<Number> {
+    async countDocuments(filterCondition:FilterCondition): Promise<Number> {
         try {
-            const count:Number  = await User.countDocuments().exec();
+
+            const query:any = {}
+            if(filterCondition.search && filterCondition.search !== "default" && filterCondition.search !== "null"){
+                const regex = new RegExp (`^${filterCondition.search}`, 'i')
+                query.name = {$regex: regex}
+            }
+
+            const count:Number  = await User.countDocuments(query).exec();
             return count;
         } catch (error) {
             console.error("Error in countDocuments:", error);

@@ -81,10 +81,11 @@ class UserController{
         }
     }
 
-    async listUsers(_req:Request,res:Response):Promise<void>{
+    async listUsers(req:Request,res:Response):Promise<void>{
         try {
 
-            const result:UserRes | null = await this.userService.listUsers()
+            const {search,charge,filterData,sortBy,sortIn,page} = req.query
+            const result:UserRes | null = await this.userService.listUsers({search,charge,filterData,sortBy,sortIn,page})
             res.json(result)
             
         } catch (error) {
@@ -148,10 +149,11 @@ class UserController{
         }
     }
 
-    async totalUsers(_req:Request,res:Response):Promise<void>{
+    async totalUsers(req:Request,res:Response):Promise<void>{
         try {
             
-            const result: Res | null = await this.userService.totalUsers()  
+            const {search,charge,filterData,sortBy,sortIn,page} = req.query
+            const result: Res | null = await this.userService.totalUsers({search,charge,filterData,sortBy,sortIn,page})  
             res.json(result)
             
         } catch (error) {
