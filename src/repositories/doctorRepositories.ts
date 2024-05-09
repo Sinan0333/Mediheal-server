@@ -1,4 +1,5 @@
 import { DoctorDoc, IDoctorData } from "../interfaces/IDoctor";
+import { FilterCondition } from "../interfaces/Icommon";
 import Doctor from "../models/doctorModel";
 
 class DoctorRepository {
@@ -34,9 +35,24 @@ class DoctorRepository {
         }
     }
 
-    async findDoctors(): Promise<DoctorDoc[] | []> {
+    async findDoctors(filterCondition:FilterCondition): Promise<DoctorDoc[] | []> {
         try {
-            const doctorData: DoctorDoc[] = await Doctor.find().populate('department');
+
+            const query:any = {}
+            const sort:any = {}
+            const skip:number = (filterCondition.page - 1) * 13
+            if(filterCondition.filterData && filterCondition.filterData !== "default" && filterCondition.filterData !== "null"){
+                query.department = filterCondition.filterData
+            }
+            if(filterCondition.search && filterCondition.search !== "default" && filterCondition.search !== "null"){
+                const regex = new RegExp (`^${filterCondition.search}`, 'i')
+                query.firstName = {$regex: regex}
+            }
+            if(filterCondition.sortBy && filterCondition.sortBy !== "default" && filterCondition.sortBy !== "null" && filterCondition.sortIn && filterCondition.sortIn !== "default" &&filterCondition.sortIn !== "null"){
+                sort[filterCondition.sortBy] = parseInt(filterCondition.sortIn)
+            }
+            
+            const doctorData: DoctorDoc[] = await Doctor.find(query).sort(sort).skip(skip).limit(13).populate('department');
             return doctorData;
         } catch (error) {
             console.error("Error finding doctors:", error);
@@ -64,9 +80,18 @@ class DoctorRepository {
         }
     }
 
-    async countDocuments(): Promise<Number> {
+    async countDocuments(filterCondition:FilterCondition): Promise<Number> {
         try {
-            const count:Number  = await Doctor.countDocuments().exec();
+            const query:any = {}
+            if(filterCondition.filterData && filterCondition.filterData !== "default" && filterCondition.filterData !== "null"){
+                query.department = filterCondition.filterData
+            }
+            if(filterCondition.search && filterCondition.search !== "default" && filterCondition.search !== "null"){
+                const regex = new RegExp (`^${filterCondition.search}`, 'i')
+                query.firstName = {$regex: regex}
+            }
+
+            const count:Number  = await Doctor.countDocuments(query).exec();
             return count;
         } catch (error) {
             console.error("Error in countDocuments:", error);

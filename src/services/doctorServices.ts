@@ -2,7 +2,7 @@ import bcrypt from 'bcrypt';
 import DoctorRepositories from "../repositories/doctorRepositories";
 import ScheduleRepository from '../repositories/scheduleRepository';
 import { DoctorDoc, DoctorRes, IDoctorData } from '../interfaces/IDoctor';
-import { Res } from '../interfaces/Icommon';
+import { FilterCondition, Res } from '../interfaces/Icommon';
 import { uploadFile } from '../utils/cloudinary';
 import { generateToken } from '../utils/jwt';
 import { generateSlots, generateSlotsForADay } from '../utils/schedule';
@@ -113,9 +113,9 @@ class DoctorServices {
         }
     }
 
-    async listDoctors(is_blocked?:Boolean):Promise <Res>{
+    async listDoctors(filterCondition:FilterCondition,is_blocked?:Boolean):Promise <Res>{
         try {
-            const doctorsData:DoctorDoc[] | null = await this.doctorRepo.findDoctors()
+            const doctorsData:DoctorDoc[] | null = await this.doctorRepo.findDoctors(filterCondition)
     
             if(is_blocked !==undefined){
                 const filteredData: IDoctorData[] | undefined = doctorsData?.filter(obj => obj.is_blocked === is_blocked);
@@ -157,10 +157,10 @@ class DoctorServices {
         }
     }
 
-    async bestDoctors(): Promise<Res> {
+    async bestDoctors(filterCondition:FilterCondition): Promise<Res> {
         try {
 
-            const doctorData:DoctorDoc[] | null = await this.doctorRepo.findDoctors()
+            const doctorData:DoctorDoc[] | null = await this.doctorRepo.findDoctors(filterCondition)
             const filterDoctors: DoctorDoc[] | undefined = doctorData?.sort((a, b) => {
                 return b.experience - a.experience;
             })
@@ -185,10 +185,10 @@ class DoctorServices {
         }
     }
 
-    async totalDoctors(): Promise<Res> {
+    async totalDoctors(filterCondition:FilterCondition): Promise<Res> {
         try {
 
-            const count:Number = await this.doctorRepo.countDocuments();
+            const count:Number = await this.doctorRepo.countDocuments(filterCondition);
             return { data: count, status: true, message: "Total Doctors count" };
 
         } catch (error) {

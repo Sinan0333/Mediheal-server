@@ -42,10 +42,11 @@ class DoctorController{
         }
     }
 
-    async listDoctors(_req:Request,res:Response):Promise <void>{
+    async listDoctors(req:Request,res:Response):Promise <void>{
         try {
             
-            const result: Res | null = await this.doctorServices.listDoctors()
+            const {search,charge,filterData,sortBy,sortIn,page} = req.query
+            const result: Res | null = await this.doctorServices.listDoctors({search,charge,filterData,sortBy,sortIn,page})
             res.json(result)
 
         } catch (error) {
@@ -54,10 +55,11 @@ class DoctorController{
         }
     }
 
-    async unBlockedDoctors(_req:Request,res:Response):Promise <void>{
+    async unBlockedDoctors(req:Request,res:Response):Promise <void>{
         try {
             
-            const result: Res | null = await this.doctorServices.listDoctors(false)
+            const {search,charge,filterData,sortBy,sortIn,page} = req.query
+            const result: Res | null = await this.doctorServices.listDoctors({search,charge,filterData,sortBy,sortIn,page},false)
             res.json(result)
 
         } catch (error) {
@@ -109,10 +111,11 @@ class DoctorController{
         }
     }
 
-    async getBestDoctors(_req:Request,res:Response):Promise<void>{
+    async getBestDoctors(req:Request,res:Response):Promise<void>{
         try {
             
-            const result: Res | null = await this.doctorServices.bestDoctors()
+            const {search,charge,filterData,sortBy,sortIn,page} = req.query
+            const result: Res | null = await this.doctorServices.bestDoctors({search,charge,filterData,sortBy,sortIn,page})
             res.json(result)
             
         } catch (error) {
@@ -134,10 +137,11 @@ class DoctorController{
         }
     }
 
-    async totalDoctors(_req:Request,res:Response):Promise<void>{
+    async totalDoctors(req:Request,res:Response):Promise<void>{
         try {
-            
-            const result: Res | null = await this.doctorServices.totalDoctors()  
+
+            const {search,charge,filterData,sortBy,sortIn,page} = req.query
+            const result: Res | null = await this.doctorServices.totalDoctors({search,charge,filterData,sortBy,sortIn,page})  
             res.json(result)
             
         } catch (error) {
