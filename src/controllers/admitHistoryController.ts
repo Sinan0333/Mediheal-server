@@ -24,10 +24,11 @@ class AdmitHistoryController{
         }
     }
 
-    async getAllAdmitHistory(_req:Request,res:Response):Promise<void>{
+    async getAllAdmitHistory(req:Request,res:Response):Promise<void>{
         try {
             
-            const result: Res | null = await this.admitHistoryServices.getAllAdmitHistory()  
+            const {search,charge,filterData,sortBy,sortIn,page} = req.query
+            const result: Res | null = await this.admitHistoryServices.getAllAdmitHistory({search,charge,filterData,sortBy,sortIn,page})  
             res.json(result)
             
         } catch (error) {
@@ -36,10 +37,11 @@ class AdmitHistoryController{
         }
     }
 
-    async totalAdmits(_req:Request,res:Response):Promise<void>{
+    async totalAdmits(req:Request,res:Response):Promise<void>{
         try {
             
-            const result: Res | null = await this.admitHistoryServices.totalAdmits()  
+            const {search,charge,filterData,sortBy,sortIn,page} = req.query
+            const result: Res | null = await this.admitHistoryServices.totalAdmits({search,charge,filterData,sortBy,sortIn,page})  
             res.json(result)
             
         } catch (error) {
@@ -48,10 +50,11 @@ class AdmitHistoryController{
         }
     }
 
-    async totalDoctorAdmits(_req:Request,res:Response):Promise<void>{
+    async totalDoctorAdmits(req:Request,res:Response):Promise<void>{
         try {
-            const {_id} = _req.params
-            const result: Res | null = await this.admitHistoryServices.totalAdmits(_id)  
+            const {_id} = req.params
+            const {search,charge,filterData,sortBy,sortIn,page} = req.query
+            const result: Res | null = await this.admitHistoryServices.totalAdmits({search,charge,filterData,sortBy,sortIn,page},_id)  
             res.json(result)
             
         } catch (error) {

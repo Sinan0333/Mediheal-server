@@ -1,6 +1,6 @@
 import AdmitHistoryRepository from "../repositories/admitHistoryRepositories";
 import { AdmitHistoryDoc} from '../interfaces/IAdmitHistory';
-import { Res } from '../interfaces/Icommon';
+import { FilterCondition, Res } from '../interfaces/Icommon';
 
 class AdmitHistoryServices {
     private admitHistoryRepo: AdmitHistoryRepository
@@ -22,10 +22,10 @@ class AdmitHistoryServices {
         }
     }
 
-    async getAllAdmitHistory(): Promise<Res> {
+    async getAllAdmitHistory(filterCondition:FilterCondition): Promise<Res> {
         try {
 
-            const admitHistoryData:AdmitHistoryDoc[] | [] = await this.admitHistoryRepo.findAdmitHistory();
+            const admitHistoryData:AdmitHistoryDoc[] | [] = await this.admitHistoryRepo.findAdmitHistory(filterCondition);
             return { data: admitHistoryData, status: true, message: "All AdmitHIstory Data" };
 
         } catch (error) {
@@ -34,10 +34,10 @@ class AdmitHistoryServices {
         }
     }
 
-    async totalAdmits(doctor?:string): Promise<Res> {
+    async totalAdmits(filterCondition:FilterCondition,doctor?:string): Promise<Res> {
         try {
 
-            const count:Number = await this.admitHistoryRepo.countDocuments(doctor);
+            const count:Number = await this.admitHistoryRepo.countDocuments(filterCondition,doctor);
             return { data: count, status: true, message: "Total AdmitHIstory count" };
 
         } catch (error) {

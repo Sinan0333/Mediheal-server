@@ -1,4 +1,5 @@
 import { AdmitHistoryDoc} from "../interfaces/IAdmitHistory";
+import { FilterCondition } from "../interfaces/Icommon";
 import AdmitHistory from "../models/admitHistory";
 
 class AdmitHistoryRepository {
@@ -23,9 +24,25 @@ class AdmitHistoryRepository {
         }
     }
 
-    async findAdmitHistory(): Promise<AdmitHistoryDoc[] | []> {
+    async findAdmitHistory(filterCondition:FilterCondition): Promise<AdmitHistoryDoc[] | []> {
         try {
-            const admitHistoryData:AdmitHistoryDoc[] | [] = await AdmitHistory.find().populate('assignBy patient').sort({dischargeDate:-1});
+
+            const query:any = {}
+            const sort:any = {}
+            const skip:number = (filterCondition.page - 1) * 13
+            if(filterCondition.charge &&filterCondition.charge !== "default" && filterCondition.charge !== "null"){
+                query.charge = parseInt(filterCondition.charge)
+            }
+            if(filterCondition.filterData && filterCondition.filterData !== "default" && filterCondition.filterData !== "null"){
+                query.type = filterCondition.filterData
+            }
+            if(filterCondition.sortBy && filterCondition.sortBy !== "default" && filterCondition.sortBy !== "null" && filterCondition.sortIn && filterCondition.sortIn !== "default" &&filterCondition.sortIn !== "null"){
+                sort[filterCondition.sortBy] = parseInt(filterCondition.sortIn)
+            }else{
+                sort.dischargeDate = -1
+            }
+
+            const admitHistoryData:AdmitHistoryDoc[] | [] = await AdmitHistory.find(query).populate('assignBy patient').sort(sort).skip(skip).limit(13).exec();
             return admitHistoryData;
         } catch (error) {
             console.error("Error in findAdmitHistory:", error);
@@ -33,15 +50,21 @@ class AdmitHistoryRepository {
         }
     }
 
-    async countDocuments(doctor?:string): Promise<Number> {
+    async countDocuments(filterCondition:FilterCondition,doctor?:string): Promise<Number> {
         try {
-
-            const filter:any = {}
+            
+            const query:any = {}
+            if(filterCondition.charge && filterCondition.charge !== "default" && filterCondition.charge !== "null"){
+                query.charge = parseInt(filterCondition.charge)
+            }
+            if(filterCondition.filterData &&filterCondition.filterData !== "default" && filterCondition.filterData !== "null"){
+                query.type = filterCondition.filterData
+            }
             if(doctor){
-                filter.assignBy = doctor
+                query.assignBy = doctor
             }
 
-            const count:Number  = await AdmitHistory.countDocuments(filter).exec();
+            const count:Number  = await AdmitHistory.countDocuments(query).exec();
             return count;
         } catch (error) {
             console.error("Error in countDocuments:", error);
