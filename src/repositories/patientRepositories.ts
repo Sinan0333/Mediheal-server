@@ -1,6 +1,7 @@
 import { ObjectId } from "mongodb";
 import { IPatientData, PatientDoc, UpdatePatientData } from "../interfaces/IPatient";
 import Patient from "../models/patientModel";
+import { FilterCondition } from "../interfaces/Icommon";
 
 class PatientRepository {
 
@@ -44,9 +45,24 @@ class PatientRepository {
         }
     }
 
-    async findPatients(): Promise<PatientDoc[]  | []> {
+    async findPatients(filterCondition:FilterCondition): Promise<PatientDoc[]  | []> {
         try {
-            const patientData:PatientDoc[] | null = await Patient.find().exec();
+
+            const query:any = {}
+            const sort:any = {}
+            const skip:number = (filterCondition.page - 1) * 13
+            if(filterCondition.filterData && filterCondition.filterData !== "default" && filterCondition.filterData !== "null"){
+                query.bloodGroup = filterCondition.filterData
+            }
+            if(filterCondition.search && filterCondition.search !== "default" && filterCondition.search !== "null"){
+                const regex = new RegExp (`^${filterCondition.search}`, 'i')
+                query.id = {$regex: regex}
+            }
+            if(filterCondition.sortBy && filterCondition.sortBy !== "default" && filterCondition.sortBy !== "null" && filterCondition.sortIn && filterCondition.sortIn !== "default" &&filterCondition.sortIn !== "null"){
+                sort[filterCondition.sortBy] = parseInt(filterCondition.sortIn)
+            }
+
+            const patientData:PatientDoc[] | null = await Patient.find(query).sort(sort).skip(skip).limit(13).exec();
             return patientData;
         } catch (error) {
             console.error("Error in findPatients:", error);
@@ -54,9 +70,24 @@ class PatientRepository {
         }
     }
 
-    async findDoctorPatients(patientID:ObjectId[]): Promise<PatientDoc[] | []> {
+    async findDoctorPatients(patientID:ObjectId[],filterCondition:FilterCondition): Promise<PatientDoc[] | []> {
         try {
-            const patientData: PatientDoc[] | null = await Patient.find({_id: { $in: patientID }}).exec();
+
+            const query:any = {}
+            const sort:any = {}
+            const skip:number = (filterCondition.page - 1) * 13
+            query._id = { $in: patientID }
+            if(filterCondition.filterData && filterCondition.filterData !== "default" && filterCondition.filterData !== "null"){
+                query.bloodGroup = filterCondition.filterData
+            }
+            if(filterCondition.search && filterCondition.search !== "default" && filterCondition.search !== "null"){
+                const regex = new RegExp (`^${filterCondition.search}`, 'i')
+                query.id = {$regex: regex}
+            }
+            if(filterCondition.sortBy && filterCondition.sortBy !== "default" && filterCondition.sortBy !== "null" && filterCondition.sortIn && filterCondition.sortIn !== "default" &&filterCondition.sortIn !== "null"){
+                sort[filterCondition.sortBy] = parseInt(filterCondition.sortIn)
+            }
+            const patientData: PatientDoc[] | null = await Patient.find(query).sort(sort).skip(skip).limit(13).exec();
     
             return patientData;
         } catch (error) {
@@ -65,9 +96,20 @@ class PatientRepository {
         }
     }
 
-    async countDocuments(): Promise<Number> {
+    async countDocuments(filterCondition?:FilterCondition): Promise<Number> {
         try {
-            const count:Number  = await Patient.countDocuments().exec();
+
+            
+            const query:any = {}
+            if(filterCondition && filterCondition.filterData && filterCondition.filterData !== "default" && filterCondition.filterData !== "null"){
+                query.bloodGroup = filterCondition.filterData
+            }
+            if(filterCondition && filterCondition.search && filterCondition.search !== "default" && filterCondition.search !== "null"){
+                const regex = new RegExp (`^${filterCondition.search}`, 'i')
+                query.id = {$regex: regex}
+            }
+
+            const count:Number  = await Patient.countDocuments(query).exec();
             return count;
         } catch (error) {
             console.error("Error in countDocuments:", error);
@@ -75,9 +117,21 @@ class PatientRepository {
         }
     }
 
-    async countDoctorPatientsDocs(patientID:ObjectId[]): Promise<number> {
+    async countDoctorPatientsDocs(patientID:ObjectId[],filterCondition:FilterCondition): Promise<number> {
         try {
-            const count:number  = await Patient.countDocuments({_id: { $in: patientID }}).exec();
+
+            const query:any = {}
+            query._id = { $in: patientID }
+            if(filterCondition.filterData &&filterCondition.filterData !== "default" && filterCondition.filterData !== "null"){
+                query.bloodGroup = filterCondition.filterData
+            }
+            if(filterCondition.search && filterCondition.search !== "default" && filterCondition.search !== "null"){
+                const regex = new RegExp (`^${filterCondition.search}`, 'i')
+                query.id = {$regex: regex}
+            }
+console.log(query);
+
+            const count:number  = await Patient.countDocuments(query).exec();
             return count;
         } catch (error) {
             console.error("Error in countDocuments:", error);

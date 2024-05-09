@@ -1,6 +1,6 @@
 import PatientRepository from "../repositories/patientRepositories";
 import { IPatientData, PatientDoc, UpdatePatientData} from '../interfaces/IPatient';
-import { Res } from '../interfaces/Icommon';
+import { FilterCondition, Res } from '../interfaces/Icommon';
 import { uploadFile } from "../utils/cloudinary";
 import { generatePatientId } from "../utils/others";
 import { ObjectId } from "mongodb";
@@ -42,10 +42,10 @@ class PatientServices {
         }
     }
 
-    async getPatients(): Promise<Res> {
+    async getPatients(filterCondition:FilterCondition): Promise<Res> {
         try {
 
-            const patientsData:PatientDoc[] | [] = await this.patientRepo.findPatients();
+            const patientsData:PatientDoc[] | [] = await this.patientRepo.findPatients(filterCondition);
             return { data: patientsData, status: true, message: "Complete patients list" };
 
         } catch (error) {
@@ -91,10 +91,10 @@ class PatientServices {
         }
     }
 
-    async totalPatients(): Promise<Res> {
+    async totalPatients(filterCondition:FilterCondition): Promise<Res> {
         try {
 
-            const count:Number = await this.patientRepo.countDocuments();
+            const count:Number = await this.patientRepo.countDocuments(filterCondition);
             return { data: count, status: true, message: "Total Patients count" };
 
         } catch (error) {
@@ -103,10 +103,10 @@ class PatientServices {
         }
     }
 
-    async doctorPatients(patientID:ObjectId[]): Promise<Res> {
+    async doctorPatients(patientID:ObjectId[],filterCondition:FilterCondition): Promise<Res> {
         try {
         
-            const count:PatientDoc[] = await this.patientRepo.findDoctorPatients(patientID);
+            const count:PatientDoc[] = await this.patientRepo.findDoctorPatients(patientID,filterCondition);
             return { data: count, status: true, message: "Total Patients count" };
 
         } catch (error) {
@@ -115,10 +115,10 @@ class PatientServices {
         }
     }
 
-    async totalDoctorPatients(patientID:ObjectId[]): Promise<Res> {
+    async totalDoctorPatients(patientID:ObjectId[],filterCondition:FilterCondition): Promise<Res> {
         try {
         
-            const count:number = await this.patientRepo.countDoctorPatientsDocs(patientID);
+            const count:number = await this.patientRepo.countDoctorPatientsDocs(patientID,filterCondition);
             return { data: count, status: true, message: "Total Doctor Patients Count" };
 
         } catch (error) {

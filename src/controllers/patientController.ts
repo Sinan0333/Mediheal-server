@@ -39,10 +39,11 @@ class PatientController{
         }
     }
 
-    async getPatients(_req:Request,res:Response):Promise<void>{
+    async getPatients(req:Request,res:Response):Promise<void>{
         try {
             
-            const result: Res | null = await this.patientServices.getPatients()  
+            const {search,charge,filterData,sortBy,sortIn,page} = req.query
+            const result: Res | null = await this.patientServices.getPatients({search,charge,filterData,sortBy,sortIn,page})  
             res.json(result)
             
         } catch (error) {
@@ -78,10 +79,11 @@ class PatientController{
         }
     }
 
-    async totalPatients(_req:Request,res:Response):Promise<void>{
+    async totalPatients(req:Request,res:Response):Promise<void>{
         try {
             
-            const result: Res | null = await this.patientServices.totalPatients()  
+            const {search,charge,filterData,sortBy,sortIn,page} = req.query
+            const result: Res | null = await this.patientServices.totalPatients({search,charge,filterData,sortBy,sortIn,page})  
             res.json(result)
             
         } catch (error) {
