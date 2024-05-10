@@ -129,7 +129,6 @@ class PatientRepository {
                 const regex = new RegExp (`^${filterCondition.search}`, 'i')
                 query.id = {$regex: regex}
             }
-console.log(query);
 
             const count:number  = await Patient.countDocuments(query).exec();
             return count;
