@@ -1,4 +1,5 @@
 import { AppointmentDoc, IAppointment, statusWiseAppointmentsCount, typeWiseAppointmentsCount } from "../interfaces/IAppointment";
+import { FilterCondition } from "../interfaces/Icommon";
 import Appointment from "../models/appointmentModel";
 import {ObjectId} from 'mongodb'
 
@@ -65,9 +66,23 @@ class AppointmentRepository {
         }
     }
 
-    async findAppointmentsByDoctorId(doctor:string): Promise<AppointmentDoc[]> {
+    async findAppointmentsByDoctorId(doctor:string,filterCondition?:FilterCondition): Promise<AppointmentDoc[]> {
         try {
-            const appointmentData:AppointmentDoc[] | null = await Appointment.find({ doctor}).populate('patient doctor').sort({bookedDate:-1})
+
+            const query:any = {}
+            const sort:any = {}
+            const skip:number = filterCondition ? (filterCondition.page - 1) * 13 : 0;
+            query.doctor = doctor
+            if(filterCondition && filterCondition.filterData && filterCondition.filterData !== "default" && filterCondition.filterData !== "null"){
+                query.day = filterCondition.filterData
+            }
+            if(filterCondition &&filterCondition.sortBy && filterCondition.sortBy !== "default" && filterCondition.sortBy !== "null" && filterCondition.sortIn && filterCondition.sortIn !== "default" &&filterCondition.sortIn !== "null"){
+                sort[filterCondition.sortBy] = parseInt(filterCondition.sortIn)
+            }else{
+                sort.bookedDate= -1
+            }
+
+            const appointmentData:AppointmentDoc[] | null = await Appointment.find(query).skip(skip).limit(13).populate('patient doctor').sort(sort)
             return appointmentData;
         } catch (error) {
             console.error("Error in findAppointmentsByDoctorId:", error);
@@ -95,9 +110,16 @@ class AppointmentRepository {
         }
     }
 
-    async countDoctorDocuments(doctor:string): Promise<Number> {
+    async countDoctorDocuments(doctor:string,filterCondition:FilterCondition): Promise<Number> {
         try {
-            const count:Number  = await Appointment.countDocuments({doctor}).exec();
+
+            const query:any = {}
+            query.doctor = doctor
+            if(filterCondition && filterCondition.filterData && filterCondition.filterData !== "default" && filterCondition.filterData !== "null"){
+                query.day = filterCondition.filterData
+            }
+
+            const count:Number  = await Appointment.countDocuments(query).exec();
             return count;
         } catch (error) {
             console.error("Error in countDocuments:", error);

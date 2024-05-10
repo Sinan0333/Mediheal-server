@@ -1,7 +1,7 @@
 import AppointmentRepository from "../repositories/appointmentRepositories";
 import ScheduleRepository from "../repositories/scheduleRepository";
 import { AppointmentDoc, IAppointment, statusWiseAppointmentsCount, typeWiseAppointmentsCount} from '../interfaces/IAppointment';
-import { Res } from '../interfaces/Icommon';
+import { FilterCondition, Res } from '../interfaces/Icommon';
 import UserRepository from "../repositories/userRepositories";
 import { History } from "../interfaces/IUser";
 import { ObjectId } from "mongodb";
@@ -108,10 +108,10 @@ class AppointmentServices {
         }
     }
 
-    async getDoctorAppointments(_id:string): Promise<Res | null> {
+    async getDoctorAppointments(_id:string,filterCondition:FilterCondition): Promise<Res | null> {
         try {
 
-           const appointmentData:AppointmentDoc[] | [] = await this.appointmentRepo.findAppointmentsByDoctorId(_id)
+           const appointmentData:AppointmentDoc[] | [] = await this.appointmentRepo.findAppointmentsByDoctorId(_id,filterCondition)
            return{data:appointmentData,status:true,message:'Appointment Data get successfully'}
 
         } catch (error) {
@@ -147,10 +147,10 @@ class AppointmentServices {
         }
     }
 
-    async totalDoctorAppointments(doctor:string): Promise<Res> {
+    async totalDoctorAppointments(doctor:string,filterCondition:FilterCondition): Promise<Res> {
         try {
 
-            const count:Number = await this.appointmentRepo.countDoctorDocuments(doctor);
+            const count:Number = await this.appointmentRepo.countDoctorDocuments(doctor,filterCondition);
             return { data: count, status: true, message: "Total Doctor Appointments count" };
 
         } catch (error) {

@@ -88,7 +88,8 @@ class AppointmentController{
         try {
             
             const {_id} = req.params
-            const result: Res | null = await this.appointmentServices.getDoctorAppointments(_id)  
+            const {search,charge,filterData,sortBy,sortIn,page} = req.query
+            const result: Res | null = await this.appointmentServices.getDoctorAppointments(_id,{search,charge,filterData,sortBy,sortIn,page})  
             res.json(result)
             
         } catch (error) {
@@ -155,7 +156,8 @@ class AppointmentController{
     async totalDoctorAppointments(req:Request,res:Response):Promise<void>{
         try {
             const {_id} = req.params
-            const result: Res | null = await this.appointmentServices.totalDoctorAppointments(_id)  
+            const {search,charge,filterData,sortBy,sortIn,page} = req.query
+            const result: Res | null = await this.appointmentServices.totalDoctorAppointments(_id,{search,charge,filterData,sortBy,sortIn,page})  
             res.json(result)
             
         } catch (error) {
