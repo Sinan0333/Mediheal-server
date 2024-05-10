@@ -43,6 +43,9 @@ const UserSchema = new Schema <UserDoc>({
             description:{
                 type:String,
                 required:true
+            },
+            cancelReason:{
+                type:String
             }
         }
     ],

@@ -25,5 +25,6 @@ export interface UserRes{
 export interface History {
     amount:number
     description:string
+    cancelReason?:string
     date:Date
 }
