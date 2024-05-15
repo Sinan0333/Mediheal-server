@@ -4,7 +4,6 @@ import { UserDoc, UserRes } from "../interfaces/IUser";
 import { setCookies } from "../utils/cookies";
 
 
-
 class AdminController{
     private adminServices:AdminServices
 

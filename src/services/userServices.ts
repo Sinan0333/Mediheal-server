@@ -8,11 +8,8 @@ import { FilterCondition, Res } from '../interfaces/Icommon';
 import { uploadFile } from '../utils/cloudinary';
 import { OtpDoc } from '../interfaces/IOtp';
 import { error } from 'console';
-
 import { Stripe } from 'stripe'
-const stripe = new Stripe("sk_test_51P3GiN06Grjj2WCtKumtQNTabouOyBTdztUjl0axEOx7yAhdWew77vc1WeKT9PmveUMUaK4Vy68phvmgABfgbPxq00ZPxjhMlr", {
-    apiVersion: '2023-10-16', 
-  });
+
 
 class UserServices {
     private userRepo: UserRepositories;
@@ -236,6 +233,10 @@ class UserServices {
 
     async createCheckoutSession(amount:number):Promise<Res>{
         try {
+            const  STRIPE_SECRET = process.env.STRIPE_SECRET  || ""
+            const stripe = new Stripe(STRIPE_SECRET , {
+                apiVersion: '2023-10-16', 
+            })
 
             let line_items = [
                 {

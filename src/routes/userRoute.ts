@@ -67,7 +67,7 @@ const messageServices = new MessageServices(messageRepository)
 const messageController = new MessageController(messageServices)
 
 userRoute.post('/profile',userController.getUserData.bind(userController))
-userRoute.post('/edit_profile',userController.updateProfile.bind(userController))
+userRoute.post('/profile/edit_profile',userController.updateProfile.bind(userController))
 
 userRoute.post('/patient/add',patientController.addPatient.bind(patientController))
 userRoute.get('/patient/:userId',patientController.getUserPatients.bind(patientController))
@@ -78,9 +78,9 @@ userRoute.get('/patient/prescription/:_id',prescriptionController.getPatientPres
 
 userRoute.get('/department/unblocked',departmentController.unBlockedDepartments.bind(departmentController))
 
-userRoute.get('/list/unblocked',doctorController.unBlockedDoctors.bind(doctorController))
-userRoute.get('/view/:_id',doctorController.viewDoctor.bind(doctorController))
-userRoute.get('/list/best',doctorController.getBestDoctors.bind(doctorController))
+userRoute.get('/doctor/list/unblocked',doctorController.unBlockedDoctors.bind(doctorController))
+userRoute.get('/doctor/view/:_id',doctorController.viewDoctor.bind(doctorController))
+userRoute.get('/doctor/list/best',doctorController.getBestDoctors.bind(doctorController))
 
 userRoute.post("/appointment/create-checkout-session",userController.createCheckoutSession.bind(userController))
 userRoute.post("/appointment/confirm_booking/:scheduleId",appointmentController.confirmBooking.bind(appointmentController))

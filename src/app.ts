@@ -31,7 +31,7 @@ app.use(
 
 
 app.use('/auth',authRoute)
-app.use('/',userRoute)
+app.use('/user',userRoute)
 app.use('/admin',adminRoute)
 app.use('/doctor',doctorRoute)
 app.use((err: Error, _req: express.Request, res: express.Response, _next: express.NextFunction) => {
