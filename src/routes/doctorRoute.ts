@@ -59,6 +59,7 @@ const admitHistoryServices = new AdmitHistoryServices(admitHistoryRepository)
 const admitHistoryController = new AdmitHistoryController(admitHistoryServices)
 
 doctorRoute.post('/take_break/:scheduleId',doctorController.takeABreak.bind(doctorController))
+doctorRoute.post('/remove_break/:scheduleId',doctorController.removeBreak.bind(doctorController))
 
 doctorRoute.get('/patient',patientController.getPatients.bind(patientController))
 doctorRoute.get('/patient/view/:_id',patientController.getPatient.bind(patientController))

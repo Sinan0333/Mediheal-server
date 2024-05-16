@@ -1,7 +1,6 @@
 import {Request,Response} from "express"
 import UserServices from "../services/userServices";
 import { UserDoc, UserRes } from "../interfaces/IUser";
-import { setCookies } from "../utils/cookies";
 import { Res } from "../interfaces/Icommon";
 
 
@@ -30,9 +29,7 @@ class UserController{
         try {
             
             const {email,password}:UserDoc = req.body
-            const result:UserRes | null = await this.userService.authUser(email,password)
-            
-            if(result?.token) setCookies(res,result.token,"userToken")  
+            const result:UserRes | null = await this.userService.authUser(email,password) 
             res.json(result)
             
         } catch (error) {

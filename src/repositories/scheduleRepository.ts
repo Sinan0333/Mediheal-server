@@ -35,11 +35,11 @@ class ScheduleRepository {
         }
     }
 
-    async changeScheduleIsReserved(_id:string ,day:string,slot_id:string | undefined): Promise<ScheduleDoc | null> {
+    async changeScheduleIsReserved(_id:string ,day:string,slot_id:string | undefined,status:boolean): Promise<ScheduleDoc | null> {
         try {
             const scheduleData = await Schedule.findOneAndUpdate(
                 {_id, [`${day}._id`]: slot_id }, 
-                { $set: { [`${day}.$.isReserved`]: true } }, 
+                { $set: { [`${day}.$.isReserved`]: status } }, 
                 { new: true }
             );
             return scheduleData;
@@ -49,11 +49,11 @@ class ScheduleRepository {
         }
     }
 
-    async changeAScheduleBreak(_id:string ,day:string,slot_id:string | undefined): Promise<ScheduleDoc | null> {
+    async changeAScheduleBreak(_id:string ,day:string,slot_id:string | undefined,status:boolean): Promise<ScheduleDoc | null> {
         try {
             const scheduleData = await Schedule.findOneAndUpdate(
                 {_id, [`${day}._id`]: slot_id }, 
-                { $set: { [`${day}.$.break`]: true } }, 
+                { $set: { [`${day}.$.break`]: status} }, 
                 { new: true }
             );
             return scheduleData;

@@ -21,7 +21,7 @@ class AppointmentServices {
         try {
 
             const appointmentData:AppointmentDoc | null = await this.appointmentRepo.createAppointment(data)
-            await this.scheduleRepo.changeScheduleIsReserved(scheduleId,data.day,data.slotId)
+            await this.scheduleRepo.changeScheduleIsReserved(scheduleId,data.day,data.slotId,true)
 
             return{data:appointmentData,status:true,message:'Booked Successfully'}
         } catch (error) {
@@ -103,7 +103,7 @@ class AppointmentServices {
             return{data:appointmentData,status:true,message:'Appointment Cancelled Successfully'}
             
         } catch (error) {
-            console.error("Error in cancelBooking:", error);
+            console.error("Error in cancelBookingWhenBreak:", error);
             throw error;
         }
     }

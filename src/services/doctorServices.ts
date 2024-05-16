@@ -175,12 +175,25 @@ class DoctorServices {
     async takeABreak(_id:string,day:string,slot_id:string): Promise<Res> {
         try {
                         
-            const scheduleData:ScheduleDoc | null = await this.scheduleRepo.changeAScheduleBreak(_id,day,slot_id);
+            const scheduleData:ScheduleDoc | null = await this.scheduleRepo.changeAScheduleBreak(_id,day,slot_id,true);
             if(!scheduleData) return {status:false,message:"Cant find the schedule data"}
             return {data:slot_id,status:true,message:"Successfully taken a break"}
 
         } catch (error) {
             console.error("Error in changeBlockStatus:", error);
+            throw error;
+        }
+    }
+
+    async removeBreak(_id:string,day:string,slot_id:string): Promise<Res> {
+        try {
+                        
+            const scheduleData:ScheduleDoc | null = await this.scheduleRepo.changeAScheduleBreak(_id,day,slot_id,false);
+            if(!scheduleData) return {status:false,message:"Cant find the schedule data"}
+            return {data:slot_id,status:true,message:"Successfully removed the break"}
+
+        } catch (error) {
+            console.error("Error in removeBreak:", error);
             throw error;
         }
     }

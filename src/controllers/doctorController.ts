@@ -2,7 +2,6 @@ import {Request,Response} from "express"
 import DoctorServices from "../services/doctorServices";
 import { DoctorDoc, DoctorRes } from '../interfaces/IDoctor';
 import { Res } from '../interfaces/Icommon';
-import { setCookies } from "../utils/cookies";
 import { UserDoc } from "../interfaces/IUser";
 
 
@@ -31,9 +30,7 @@ class DoctorController{
     async login(req:Request,res:Response):Promise<void>{
         try {
             const {email,password}:DoctorDoc = req.body
-            const result:DoctorRes | null = await this.doctorServices.authDoctor(email,password)
-            if(result?.token) setCookies(res,result.token,"doctorToken")
-            
+            const result:DoctorRes | null = await this.doctorServices.authDoctor(email,password)            
             res.json(result)
             
         } catch (error) {
@@ -129,6 +126,19 @@ class DoctorController{
             const {scheduleId} = req.params
             const {_id,day} = req.body
             const result: Res | null = await this.doctorServices.takeABreak(scheduleId,day,_id)
+            res.json(result)
+            
+        } catch (error) {
+            console.error("Error in DoctorController.takeABreak:", error);
+            res.status(500).json({ error: "Internal server error" });
+        }
+    }
+
+    async removeBreak(req:Request,res:Response):Promise<void>{
+        try {
+            const {scheduleId} = req.params
+            const {_id,day} = req.body
+            const result: Res | null = await this.doctorServices.removeBreak(scheduleId,day,_id)
             res.json(result)
             
         } catch (error) {
