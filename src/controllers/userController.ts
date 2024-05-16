@@ -161,6 +161,19 @@ class UserController{
             res.status(500).json({ error: "Internal server error" });
         }
     }
+
+    async walletPayment(req:Request,res:Response):Promise<void>{
+        try {
+            
+            const {_id,amount} = req.body
+            const result: Res | null = await this.userService.walletPayment(_id,amount)  
+            res.json(result)
+            
+        } catch (error) {
+            console.error("Error in UserController.walletPayment:", error);
+            res.status(500).json({ error: "Internal server error" });
+        }
+    }
 }
 
 

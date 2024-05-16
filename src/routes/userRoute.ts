@@ -68,6 +68,7 @@ const messageController = new MessageController(messageServices)
 
 userRoute.post('/profile',userController.getUserData.bind(userController))
 userRoute.post('/profile/edit_profile',userController.updateProfile.bind(userController))
+userRoute.post('/wallet_payment',userController.walletPayment.bind(userController))
 
 userRoute.post('/patient/add',patientController.addPatient.bind(patientController))
 userRoute.get('/patient/:userId',patientController.getUserPatients.bind(patientController))

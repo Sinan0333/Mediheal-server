@@ -278,6 +278,23 @@ class UserServices {
         }
     }
 
+    async walletPayment(_id:string,amount:number): Promise<Res> {
+        try {
+
+            const userData:UserDoc | null = await this.userRepo.findUserById(_id)
+            if(!userData) return {status:false,message:"Cant find the user"}
+
+            if(userData.wallet < amount) return {status:false,message:"Insufficient balance"}
+
+            const updateWallet:UserDoc | null = await this.userRepo.updateHistory(_id,{date:new Date(),description:"Wallet payment",amount:-amount})
+            return { data:updateWallet , status: true, message: "Wallet payment successful" };
+
+        } catch (error) {
+            console.error("Error in walletPayment:", error);
+            throw error;
+        }
+    }
+
 }
 
 export default UserServices;

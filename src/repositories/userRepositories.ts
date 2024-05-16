@@ -74,7 +74,7 @@ class UserRepository {
         }
     }
 
-    async updateHistory(_id:Types.ObjectId,data:History): Promise<UserDoc | null > {
+    async updateHistory(_id:Types.ObjectId | string,data:History): Promise<UserDoc | null > {
         try {
             const userData:UserDoc | null = await User.findOneAndUpdate({_id},{$push:{history:data},$inc:{wallet:data.amount}},{new:true});
             return userData

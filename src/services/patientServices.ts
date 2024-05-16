@@ -72,7 +72,9 @@ class PatientServices {
         try {
 
             let imagePublicId:string
-            if(data.image.split("/").includes('Mediheal')){
+            if(!data.image){
+                imagePublicId=""
+            }else if(data.image.split("/").includes('Mediheal') && data.image !== ""){
                 imagePublicId=data.image
             }else{
                 imagePublicId = await uploadFile(data.image,"doctor_image");
