@@ -14,9 +14,12 @@ export const doctorAuthMiddleware = (req: Request, res: Response, next: NextFunc
         if (decodedToken.role !== 'doctor') {            
             return res.status(403).json({ message: 'Forbidden: Insufficient privileges' });
         }
-
+        
         next(); 
-    } catch (error) {
+    } catch (error:any) {
+        if (error.message === 'Token expired') {  
+            return res.status(401).json({ message: 'Unauthorized: Token expired' });
+        }
         return res.status(403).json({ message: 'Forbidden: Invalid token' });
     }
     return

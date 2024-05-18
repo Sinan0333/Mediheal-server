@@ -1,5 +1,5 @@
 import express,{Router} from 'express'
-// import { adminAuthMiddleware } from '../middleware/adminAuthMiddleware'
+import { adminAuthMiddleware } from '../middleware/adminAuthMiddleware'
 
 import OtpRepository from '../repositories/otpRepositories'
 import ScheduleRepository from '../repositories/scheduleRepository'
@@ -33,7 +33,7 @@ import AppointmentServices from '../services/appointmentServices'
 import AppointmentController from '../controllers/appointmentController'
 
 const adminRoute:Router = express.Router()
-// adminRoute.use(adminAuthMiddleware)
+adminRoute.use(adminAuthMiddleware)
 
 const otpRepository = new OtpRepository()
 const scheduleRepository = new ScheduleRepository()

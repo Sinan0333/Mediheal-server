@@ -34,8 +34,32 @@ class DoctorController{
             res.json(result)
             
         } catch (error) {
-            console.error("Error in UserController.login:", error);
+            console.error("Error in DoctorController.login:", error);
             res.status(500).json({ error: "Internal server error" });
+        }
+    }
+
+    async refreshToken(req:Request,res:Response):Promise<void>{
+        try {
+
+            const {refreshToken} = req.body
+            if (!refreshToken) {
+                res.status(401).json({ message: 'Unauthorized: No token provided' });
+            }
+            
+            const result:Res | null = await this.doctorServices.refreshToken(refreshToken)
+            res.json(result)
+            return
+            
+        } catch (error:any) {
+            
+            if(error.message === 'Token expired'){
+                res.status(401).json({ message: 'Unauthorized: Token expired' });
+                return
+            }else{
+                res.status(500).json({ error: "Internal server error" });
+                return
+            }
         }
     }
 

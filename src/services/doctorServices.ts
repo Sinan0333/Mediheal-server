@@ -4,7 +4,7 @@ import ScheduleRepository from '../repositories/scheduleRepository';
 import { DoctorDoc, DoctorRes, IDoctorData } from '../interfaces/IDoctor';
 import { FilterCondition, Res } from '../interfaces/Icommon';
 import { uploadFile } from '../utils/cloudinary';
-import { generateToken } from '../utils/jwt';
+import { generateRefreshToken, generateToken, verifyToken } from '../utils/jwt';
 import { generateSlots, generateSlotsForADay } from '../utils/schedule';
 import { ScheduleDoc } from '../interfaces/Ischedule';
 import { removeDays } from '../utils/others';
@@ -100,7 +100,8 @@ class DoctorServices {
                 const isPasswordValid = await bcrypt.compare(password, userData.password);
                 if (isPasswordValid && userData._id) {
                     const token: string = generateToken(userData);
-                    return { userData, token, status: true, message: 'Authentication successful' };
+                    const refreshToken:string = generateRefreshToken(userData)
+                    return { userData, token,refreshToken, status: true, message: 'Authentication successful' };
                 } else {
                     return { status: false, message: 'Incorrect password' };
                 }
@@ -109,6 +110,24 @@ class DoctorServices {
             }
         } catch (error) {
             console.error("Error in authUser:", error);
+            throw error;
+        }
+    }
+
+    async refreshToken(token:string): Promise<Res> {
+        try {
+
+           const decodedToken = verifyToken(token);
+           const doctorData:DoctorDoc | null = await this.doctorRepo.findDoctorById(decodedToken._id)
+
+           if(!doctorData) return {status:false,message:"Cant find the user"}
+           const accessToken:string = generateToken(doctorData)
+           const refreshToken:string = generateRefreshToken(doctorData)
+
+            return {status:true ,data:{accessToken,refreshToken} ,message:"Token refreshed"}
+
+        } catch (error) {
+            console.error("Error in refreshToken:", error);
             throw error;
         }
     }

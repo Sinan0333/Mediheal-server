@@ -1,6 +1,7 @@
 import {Request,Response} from "express"
 import AdminServices from "../services/adminServices";
 import { UserDoc, UserRes } from "../interfaces/IUser";
+import { Res } from "../interfaces/Icommon";
 
 
 class AdminController{
@@ -20,6 +21,28 @@ class AdminController{
         } catch (error) {
             console.error("Error in AdminController.login:", error);
             res.status(500).json({ error: "Internal server error" });
+        }
+    }
+
+    async refreshToken(req:Request,res:Response):Promise<void>{
+        try {
+
+            const {refreshToken} = req.body
+            if (!refreshToken) {
+                res.status(401).json({ message: 'Unauthorized: No token provided' });
+            }
+
+            const result:Res | null = await this.adminServices.refreshToken(refreshToken)
+            res.json(result)
+            
+        } catch (error:any) {
+            console.error("Error in AdminController.refreshToken:", error);
+            if(error.message === 'Token expired' || error.name === 'Token verification failed'){
+                res.status(401).json({ message: 'Unauthorized: Token expired' });
+                return
+            }else{
+                res.status(500).json({ error: "Internal server error" });
+            }
         }
     }
 }

@@ -17,6 +17,7 @@ export interface UserDoc extends Document{
 export interface UserRes{
     userData?:UserDoc | null
     token?:string
+    refreshToken?:string
     otp_id?:string
     status:true | false
     message:string

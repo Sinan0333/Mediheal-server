@@ -1,7 +1,7 @@
 import bcrypt from 'bcrypt';
 import UserRepositories from "../repositories/userRepositories";
 import { UserDoc, UserRes } from '../interfaces/IUser';
-import { generateToken } from '../utils/jwt';
+import { generateRefreshToken, generateToken, verifyToken } from '../utils/jwt';
 import OtpRepositories from '../repositories/otpRepositories';
 import { sendVerifyMail } from '../utils/otpVerification';
 import { FilterCondition, Res } from '../interfaces/Icommon';
@@ -122,7 +122,8 @@ class UserServices {
                         return{status:false,message:"Admin blocked you"}
                     }else{  
                         const token: string = generateToken(userData);
-                        return { userData, token, status: true, message: 'Authentication successful' };
+                        const refreshToken:string = generateRefreshToken(userData)
+                        return { userData, token,refreshToken, status: true, message: 'Authentication successful' };
                     }
                 } else {
                     return { status: false, message: 'Incorrect password' };
@@ -132,6 +133,24 @@ class UserServices {
             }
         } catch (error) {
             console.error("Error in authUser:", error);
+            throw error;
+        }
+    }
+
+    async refreshToken(token:string): Promise<Res> {
+        try {
+
+           const decodedToken = verifyToken(token);
+           const userData:UserDoc | null = await this.userRepo.findUserById(decodedToken._id)
+
+           if(!userData) return {status:false,message:"Cant find the user"}
+           const accessToken:string = generateToken(userData)
+           const refreshToken:string = generateRefreshToken(userData)
+
+            return {status:true ,data:{accessToken,refreshToken} ,message:"Token refreshed"}
+
+        } catch (error) {
+            console.error("Error in refreshToken:", error);
             throw error;
         }
     }

@@ -36,9 +36,12 @@ authRoute.get('/user/get_otp/:_id',userController.getOtp.bind(userController))
 authRoute.get('/user/resend_otp/:_id',userController.resendOtp.bind(userController))
 authRoute.post('/user/verify',userController.verifyOtp.bind(userController))
 authRoute.post('/user/login',userController.login.bind(userController))
+authRoute.post('/user/refresh',userController.refreshToken.bind(userController))
 
 authRoute.post('/doctor/login',doctorController.login.bind(doctorController))
+authRoute.post('/doctor/refresh',doctorController.refreshToken.bind(doctorController))
 
 authRoute.post('/admin/login',adminController.login.bind(adminController))
+authRoute.post('/admin/refresh',adminController.refreshToken.bind(adminController))
 
 export default authRoute

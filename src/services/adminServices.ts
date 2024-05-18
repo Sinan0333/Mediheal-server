@@ -1,7 +1,8 @@
 import bcrypt from 'bcrypt';
 import AdminRepository from "../repositories/adminRepositories";
 import { UserDoc, UserRes } from '../interfaces/IUser';
-import { generateToken } from '../utils/jwt';
+import { generateRefreshToken, generateToken, verifyToken } from '../utils/jwt';
+import { Res } from '../interfaces/Icommon';
 
 class AdminServices {
     private adminRepo: AdminRepository;
@@ -19,7 +20,8 @@ class AdminServices {
 
                 if (isPasswordValid) {
                     const token: string = generateToken(userData);
-                    return { userData, token, status: true, message: 'Authentication successful' };
+                    const refreshToken:string = generateRefreshToken(userData)
+                    return { userData, token,refreshToken, status: true, message: 'Authentication successful' };
                 } else {
                     return { status: false, message: 'Incorrect password' };
                 }
@@ -28,6 +30,24 @@ class AdminServices {
             }
         } catch (error) {
             console.error("Error in authAdmin:", error);
+            throw error;
+        }
+    }
+
+    async refreshToken(token:string): Promise<Res> {
+        try {
+
+           const decodedToken = verifyToken(token);
+           const userData:UserDoc | null = await this.adminRepo.findAdminByEmail(decodedToken.email)
+
+           if(!userData) return {status:false,message:"Cant find the user"}
+           const accessToken:string = generateToken(userData)
+           const refreshToken:string = generateRefreshToken(userData)
+
+            return {status:true ,data:{accessToken,refreshToken} ,message:"Token refreshed"}
+
+        } catch (error) {
+            console.error("Error in refreshToken:", error);
             throw error;
         }
     }

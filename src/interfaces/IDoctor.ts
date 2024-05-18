@@ -54,6 +54,7 @@ export interface IDoctorData {
 export interface DoctorRes{
    userData?:DoctorDoc
    token?:string
+   refreshToken?:string
    status:true | false
    message:string
 }

@@ -1,5 +1,5 @@
 import express,{Router} from 'express'
-// import { doctorAuthMiddleware } from '../middleware/doctorAuthMiddleware'
+import { doctorAuthMiddleware } from '../middleware/doctorAuthMiddleware'
 
 import ScheduleRepository from '../repositories/scheduleRepository'
 import UserRepository from '../repositories/userRepositories'
@@ -29,7 +29,7 @@ import AdmitHistoryServices from '../services/admitHistoryServices'
 import AdmitHistoryRepository from '../repositories/admitHistoryRepositories'
 
 const doctorRoute:Router = express.Router()
-// doctorRoute.use(doctorAuthMiddleware)
+doctorRoute.use(doctorAuthMiddleware)
 
 const scheduleRepository = new ScheduleRepository()
 const userRepositories = new UserRepository()
@@ -58,6 +58,7 @@ const admitHistoryRepository = new AdmitHistoryRepository()
 const admitHistoryServices = new AdmitHistoryServices(admitHistoryRepository)
 const admitHistoryController = new AdmitHistoryController(admitHistoryServices)
 
+doctorRoute.post('/profile/:_id',doctorController.takeABreak.bind(doctorController))
 doctorRoute.post('/take_break/:scheduleId',doctorController.takeABreak.bind(doctorController))
 doctorRoute.post('/remove_break/:scheduleId',doctorController.removeBreak.bind(doctorController))
 

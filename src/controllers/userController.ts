@@ -78,6 +78,28 @@ class UserController{
         }
     }
 
+    async refreshToken(req:Request,res:Response):Promise<void>{
+        try {
+
+            const {refreshToken} = req.body
+            if (!refreshToken) {
+                res.status(401).json({ message: 'Unauthorized: No token provided' });
+            }
+
+            const result:Res | null = await this.userService.refreshToken(refreshToken)
+            res.json(result)
+            
+        } catch (error:any) {
+            console.error("Error in UserController.refreshToken:", error);
+            if(error.message === 'Token expired' || error.name === 'Token verification failed'){
+                res.status(401).json({ message: 'Unauthorized: Token expired' });
+                return
+            }else{
+                res.status(500).json({ error: "Internal server error" });
+            }
+        }
+    }
+
     async listUsers(req:Request,res:Response):Promise<void>{
         try {
 
