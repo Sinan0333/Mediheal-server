@@ -25,6 +25,19 @@ class UserController{
         }
     }
 
+    async googleAuth(req:Request,res:Response):Promise<void>{
+        try {
+    
+            const {credential} = req.body
+            const result:UserRes |null = await this.userService.googleAuth(credential)
+            res.json(result)
+
+        } catch (error) {
+            console.error("Error in UserController.googleSignup:", error);
+            res.status(500).json({ error: "Internal server error" });
+        }
+    }
+
     async login(req:Request,res:Response):Promise<void>{
         try {
             

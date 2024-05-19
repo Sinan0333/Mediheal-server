@@ -25,9 +25,9 @@ class UserRepository {
         }
     }
 
-    async createUser(name: string, phone: string, email: string, password: string): Promise<UserDoc> {
+    async createUser(name: string, phone: string, email: string, password: string,verified?:boolean): Promise<UserDoc> {
         try {
-            const userModel = new User({ name, phone, email, password });
+            const userModel = new User({ name, phone, email, password,verified });
             return await userModel.save();
         } catch (error) {
             console.error("Error in createUser:", error);

@@ -1,6 +1,6 @@
 import bcrypt from 'bcrypt';
 import UserRepositories from "../repositories/userRepositories";
-import { UserDoc, UserRes } from '../interfaces/IUser';
+import { DecodedJWT, UserDoc, UserRes } from '../interfaces/IUser';
 import { generateRefreshToken, generateToken, verifyToken } from '../utils/jwt';
 import OtpRepositories from '../repositories/otpRepositories';
 import { sendVerifyMail } from '../utils/otpVerification';
@@ -9,6 +9,7 @@ import { uploadFile } from '../utils/cloudinary';
 import { OtpDoc } from '../interfaces/IOtp';
 import { error } from 'console';
 import { Stripe } from 'stripe'
+import { jwtDecode } from "jwt-decode";     
 
 
 class UserServices {
@@ -55,6 +56,34 @@ class UserServices {
             return {userData,status: true, message: 'User Signup successfully' };
         } catch (error) {
             console.error("Error in createUser:", error);
+            throw error;
+        }
+    }
+
+    async googleAuth(credential:string): Promise<UserRes> {
+        try {
+            
+            const userGoogleData:DecodedJWT = jwtDecode(credential)
+            if(!userGoogleData.email || !userGoogleData.name) return {status:false,message:"Something Wrong Please Try Another Account"}
+
+            // Check if email already exists
+            const checkEmail: UserDoc | null = await this.userRepo.findUserByEmail(userGoogleData.email);
+            if(checkEmail){
+                const token: string = generateToken(checkEmail);
+                const refreshToken:string = generateRefreshToken(checkEmail)
+                return {userData:checkEmail,token,refreshToken,status: true, message: 'Login Successful' };
+            } 
+                
+
+            // Create user
+            const userData:UserDoc | null = await this.userRepo.createUser(userGoogleData.name,"0", userGoogleData.email, "0",true);
+            if(!userData) throw error
+
+            const token: string = generateToken(userData);
+            const refreshToken:string = generateRefreshToken(userData)
+            return {userData,token,refreshToken,status: true, message: 'User Signup successfully' };
+        } catch (error) {
+            console.error("Error in googleSignup:", error);
             throw error;
         }
     }
@@ -145,7 +174,7 @@ class UserServices {
 
            if(!userData) return {status:false,message:"Cant find the user"}
            if(userData.is_blocked)  throw new Error("Token verification failed")
-            
+
            const accessToken:string = generateToken(userData)
            const refreshToken:string = generateRefreshToken(userData)
 

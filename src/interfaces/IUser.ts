@@ -29,3 +29,12 @@ export interface History {
     cancelReason?:string
     date:Date
 }
+
+export interface DecodedJWT {
+    sub?: string;
+    name?: string;
+    iat?: number;
+    exp?: number;
+    role?: string;
+    email?: string;
+  }

@@ -32,6 +32,7 @@ const adminServices = new AdminServices(adminRepository)
 const adminController = new AdminController(adminServices)
 
 authRoute.post('/user/signup',userController.signup.bind(userController))
+authRoute.post('/user/google_auth',userController.googleAuth.bind(userController))
 authRoute.get('/user/get_otp/:_id',userController.getOtp.bind(userController))
 authRoute.get('/user/resend_otp/:_id',userController.resendOtp.bind(userController))
 authRoute.post('/user/verify',userController.verifyOtp.bind(userController))

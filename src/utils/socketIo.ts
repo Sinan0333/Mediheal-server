@@ -60,41 +60,13 @@ io.on('connection', (socket) => {
     })
 
     socket.on("call:start",({sender,receiver})=>{      
-      const senderData = getUser(sender)
       const receiverData = getUser(receiver)
-      if(senderData){
-        io.to(senderData.socketId).emit("call:start",{receiver})
-      }
       if(receiverData){
-        io.to(receiverData.socketId).emit("call:start")
+        io.to(receiverData.socketId).emit("call:start",sender)
       }
       
     })
 
-    socket.on("user:call",({to,offer})=>{
-      const user = getUser(to)
-      
-      if(user){
-        io.to(user.socketId).emit("incoming:call",{from:socket.id,offer})
-      }
-      
-    })
-
-    socket.on("call:accepted",({to,ans})=>{
-      io.to(to).emit("call:accepted",{from:socket.id,ans})
-    })
-
-    socket.on("peer:negotiationneeded",({to,offer})=>{
-      io.to(to).emit("peer:negotiationneeded",{from:socket.id,offer})
-    })
-
-    socket.on("peer:negotiationDone",({to,ans})=>{
-      io.to(to).emit("peer:negotiationFinal",{from:socket.id,ans})
-    })
-  
-    socket.on("call:end",({to})=>{
-      io.to(to).emit("call:end")
-    })
 
     socket.on('disconnect', () => {
       // console.log('User disconnected');
