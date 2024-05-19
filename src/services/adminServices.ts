@@ -39,6 +39,7 @@ class AdminServices {
 
            const decodedToken = verifyToken(token);
            const userData:UserDoc | null = await this.adminRepo.findAdminByEmail(decodedToken.email)
+console.log('in admin refresh token');
 
            if(!userData) return {status:false,message:"Cant find the user"}
            const accessToken:string = generateToken(userData)

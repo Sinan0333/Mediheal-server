@@ -17,10 +17,10 @@ export const adminAuthMiddleware = (req: Request, res: Response, next: NextFunct
 
         next(); 
     } catch (error:any) {
-        if (error.name === 'TokenExpiredError') {
-            return res.status(401).json({ message: 'Unauthorized: Token expired' });
-        }
-        return res.status(403).json({ message: 'Forbidden: Invalid token' });
+            if (error.message === 'Token expired') {  
+                return res.status(401).json({ message: 'Unauthorized: Token expired' });
+            }
+            return res.status(403).json({ message: 'Forbidden: Invalid token' });
     }
     return
 };

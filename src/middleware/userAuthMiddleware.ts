@@ -18,7 +18,7 @@ export const userAuthMiddleware = (req: Request, res: Response, next: NextFuncti
 
         next(); 
     } catch (error:any) {
-        if (error.name === 'TokenExpiredError') {
+        if (error.message === 'Token expired') {  
             return res.status(401).json({ message: 'Unauthorized: Token expired' });
         }
         return res.status(403).json({ message: 'Forbidden: Invalid token' });

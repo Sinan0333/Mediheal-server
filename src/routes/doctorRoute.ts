@@ -58,7 +58,7 @@ const admitHistoryRepository = new AdmitHistoryRepository()
 const admitHistoryServices = new AdmitHistoryServices(admitHistoryRepository)
 const admitHistoryController = new AdmitHistoryController(admitHistoryServices)
 
-doctorRoute.post('/profile/:_id',doctorController.takeABreak.bind(doctorController))
+doctorRoute.get('/profile/:_id',doctorController.viewDoctor.bind(doctorController))
 doctorRoute.post('/take_break/:scheduleId',doctorController.takeABreak.bind(doctorController))
 doctorRoute.post('/remove_break/:scheduleId',doctorController.removeBreak.bind(doctorController))
 

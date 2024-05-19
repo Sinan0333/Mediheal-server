@@ -36,12 +36,12 @@ class AdminController{
             res.json(result)
             
         } catch (error:any) {
-            console.error("Error in AdminController.refreshToken:", error);
-            if(error.message === 'Token expired' || error.name === 'Token verification failed'){
+            if(error.message === 'Token expired'){
                 res.status(401).json({ message: 'Unauthorized: Token expired' });
                 return
             }else{
                 res.status(500).json({ error: "Internal server error" });
+                return
             }
         }
     }
