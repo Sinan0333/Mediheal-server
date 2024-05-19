@@ -98,10 +98,15 @@ class DoctorServices {
             const userData:DoctorDoc | null = await this.doctorRepo.findDoctorByEmail(email);
             if (userData) {
                 const isPasswordValid = await bcrypt.compare(password, userData.password);
-                if (isPasswordValid && userData._id) {
-                    const token: string = generateToken(userData);
-                    const refreshToken:string = generateRefreshToken(userData)
-                    return { userData, token,refreshToken, status: true, message: 'Authentication successful' };
+                if (isPasswordValid ) {
+                    if(userData.is_blocked){
+                        return{status:false,message:"Admin blocked you"}
+                    }else{
+                        const token: string = generateToken(userData);
+                        const refreshToken:string = generateRefreshToken(userData)
+                        return { userData, token,refreshToken, status: true, message: 'Authentication successful' };
+                    }
+                    
                 } else {
                     return { status: false, message: 'Incorrect password' };
                 }
@@ -121,6 +126,8 @@ class DoctorServices {
            const doctorData:DoctorDoc | null = await this.doctorRepo.findDoctorById(decodedToken._id)
 
            if(!doctorData) return {status:false,message:"Cant find the user"}
+           if(doctorData.is_blocked)  throw new Error("Token verification failed")
+
            const accessToken:string = generateToken(doctorData)
            const refreshToken:string = generateRefreshToken(doctorData)
 

@@ -11,7 +11,7 @@ export const doctorAuthMiddleware = (req: Request, res: Response, next: NextFunc
     try {
         const decodedToken = verifyToken(doctorToken);
 
-        if (decodedToken.role !== 'doctor') {            
+        if (decodedToken.role !== 'doctor' || decodedToken.is_blocked) {            
             return res.status(403).json({ message: 'Forbidden: Insufficient privileges' });
         }
         

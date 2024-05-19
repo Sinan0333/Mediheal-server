@@ -144,6 +144,8 @@ class UserServices {
            const userData:UserDoc | null = await this.userRepo.findUserById(decodedToken._id)
 
            if(!userData) return {status:false,message:"Cant find the user"}
+           if(userData.is_blocked)  throw new Error("Token verification failed")
+            
            const accessToken:string = generateToken(userData)
            const refreshToken:string = generateRefreshToken(userData)
 

@@ -43,12 +43,12 @@ io.on('connection', (socket) => {
       }
     })
   
-    socket.on('sendMessage', ({sender,receiver,text}) => {
+    socket.on('sendMessage', ({sender,receiver,text,createdAt}) => {
       const receiverData = getUser(receiver)
       const senderData = getUser(sender)
       
-      if(receiverData) io.to(receiverData.socketId).emit('message',{sender,receiver,text})
-      if(senderData) io.to(senderData.socketId).emit('message',{sender,receiver,text})
+      if(receiverData) io.to(receiverData.socketId).emit('message',{sender,receiver,text,createdAt})
+      if(senderData) io.to(senderData.socketId).emit('message',{sender,receiver,text,createdAt})
     });
 
     socket.on("end_session",(receiver)=>{

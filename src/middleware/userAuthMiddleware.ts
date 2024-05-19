@@ -12,7 +12,7 @@ export const userAuthMiddleware = (req: Request, res: Response, next: NextFuncti
         const decodedToken = verifyToken(userToken);
 
         
-        if (decodedToken.role !== 'user') {     
+        if (decodedToken.role !== 'user' || decodedToken.is_blocked) {     
             return res.status(403).json({ message: 'Forbidden: Insufficient privileges' });
         }
 
