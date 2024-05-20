@@ -20,7 +20,7 @@ export interface AppointmentDoc extends Document{
 export interface IAppointment {
     slotId:string
     userId:Types.ObjectId
-    _id:Types.ObjectId
+    _id?:Types.ObjectId
     startTime:string
     endTime:string
     day:string
