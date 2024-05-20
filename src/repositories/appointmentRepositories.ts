@@ -90,9 +90,9 @@ class AppointmentRepository {
         }
     }
 
-    async findAppointmentsBySlotId(slotId:string): Promise<IAppointment[]> {
+    async findAppointmentsBySlotIdAndStatus(slotId:string,status:string): Promise<AppointmentDoc[]> {
         try {
-            const appointmentData:IAppointment[] | [] = await Appointment.find({ slotId}).populate('patient doctor')
+            const appointmentData:AppointmentDoc[] | [] = await Appointment.find({ slotId,status}).populate('patient doctor')
             return appointmentData;
         } catch (error) {
             console.error("Error in findAppointmentsBySlotId:", error);

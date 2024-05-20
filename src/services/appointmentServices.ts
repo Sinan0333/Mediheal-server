@@ -93,12 +93,12 @@ class AppointmentServices {
     async cancelBookingWhenBreak(slotId:string): Promise<Res | null> {
         try {
 
-           const appointmentData:IAppointment[] | [] = await this.appointmentRepo.findAppointmentsBySlotId(""+slotId)           
-           const filterAppointmentData:IAppointment[] | [] = appointmentData.filter((doc)=>doc.status==='Pending')
+           const appointmentData:AppointmentDoc[]  = await this.appointmentRepo.findAppointmentsBySlotIdAndStatus(""+slotId,'Pending')           
 
-            for(let i=0;i<filterAppointmentData.length;i++){
-                await this.userRepo.updateHistory(filterAppointmentData[i].userId,{date:new Date(),description:"Doctor Cancelled the Appointment",amount:filterAppointmentData[i].doctor.fees})
-                await this.appointmentRepo.cancelBooking(filterAppointmentData[i]._id)
+            for(let i=0;i<appointmentData.length;i++){
+                if(typeof(appointmentData[i].doctor) === 'string') continue
+                await this.userRepo.updateHistory(appointmentData[i].userId,{date:new Date(),description:"Doctor Cancelled the Appointment",amount:appointmentData[i].doctor.fees})
+                await this.appointmentRepo.cancelBooking(appointmentData[i]._id)
             }
 
             return{data:appointmentData,status:true,message:'Appointment Cancelled Successfully'}

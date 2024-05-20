@@ -8,7 +8,7 @@ export interface AppointmentDoc extends Document{
     startTime:string
     endTime:string
     day:string
-    doctor:Types.ObjectId
+    doctor:DoctorDoc
     patient:Types.ObjectId
     bookedDate:Date
     fees:number
