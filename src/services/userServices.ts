@@ -283,7 +283,7 @@ class UserServices {
 
     async createCheckoutSession(amount:number):Promise<Res>{
         try {
-            const CLIENT_URL = process.env.CLIENT_URL ? process.env.CLIENT_URL[0] : ""
+            const CLIENT_URL = process.env.CLIENT_URL 
             const  STRIPE_SECRET = process.env.STRIPE_SECRET  || ""
             const stripe = new Stripe(STRIPE_SECRET , {
                 apiVersion: '2023-10-16', 
