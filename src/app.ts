@@ -23,7 +23,7 @@ app.use(cookieParser());
 
 app.use(
     cors({
-      origin: ["https://mediheal-ivory.vercel.app"],
+      origin: process.env.CLIENT_URL,
       methods: ["GET", "POST","PUT"],
       credentials: true,
     })
