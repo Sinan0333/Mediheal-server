@@ -36,7 +36,7 @@ class AppointmentRepository {
         }
     }
 
-    async cancelBooking(_id:string | undefined): Promise<AppointmentDoc | null> {
+    async cancelBooking(_id:ObjectId ): Promise<AppointmentDoc | null> {
         try {
             const appointmentData:AppointmentDoc | null = await Appointment.findOneAndUpdate({_id},{status:"Cancelled"})
             return appointmentData;

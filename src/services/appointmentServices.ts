@@ -55,7 +55,8 @@ class AppointmentServices {
     async cancelBooking(_id:string,data:History): Promise<Res | null> {
         try {
 
-           const appointmentData:AppointmentDoc | null = await this.appointmentRepo.cancelBooking(_id)
+            const _idObj:ObjectId = new ObjectId(_id)
+           const appointmentData:AppointmentDoc | null = await this.appointmentRepo.cancelBooking(_idObj)
            if(!appointmentData) return {status:false,message:"Couldn't get the data"}
 
            if(data.description === "Cancelled Booking"){
