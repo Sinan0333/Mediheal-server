@@ -15,6 +15,16 @@ class ScheduleRepository {
         }
     }
 
+    async updateSchedule(_id:ObjectId,data: ScheduleDoc): Promise<ScheduleDoc | null> {
+        try {
+            const scheduleData: ScheduleDoc | null = await Schedule.findOneAndUpdate({ _id }, data, { new: true });
+            return scheduleData;
+        } catch (error) {
+            console.error("Error creating updateSchedule:", error);
+            throw error;
+        }
+    }
+
     async findScheduleById(_id:ObjectId): Promise<ScheduleDoc | null> {
         try {
             const scheduleData = await Schedule.findOne({_id})

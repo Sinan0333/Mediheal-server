@@ -283,6 +283,7 @@ class UserServices {
 
     async createCheckoutSession(amount:number):Promise<Res>{
         try {
+            const CLIENT_URL = process.env.CLIENT_URL ? process.env.CLIENT_URL[0] : ""
             const  STRIPE_SECRET = process.env.STRIPE_SECRET  || ""
             const stripe = new Stripe(STRIPE_SECRET , {
                 apiVersion: '2023-10-16', 
@@ -301,8 +302,8 @@ class UserServices {
                 }
             ]
             const session = await stripe.checkout.sessions.create({
-                success_url: 'http://localhost:5173/payment_success',
-                cancel_url : 'http://localhost:5173/payment_cancel',
+                success_url: `${CLIENT_URL}/payment_success`,
+                cancel_url : `${CLIENT_URL}/payment_cancel`,
                 line_items:line_items,  
                 mode: 'payment',
                 billing_address_collection:'required',

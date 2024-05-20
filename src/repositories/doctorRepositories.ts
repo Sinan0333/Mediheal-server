@@ -98,6 +98,17 @@ class DoctorRepository {
             throw error;
         }
     }
+
+    async findAllDoctors(): Promise<DoctorDoc[] | []> {
+        try {
+            const doctors: DoctorDoc[] = await Doctor.find()
+            return doctors;
+        } catch (error) {
+            console.error("Error findAllDoctors:", error);
+            throw error;
+        }
+    }
+
 }
 
 export default DoctorRepository;

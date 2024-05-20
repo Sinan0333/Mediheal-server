@@ -236,6 +236,20 @@ class DoctorServices {
         }
     }
 
+    async updateSlots(): Promise<void> {
+        try {
+            const doctors:DoctorDoc[] = await this.doctorRepo.findAllDoctors()
+            for(let i=0;i<doctors.length;i++){
+                const doctor:DoctorDoc = doctors[i]
+                const slots = await generateSlots(doctor.schedule.startTime,doctor.schedule.endTime,doctor.schedule.interval,doctor.workingDays)
+                await this.scheduleRepo.updateSchedule(doctor.slots,slots)
+            }
+        } catch (error) {
+            console.error("Error in initializeSlots:", error);
+            throw error;
+        }
+    }
+
 }
 
 export default DoctorServices;

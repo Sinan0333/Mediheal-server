@@ -14,6 +14,7 @@ import authRoute from './routes/authRoute'
 dotenv.config()
 configCloudinary()
 const app = express()
+import './utils/cronJob'
 
 
 app.use(express.json({ limit:'50mb' }));
