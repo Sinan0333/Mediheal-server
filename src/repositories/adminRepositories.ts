@@ -13,7 +13,7 @@ class AdminRepository{
         }
     }
 
-    async findAdminById(_id:string | unknown):Promise<UserDoc | null>{
+    async findAdminById(_id:string ):Promise<UserDoc | null>{
         try {
             const userData:UserDoc | null =await Admin.findOne({_id})
             return userData

@@ -26,7 +26,7 @@ class AdminController{
 
     async adminProfile(req:Request,res:Response):Promise<void>{
         try {
-            const {_id}:UserDoc = req.body
+            const { _id } = req.body as { _id: string };
             const result:UserRes | null= await this.adminServices.adminProfile(_id)
             res.json(result)
             
