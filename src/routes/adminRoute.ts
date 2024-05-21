@@ -4,6 +4,10 @@ import { adminAuthMiddleware } from '../middleware/adminAuthMiddleware'
 import OtpRepository from '../repositories/otpRepositories'
 import ScheduleRepository from '../repositories/scheduleRepository'
 
+import AdminController from '../controllers/adminController'
+import AdminServices from '../services/adminServices'
+import AdminRepository from '../repositories/adminRepositories'
+
 import UserController from '../controllers/userController'
 import UserServices from '../services/userServices'
 import UserRepository from '../repositories/userRepositories'
@@ -38,6 +42,10 @@ adminRoute.use(adminAuthMiddleware)
 const otpRepository = new OtpRepository()
 const scheduleRepository = new ScheduleRepository()
 
+const adminRepository = new AdminRepository()
+const adminServices = new AdminServices(adminRepository)
+const adminController = new AdminController(adminServices)
+
 const userRepository = new UserRepository()
 const userServices = new UserServices(userRepository,otpRepository)
 const userController = new UserController(userServices)
@@ -65,6 +73,8 @@ const doctorController = new DoctorController(doctorServices)
 const appointmentRepositories = new AppointmentRepository()
 const appointmentServices = new AppointmentServices(appointmentRepositories,scheduleRepository,userRepository)
 const appointmentController = new AppointmentController(appointmentServices,patientServices)
+
+adminRoute.get("/profile/:_id",adminController.adminProfile.bind(adminController))
 
 adminRoute.get('/user',userController.listUsers.bind(userController))
 adminRoute.post('/user/view',userController.getUserData.bind(userController))

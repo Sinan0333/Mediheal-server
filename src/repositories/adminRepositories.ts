@@ -12,6 +12,16 @@ class AdminRepository{
             throw error;
         }
     }
+
+    async findAdminById(_id:string):Promise<UserDoc | null>{
+        try {
+            const userData:UserDoc | null =await Admin.findOne({_id})
+            return userData
+        } catch (error) {
+            console.error("Error in findAdminById:", error);
+            throw error;
+        }
+    }
 }
 
 export default AdminRepository

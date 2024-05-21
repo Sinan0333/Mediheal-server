@@ -39,7 +39,6 @@ class AdminServices {
 
            const decodedToken = verifyToken(token);
            const userData:UserDoc | null = await this.adminRepo.findAdminByEmail(decodedToken.email)
-console.log('in admin refresh token');
 
            if(!userData) return {status:false,message:"Cant find the user"}
            const accessToken:string = generateToken(userData)
@@ -49,6 +48,19 @@ console.log('in admin refresh token');
 
         } catch (error) {
             console.error("Error in refreshToken:", error);
+            throw error;
+        }
+    }
+
+    async adminProfile(_id:string): Promise<Res> {
+        try {
+        
+           const userData:UserDoc | null = await this.adminRepo.findAdminById(_id)
+           if(!userData) return {status:false,message:"Cant find the user"}
+            return {status:true ,data:userData ,message:"Token refreshed"}
+
+        } catch (error) {
+            console.error("Error in adminProfile:", error);
             throw error;
         }
     }

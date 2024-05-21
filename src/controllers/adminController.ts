@@ -24,6 +24,18 @@ class AdminController{
         }
     }
 
+    async adminProfile(req:Request,res:Response):Promise<void>{
+        try {
+            const {_id}:UserDoc = req.body
+            const result:UserRes | null= await this.adminServices.adminProfile(_id)
+            res.json(result)
+            
+        } catch (error) {
+            console.error("Error in AdminController.adminProfile:", error);
+            res.status(500).json({ error: "Internal server error" });
+        }
+    }
+
     async refreshToken(req:Request,res:Response):Promise<void>{
         try {
 
