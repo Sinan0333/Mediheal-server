@@ -194,6 +194,19 @@ class UserController{
         }
     }
 
+    async removeProfile(req:Request,res:Response):Promise<void>{
+        try {
+            
+            const {_id} = req.params
+            const result: Res | null = await this.userService.removeProfile(_id) 
+            res.json(result)
+            
+        } catch (error) {
+            console.error("Error in UserController.removeProfile:", error);
+            res.status(500).json({ error: "Internal server error" });
+        }
+    }
+
     async walletPayment(req:Request,res:Response):Promise<void>{
         try {
             

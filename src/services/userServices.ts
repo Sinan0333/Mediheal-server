@@ -346,6 +346,20 @@ class UserServices {
         }
     }
 
+    async removeProfile(_id:string): Promise<Res> {
+        try {
+
+            const userData:UserDoc | null = await this.userRepo.findUserByIdAndUpdate(_id,{image:""})
+            if(!userData) return {status:false,message:"Cant find the user"}
+
+            return { data:userData , status: true, message: "Profile photo removed" };
+
+        } catch (error) {
+            console.error("Error in removeProfile:", error);
+            throw error;
+        }
+    }
+
 }
 
 export default UserServices;

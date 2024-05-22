@@ -67,6 +67,7 @@ const messageServices = new MessageServices(messageRepository)
 const messageController = new MessageController(messageServices)
 
 userRoute.post('/profile',userController.getUserData.bind(userController))
+userRoute.patch('/profile/remove_profile_dp/:_id',userController.removeProfile.bind(userController))
 userRoute.post('/profile/edit_profile',userController.updateProfile.bind(userController))
 userRoute.post('/wallet_payment',userController.walletPayment.bind(userController))
 
