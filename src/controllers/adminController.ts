@@ -57,6 +57,72 @@ class AdminController{
             }
         }
     }
+
+    async verifyEmail(req:Request,res:Response):Promise<void>{
+        try {
+            
+            const {email} = req.body
+            const result: Res | null = await this.adminServices.verifyEmail(email)  
+            res.json(result)
+            
+        } catch (error) {
+            console.error("Error in UserController.verifyEmail:", error);
+            res.status(500).json({ error: "Internal server error" });
+        }
+    }
+
+    async getOtp(req:Request,res:Response):Promise<void>{
+        try {
+
+            const {_id} = req.params
+            const result:Res | null = await this.adminServices.getOtp(_id)
+            res.json(result)
+            
+        } catch (error) {
+            console.error("Error in UserController.getOtp:", error);
+            res.status(500).json({ error: "Internal server error" });
+        }
+    }
+
+    async verifyOtp(req:Request,res:Response):Promise<void>{
+        try {
+
+            const {_id,otp} = req.body
+            const result:Res | null = await this.adminServices.verifyOtp(_id,otp)
+            res.json(result)
+            
+        } catch (error) {
+            console.error("Error in DoctorController.verifyOtp:", error);
+            res.status(500).json({ error: "Internal server error" });
+        }
+    }
+
+
+    async changePassword(req:Request,res:Response):Promise<void>{
+        try {
+            
+            const {_id,password} = req.body
+            const result: Res | null = await this.adminServices.changePassword(_id,password)  
+            res.json(result)
+            
+        } catch (error) {
+            console.error("Error in UserController.changePassword:", error);
+            res.status(500).json({ error: "Internal server error" });
+        }
+    }
+
+    async resendOtp(req:Request,res:Response):Promise<void>{
+        try {
+
+            const {_id} = req.params
+            const result:Res | null = await this.adminServices.resendOtp(_id)
+            res.json(result)
+            
+        } catch (error) {
+            console.error("Error in AdminController.login:", error);
+            res.status(500).json({ error: "Internal server error" });
+        }
+    }
 }
 
 

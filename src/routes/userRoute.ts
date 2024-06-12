@@ -55,7 +55,7 @@ const departmentServices = new DepartmentServices(departmentRepository)
 const departmentController = new DepartmentController(departmentServices)
 
 const doctorRepositories = new DoctorRepository()
-const doctorServices = new DoctorServices(doctorRepositories,scheduleRepository)
+const doctorServices = new DoctorServices(doctorRepositories,scheduleRepository,otpRepository)
 const doctorController = new DoctorController(doctorServices)
 
 const appointmentRepository = new AppointmentRepository()

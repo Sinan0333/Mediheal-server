@@ -1,6 +1,7 @@
 import bcrypt from 'bcrypt';
 import DoctorRepositories from "../repositories/doctorRepositories";
 import ScheduleRepository from '../repositories/scheduleRepository';
+import OtpRepository from '../repositories/otpRepositories';
 import { DoctorDoc, DoctorRes, IDoctorData } from '../interfaces/IDoctor';
 import { FilterCondition, Res } from '../interfaces/Icommon';
 import { uploadFile } from '../utils/cloudinary';
@@ -8,14 +9,18 @@ import { generateRefreshToken, generateToken, verifyToken } from '../utils/jwt';
 import { generateSlots, generateSlotsForADay } from '../utils/schedule';
 import { ScheduleDoc } from '../interfaces/Ischedule';
 import { removeDays } from '../utils/others';
+import { sendVerifyMail } from '../utils/otpVerification';
+import { OtpDoc } from '../interfaces/IOtp';
 
 class DoctorServices {
     private doctorRepo: DoctorRepositories;
     private scheduleRepo:ScheduleRepository
+    private otpRepo: OtpRepository
 
-    constructor(doctorRepo: DoctorRepositories,scheduleRepo:ScheduleRepository) {
+    constructor(doctorRepo: DoctorRepositories,scheduleRepo:ScheduleRepository,otpRepo: OtpRepository) {
         this.doctorRepo = doctorRepo;
         this.scheduleRepo = scheduleRepo
+        this.otpRepo = otpRepo
     }
 
     async checkExistingEmail(email: string): Promise<boolean> {
@@ -246,6 +251,94 @@ class DoctorServices {
             }
         } catch (error) {
             console.error("Error in initializeSlots:", error);
+            throw error;
+        }
+    }
+
+    async verifyEmail(email:string): Promise<Res> {
+        try {
+            const doctorData:DoctorDoc | null = await this.doctorRepo.findDoctorByEmail(email)
+            if(!doctorData) return {status:false,message:"Email not found"}
+
+            const otp:string = await sendVerifyMail(doctorData.firstName + ""+ doctorData.secondName,doctorData.email)
+            await this.otpRepo.createOrUpdateOtp(doctorData.email,otp)
+
+            return { data:doctorData , status: true, message: "Otp send" };
+
+            
+        } catch (error) {
+            console.error("Error in verifyEmail:", error);
+            throw error;
+        }
+    }
+
+    async getOtp(_id:string): Promise<Res> {
+        try {
+
+            const doctorData:DoctorDoc | null = await this.doctorRepo.findDoctorById(_id)
+            if(!doctorData) return {status:false,message:"Cant find the user"}
+            const otpData:OtpDoc | null = await this.otpRepo.findOtpByEmail(doctorData?.email);
+            return otpData ? {data:otpData,status:true ,message:"Otp get"} : {status:false ,message:"Can't find the otp"}
+
+        } catch (error) {
+            console.error("Error in getOtp:", error);
+            throw error;
+        }
+    }
+
+    async verifyOtp(_id:string,otp:string): Promise<Res> {
+        try {
+
+            const doctorData:DoctorDoc | null = await this.doctorRepo.findDoctorById(_id)
+            if(!doctorData) throw Error
+            const otpData:OtpDoc | null = await this.otpRepo.findOtpByEmail(doctorData.email);
+            if(!otpData) throw Error
+
+            if(otpData.otp == otp){
+                return { data:doctorData, status: true, message: 'Verification successful' };
+            }else{
+                return {status:false ,message:"Otp verification filed"}
+            }
+
+        } catch (error) {
+            console.error("Error in verifyOtp:", error);
+            throw error;
+        }
+    }
+
+    async changePassword(_id:string,password:string): Promise<Res> {
+        try {
+
+            const hashedPass: string = await bcrypt.hash(password, 10);
+
+            const doctorData: DoctorDoc | null = await this.doctorRepo.findDoctorById(_id)
+            if(!doctorData) return {status:false,message:"Cant find the user"}
+
+            doctorData.password = hashedPass
+
+            const updateDoctor:DoctorDoc | null = await this.doctorRepo.updateDoctor(doctorData,_id)
+            if(!updateDoctor) return {status:false,message:"Something wrong please try again later"}
+            return { data:updateDoctor , status: true, message: "Password changed successfully" };
+
+        } catch (error) {
+            console.error("Error in changePassword:", error);
+            throw error;
+        }
+    }
+
+    async resendOtp(_id:string): Promise<Res> {
+        try {
+
+            const doctorData:DoctorDoc | null = await this.doctorRepo.findDoctorById(_id)
+            if(!doctorData) return {status:false,message:"Cant find the user"}
+
+            const otp:string = await sendVerifyMail(doctorData.firstName + "" + doctorData.secondName,doctorData.email)
+            const otpData:OtpDoc | null = await this.otpRepo.createOrUpdateOtp(doctorData.email,otp);
+
+            return otpData ? {data:otpData,status:true ,message:"Otp sended"} : {status:false ,message:"Can't find the otp"}
+
+        } catch (error) {
+            console.error("Error in resendOtp:", error);
             throw error;
         }
     }

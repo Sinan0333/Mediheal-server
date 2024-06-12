@@ -43,7 +43,7 @@ const otpRepository = new OtpRepository()
 const scheduleRepository = new ScheduleRepository()
 
 const adminRepository = new AdminRepository()
-const adminServices = new AdminServices(adminRepository)
+const adminServices = new AdminServices(adminRepository,otpRepository)
 const adminController = new AdminController(adminServices)
 
 const userRepository = new UserRepository()
@@ -67,7 +67,7 @@ const bedServices = new BedServices(bedRepositories,patientRepository,admitHisto
 const bedController = new BedController(bedServices)
 
 const doctorRepositories = new DoctorRepository()
-const doctorServices = new DoctorServices(doctorRepositories,scheduleRepository)
+const doctorServices = new DoctorServices(doctorRepositories,scheduleRepository,otpRepository)
 const doctorController = new DoctorController(doctorServices)
 
 const appointmentRepositories = new AppointmentRepository()

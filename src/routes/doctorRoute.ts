@@ -3,6 +3,7 @@ import { doctorAuthMiddleware } from '../middleware/doctorAuthMiddleware'
 
 import ScheduleRepository from '../repositories/scheduleRepository'
 import UserRepository from '../repositories/userRepositories'
+import OtpRepository from '../repositories/otpRepositories'
 
 import DoctorRepository from '../repositories/doctorRepositories' 
 import DoctorServices from '../services/doctorServices'
@@ -33,9 +34,10 @@ doctorRoute.use(doctorAuthMiddleware)
 
 const scheduleRepository = new ScheduleRepository()
 const userRepositories = new UserRepository()
+const otpRepositories = new OtpRepository()
 
 const doctorRepositories = new DoctorRepository()
-const doctorServices = new DoctorServices(doctorRepositories,scheduleRepository)
+const doctorServices = new DoctorServices(doctorRepositories,scheduleRepository,otpRepositories)
 const doctorController = new DoctorController(doctorServices)
 
 const patientRepository = new PatientRepository()

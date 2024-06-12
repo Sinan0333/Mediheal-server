@@ -22,6 +22,16 @@ class AdminRepository{
             throw error;
         }
     }
+
+    async findAdminAndUpdate(_id:string,data:UserDoc ):Promise<UserDoc | null>{
+        try {
+            const userData:UserDoc | null =await Admin.findOneAndUpdate({_id},data)
+            return userData
+        } catch (error) {
+            console.error("Error in findAdminAndUpdate:", error);
+            throw error;
+        }
+    }
 }
 
 export default AdminRepository

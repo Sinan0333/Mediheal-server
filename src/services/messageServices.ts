@@ -9,7 +9,7 @@ class MessageServices {
         this.messageRepo = messageRepo;
     }
 
-    async createMessage(data: MessageDoc): Promise<Res > {
+    async createMessage(data: MessageDoc): Promise<Res> {
         try {
             const messageData:MessageDoc = await this.messageRepo.createMessage(data);
             return { data: messageData, status: true, message: "Message sent successfully" };

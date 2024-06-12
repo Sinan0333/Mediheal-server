@@ -132,7 +132,7 @@ class UserServices {
             const otp:string = await sendVerifyMail(userData.name,userData.email)
             const otpData:OtpDoc | null = await this.otpRepo.createOrUpdateOtp(userData.email,otp);
 
-            return otpData ? {data:otpData,status:true ,message:"Otp get"} : {status:false ,message:"Can't find the otp"}
+            return otpData ? {data:otpData,status:true ,message:"Otp sended"} : {status:false ,message:"Can't find the otp"}
 
         } catch (error) {
             console.error("Error in resendOtp:", error);
@@ -356,6 +356,39 @@ class UserServices {
 
         } catch (error) {
             console.error("Error in removeProfile:", error);
+            throw error;
+        }
+    }
+
+    
+    async verifyEmail(email:string): Promise<Res> {
+        try {
+
+            const userData:UserDoc | null = await this.userRepo.findUserByEmail(email)
+            if(!userData) return {status:false,message:"Email not found"}
+
+            const otp:string = await sendVerifyMail(userData.name,userData.email)
+            await this.otpRepo.createOrUpdateOtp(userData.email,otp)
+
+            return { data:userData , status: true, message: "Otp send" };
+
+        } catch (error) {
+            console.error("Error in verifyEmail:", error);
+            throw error;
+        }
+    }
+
+    async changePassword(_id:string,password:string): Promise<Res> {
+        try {
+
+            const hashedPass: string = await bcrypt.hash(password, 10);
+
+            const userData:UserDoc | null = await this.userRepo.findUserByIdAndUpdate(_id,{password:hashedPass})
+            if(!userData) return {status:false,message:"Something wrong please try again later"}
+            return { data:userData , status: true, message: "Password changed successfully" };
+
+        } catch (error) {
+            console.error("Error in changePassword:", error);
             throw error;
         }
     }
