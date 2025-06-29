@@ -31,10 +31,10 @@ app.use(
 );
 
 
-app.use('/auth',authRoute)
-app.use('/user',userRoute)
-app.use('/admin',adminRoute)
-app.use('/doctor',doctorRoute)
+app.use('/api/auth',authRoute)
+app.use('/api/user',userRoute)
+app.use('/api/admin',adminRoute)
+app.use('/api/doctor',doctorRoute)
 app.use((err: Error, _req: express.Request, res: express.Response, _next: express.NextFunction) => {
   console.error(err.stack);
   res.status(500).send('Something went wrong!');
